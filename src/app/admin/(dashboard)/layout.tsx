@@ -1,5 +1,5 @@
 import {ReactNode} from 'react';
-import {Header, Sidebar} from '@/components';
+import {AdminHeader, Sidebar} from '@/components';
 
 export default async function AdminLayout({children}: { children: ReactNode }) {
   return (
@@ -9,8 +9,11 @@ export default async function AdminLayout({children}: { children: ReactNode }) {
     <div className="grid min-h-screen w-full grid-cols-[250px_1fr]">
       <Sidebar/>
       <div className="flex flex-col">
-        <Header />
-        <main className="p-4">{children}</main>
+        <main className="p-4 bg-gray-50 min-h-screen">
+          <div className="p-4 border bg-white h-full">
+            {children}
+          </div>
+        </main>
       </div>
     </div>
     </body>

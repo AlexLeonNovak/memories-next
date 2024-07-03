@@ -1,3 +1,6 @@
 export * from './NavItem';
 export * from './Sidebar';
-export * from './Header';
+export * from './AdminHeader';
+export * from './posts';
+export * from './categories';
+export * from './PageTitle';

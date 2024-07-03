@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import {TCredentials} from '@/types';
-import { getFirebaseAuth } from '@/services/firebase.service';
+import { getFirebaseAuth } from '@/services';
 
 export const useAuth = () => {
   const [error, setError] = useState<string>();
