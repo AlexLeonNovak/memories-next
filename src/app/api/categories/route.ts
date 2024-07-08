@@ -1,14 +1,15 @@
-import {NextRequest, NextResponse} from 'next/server';
+import {revalidatePath, revalidateTag} from 'next/cache';
 import {TCategory} from '@/types';
-import { db } from '@/services';
+import { CategoryRepository } from '@/lib/repositories';
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   const data: TCategory = await req.json();
-  const cat = await db.categories.create(data);
-  console.log(cat);
-  return NextResponse.json(cat);
+  const cat = await CategoryRepository.create(data);
+  revalidateTag('categories');
+  return Response.json(cat);
 }
 
-export async function GET() {
-
-}
+// export async function GET() {
+//   const categories = await CategoryRepository.getAll();
+//   return NextResponse.json(categories);
+// }

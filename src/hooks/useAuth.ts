@@ -1,7 +1,9 @@
+'use client';
+
 import {useState} from 'react';
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import {TCredentials} from '@/types';
-import { getFirebaseAuth } from '@/services';
+import { getFirebaseAuth } from '@/lib/services';
 
 export const useAuth = () => {
   const [error, setError] = useState<string>();

@@ -1,4 +1,4 @@
-import {FirebaseOptions} from 'firebase/app';
+import {FirebaseOptions, getApp, getApps, initializeApp} from 'firebase/app';
 
 const {
   AUTH_COOKIE_NAME,
@@ -37,3 +37,11 @@ export const firebaseConfig: FirebaseOptions = {
 };
 
 export const BUCKET_URL =  `gs://${process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}`;
+
+export const getFirebaseApp = () => {
+  if (getApps().length) {
+    return getApp();
+  }
+
+  return initializeApp(firebaseConfig);
+};

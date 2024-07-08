@@ -1,6 +1,6 @@
 import {NextRequest, NextResponse} from 'next/server';
-import {authMiddleware, redirectToHome, redirectToLogin} from 'next-firebase-auth-edge';
-import { firebaseConfig, serverConfig } from "@/lib/firebase.config";
+import {authMiddleware, redirectToLogin} from 'next-firebase-auth-edge';
+import { firebaseConfig, serverConfig } from "@/lib/services";
 import {redirectToAdmin} from '@/lib/redirects';
 
 const PUBLIC_PATHS = ['/admin/login'];

@@ -3,8 +3,13 @@ export enum EPostMediaType {
   VIDEO = 'video',
 }
 
+export type TBaseEntity = {
+  id: string,
+  createdAt: Date,
+  updatedAt: Date,
+}
+
 export type TPost = {
-  id?: string;
   name: string;
   description?: string;
   mediaUrl: string;
@@ -13,7 +18,6 @@ export type TPost = {
 }
 
 export type TCategory = {
-  id?: string;
   name: string;
   isEnabled: boolean;
 }

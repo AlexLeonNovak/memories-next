@@ -1,6 +1,5 @@
 'use client';
 
-import {z} from 'zod';
 import {TCategory} from '@/types';
 import {
   Button,
@@ -14,15 +13,13 @@ import {
   FormMessage,
   Input,
 } from '@/components';
-import {useForm} from 'react-hook-form';
+import {FieldPath, useForm} from 'react-hook-form';
+import { useFormStatus, useFormState } from 'react-dom';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {Save} from 'lucide-react';
-import {useEffect} from 'react';
-
-const formSchema: z.ZodType<TCategory> = z.object({
-  name: z.string().min(1, 'Required'),
-  isEnabled: z.boolean(),
-})
+import {LoaderCircle, Save} from 'lucide-react';
+import {useEffect, useRef} from 'react';
+import {createCategorySchema} from '@/lib/validations';
+import {createCategory} from '@/server';
 
 type TCategoryFormProps = {
   onFormSubmit?: (data: TCategory) => void,
@@ -30,36 +27,67 @@ type TCategoryFormProps = {
   isShowSubmitButton?: boolean;
 }
 
+const initialState: TCategory = {
+  name: '',
+  isEnabled: true,
+}
+
 export const CategoryForm = ({onFormSubmit, submitRequested, isShowSubmitButton = true}: TCategoryFormProps) => {
+  const formRef = useRef<HTMLFormElement>(null);
   const form = useForm<TCategory>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: '',
-      isEnabled: true,
-    }
+    mode: 'all',
+    resolver: zodResolver(createCategorySchema),
+    defaultValues: initialState
   });
 
-  const { control, handleSubmit } = form;
+  const [state, action] = useFormState(createCategory, null);
+  const { pending } = useFormStatus();
 
-  const onSubmit = async (data: TCategory) => {
-    const res = await fetch('/api/categories', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
+  const { control, handleSubmit, setError } = form;
 
-    onFormSubmit && onFormSubmit(data);
-  }
+  // const onSubmit = async (data: TCategory) => {
+  //   setIsLoading(true);
+  //   const res = await fetch('/api/categories', {
+  //     method: 'POST',
+  //     body: JSON.stringify(data),
+  //     next: { tags: ['categories'] }
+  //   });
+  //
+  //   const category: TCategory = await res.json();
+  //   setIsLoading(false);
+  //   onFormSubmit && onFormSubmit(category);
+  // }
+
+  // const onSubmit = async (data: TCategory) => {
+  //   'use server';
+  //   await CategoryRepository.create(data)
+  // }
 
   useEffect(() => {
-    console.log(submitRequested);
-    if (submitRequested) {
-      handleSubmit(onSubmit)();
+    if (!state) {
+      return;
     }
-  }, [submitRequested]);
+    if (!state.success) {
+      state.errors?.forEach((error) => {
+        setError(error.path as FieldPath<TCategory>, {
+          message: error.message,
+        });
+      });
+    }
+    if (state.success) {
+      onFormSubmit && onFormSubmit(state.data);
+    }
+  }, [state, setError]);
+
+  useEffect(() => {
+    if (submitRequested) {
+      action(new FormData(formRef.current!));
+    }
+  }, [action, submitRequested]);
 
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+      <form action={action} ref={formRef} className='space-y-8'>
         <FormField name="name"
                    control={control}
                    render={({field}) => (
@@ -78,10 +106,10 @@ export const CategoryForm = ({onFormSubmit, submitRequested, isShowSubmitButton 
 
         <FormField name="isEnabled"
                    control={control}
-                   render={({field}) => (
+                   render={({field: { name, value, onChange}}) => (
                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                        <FormControl>
-                         <Checkbox checked={field.value} onCheckedChange={field.onChange}/>
+                         <Checkbox name={name} checked={value} onCheckedChange={onChange}/>
                        </FormControl>
                        <div className="space-y-1 leading-none">
                          <FormLabel>Is active</FormLabel>
@@ -91,9 +119,11 @@ export const CategoryForm = ({onFormSubmit, submitRequested, isShowSubmitButton 
                      )}
           />
         {isShowSubmitButton && (
-          <Button type="submit">
-            <Save />
-            <span>Save</span>
+          <Button type="submit" disabled={pending}>
+            {pending
+              ? (<><LoaderCircle className="animate-spin" /><span>Please wait...</span></>)
+              : (<><Save /><span>Save</span></>)
+            }
           </Button>
         )}
       </form>

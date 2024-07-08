@@ -2,7 +2,7 @@
 import {FormEvent, useEffect, useState} from 'react';
 import {useAuth} from '@/hooks';
 import {useRouter} from 'next/navigation';
-import {getFirebaseAuth} from '@/services';
+import {getFirebaseAuth} from '@/lib/services';
 import {getRedirectResult} from 'firebase/auth';
 import Image from 'next/image';
 import {Button, Input, Label} from '@/components';

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import {NavItem} from '.';
-import {CircleGauge, LogOut, NotebookText} from 'lucide-react';
+import {CircleGauge, LogOut, NotebookText, List} from 'lucide-react';
 import {Button} from '@/components';
 import {useAuth} from '@/hooks';
 import {useRouter} from 'next/navigation';
@@ -33,6 +33,11 @@ export const Sidebar = () => {
         <NavItem href='/admin/posts'>
           <NotebookText />
           <span>Posts</span>
+        </NavItem>
+
+        <NavItem href='/admin/categories'>
+          <List />
+          <span>Categories</span>
         </NavItem>
       </div>
       <div className="p-4 flex mt-auto">

@@ -1,7 +1,7 @@
 import {redirect} from 'next/navigation';
 import {getTokens} from 'next-firebase-auth-edge';
 import {cookies} from 'next/headers';
-import {firebaseConfig, serverConfig} from '@/lib/firebase.config';
+import {firebaseConfig, serverConfig} from '@/lib/services';
 
 export default async function AdminPage() {
   const tokens = await getTokens(cookies(), {
