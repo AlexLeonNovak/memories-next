@@ -4,10 +4,19 @@ import {
   collection,
   getDocs,
   QueryDocumentSnapshot,
-  getDoc, doc,
+  getDoc,
+  doc,
+  query,
+  orderBy,
+  where,
+  or,
+  OrderByDirection,
+  QueryFieldFilterConstraint,
+  QueryCompositeFilterConstraint,
+  QueryOrderByConstraint, and,
 } from '@firebase/firestore';
 import {getFirebaseApp} from '.';
-import {TBaseEntity, TCollections} from '@/types';
+import {TBaseEntity, TCollections, TQueryFilter, TQueryOptions, TQueryOrder} from '@/types';
 
 
 export const getFirestoreDatabase = () => {
@@ -24,11 +33,68 @@ export const getCollection = <T extends object>(path: TCollections) => {
     return collection(database, path).withConverter(converter<T>());
 }
 
+const getWhere = <T>(wh: TQueryFilter<T> | TQueryFilter<T>[]) =>
+  [wh].flat().map(({fieldPath, opStr, value}) => where(fieldPath as string, opStr, value));
+
 export const createCRUD = <T extends object>(path: TCollections) => {
   const _collection = getCollection<T>(path);
-  const getAll = async (): Promise<Array<TBaseEntity & T>> => {
+  const getAll = async (queryOptions?: TQueryOptions<TBaseEntity & T>): Promise<Array<TBaseEntity & T>> => {
     try {
-      const snapshot = await getDocs(_collection);
+      const queryParams = [];
+      if (queryOptions?.where || queryOptions?.or) {
+        const andWhere = queryOptions.where ? getWhere(queryOptions.where) : [];
+        const orWhere = queryOptions.or ? getWhere(queryOptions.or) : [];
+
+        if (andWhere.length === 0) {
+          if (orWhere.length === 1) {
+            queryParams.push(orWhere[0]);
+          } else if (orWhere.length > 1) {
+            queryParams.push(or(...orWhere));
+          }
+        } else if (andWhere.length === 1) {
+          if (orWhere.length === 0) {
+            queryParams.push(andWhere[0]);
+          } else if (orWhere.length === 1) {
+            queryParams.push(or(andWhere[0], orWhere[0]));
+          } else if (orWhere.length > 1) {
+            queryParams.push(and(
+                andWhere[0],
+                or(...orWhere)
+              )
+            );
+          }
+        } else if (andWhere.length > 1) {
+          if (orWhere.length === 0) {
+            queryParams.push(and(...andWhere));
+          } else if (orWhere.length === 1) {
+            queryParams.push(or(and(...andWhere), orWhere[0]));
+          }
+          // TODO: Check how to combine
+          // else if (orWhere.length > 1) {
+          //   queryParams.push(or(
+          //     and(andWhere),
+          //       or(...orWhere)
+          //     )
+          //   );
+          // }
+        }
+      }
+      if (queryOptions?.order) {
+        const orders = [queryOptions.order].flat().map((value) => {
+          if (typeof value === 'string') {
+            return orderBy(value);
+          } else {
+            const [key, val] = Object.entries(value as TQueryOrder<T>)[0];
+            return orderBy(key, val as OrderByDirection);
+          }
+        });
+        queryParams.push(...orders);
+      }
+
+      // TODO: Try to fix it
+      // @ts-ignore
+      const q = queryParams.length ? query(_collection, ...queryParams) : _collection;
+      const snapshot = await getDocs(q);
       return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as TBaseEntity & T));
     } catch (error) {
       console.error(error);
@@ -51,8 +117,8 @@ export const createCRUD = <T extends object>(path: TCollections) => {
     try {
       const document = await addDoc(_collection, {
         ...data,
-        createdAt: new Date,
-        updatedAt: new Date(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       });
       return getById(document.id);
     } catch (error) {
@@ -63,5 +129,5 @@ export const createCRUD = <T extends object>(path: TCollections) => {
 
   // const findOne = async (id: string): Promise<T> => {}
 
-  return { getAll, getById, create };
+  return { getAll, getById, create, collection: _collection };
 }

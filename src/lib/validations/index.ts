@@ -2,10 +2,11 @@ import {z, ZodSchema} from 'zod';
 import {TFormState} from '@/types';
 
 export * from './category.validation';
+export * from './post.validations';
 
-export const parseFormData = (schema: ZodSchema, fd: FormData): TFormState<z.infer<typeof schema>> => {
-  const rawFD = Object.fromEntries(fd.entries());
-  const parsed = schema.safeParse(rawFD);
+export const parseFormData = <T extends ZodSchema>(schema: T, fd: FormData): TFormState<z.infer<typeof schema>> => {
+  console.log(fd.getAll('files'));
+  const parsed = schema.safeParse(fd);
   const { success, error, data } = parsed;
   return {
     success,
@@ -14,5 +15,5 @@ export const parseFormData = (schema: ZodSchema, fd: FormData): TFormState<z.inf
       path: path.join('.'),
       message,
     })),
-  };
+  } as TFormState<z.infer<typeof schema>>;
 }

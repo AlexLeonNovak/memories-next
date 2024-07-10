@@ -9,11 +9,15 @@ export type TBaseEntity = {
   updatedAt: Date,
 }
 
+export type TPostMedia = {
+  type: EPostMediaType,
+  url: string,
+}
+
 export type TPost = {
   name: string;
   description?: string;
-  mediaUrl: string;
-  mediaType: EPostMediaType;
+  media: TPostMedia[];
   categories: string[];
 }
 

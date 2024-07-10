@@ -1,6 +1,4 @@
 import {Button, CategoriesTable, PageTitle} from '@/components';
-// import {HydrationBoundary} from '@tanstack/react-query';
-// import {categoriesListDehydrator} from '@/server';
 import Link from 'next/link';
 import {Plus} from 'lucide-react';
 
@@ -17,9 +15,7 @@ export default function CategoryPage() {
           </Link>
         </Button>
       </div>
-      {/*<HydrationBoundary state={categoriesState}>*/}
         <CategoriesTable/>
-      {/*</HydrationBoundary>*/}
     </div>
   )
 }

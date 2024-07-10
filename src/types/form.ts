@@ -1,6 +1,5 @@
-export type TFormStateBase<T extends object = {}> = {
+export type TFormStateBase = {
   message?: string;
-  data?: T;
 };
 
 export type TFormStateError = {
@@ -11,8 +10,9 @@ export type TFormStateError = {
   }>;
 };
 
-export type TFormStateSuccess = {
+export type TFormStateSuccess<T extends object = {}> = {
   success: true;
+  data: T;
 };
 
-export type TFormState<T extends object = {}> = TFormStateBase<T> & (TFormStateError | TFormStateSuccess);
+export type TFormState<T extends object = {}> = TFormStateBase & (TFormStateError | TFormStateSuccess<T>);

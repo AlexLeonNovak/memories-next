@@ -12,11 +12,11 @@ import {
   FormLabel,
   FormMessage,
   Input,
+  SubmitButton
 } from '@/components';
 import {FieldPath, useForm} from 'react-hook-form';
-import { useFormStatus, useFormState } from 'react-dom';
+import { useFormState } from 'react-dom';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {LoaderCircle, Save} from 'lucide-react';
 import {useEffect, useRef} from 'react';
 import {createCategorySchema} from '@/lib/validations';
 import {createCategory} from '@/server';
@@ -27,41 +27,19 @@ type TCategoryFormProps = {
   isShowSubmitButton?: boolean;
 }
 
-const initialState: TCategory = {
-  name: '',
-  isEnabled: true,
-}
-
 export const CategoryForm = ({onFormSubmit, submitRequested, isShowSubmitButton = true}: TCategoryFormProps) => {
   const formRef = useRef<HTMLFormElement>(null);
   const form = useForm<TCategory>({
     mode: 'all',
     resolver: zodResolver(createCategorySchema),
-    defaultValues: initialState
+    defaultValues: {
+      name: '',
+      isEnabled: true,
+    }
   });
 
+  const { control, setError } = form;
   const [state, action] = useFormState(createCategory, null);
-  const { pending } = useFormStatus();
-
-  const { control, handleSubmit, setError } = form;
-
-  // const onSubmit = async (data: TCategory) => {
-  //   setIsLoading(true);
-  //   const res = await fetch('/api/categories', {
-  //     method: 'POST',
-  //     body: JSON.stringify(data),
-  //     next: { tags: ['categories'] }
-  //   });
-  //
-  //   const category: TCategory = await res.json();
-  //   setIsLoading(false);
-  //   onFormSubmit && onFormSubmit(category);
-  // }
-
-  // const onSubmit = async (data: TCategory) => {
-  //   'use server';
-  //   await CategoryRepository.create(data)
-  // }
 
   useEffect(() => {
     if (!state) {
@@ -118,14 +96,7 @@ export const CategoryForm = ({onFormSubmit, submitRequested, isShowSubmitButton 
                      </FormItem>
                      )}
           />
-        {isShowSubmitButton && (
-          <Button type="submit" disabled={pending}>
-            {pending
-              ? (<><LoaderCircle className="animate-spin" /><span>Please wait...</span></>)
-              : (<><Save /><span>Save</span></>)
-            }
-          </Button>
-        )}
+        {isShowSubmitButton && <SubmitButton />}
       </form>
     </Form>
   );

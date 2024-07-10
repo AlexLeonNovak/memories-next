@@ -10,3 +10,5 @@ export * from './multi-select';
 export * from './form';
 export * from './checkbox';
 export * from './skeleton';
+export * from './file-uploader';
+export * from './aspect-ratio';
