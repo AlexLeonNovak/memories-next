@@ -13,7 +13,7 @@ import {
   Textarea,
   MultipleSelector,
   Option,
-  CategoryDialog, FileUploader, FileInput, FileUploaderContent, FileUploaderItem, AspectRatio, SubmitButton,
+  CategoryDialog, FileUploader, FileInput, FileUploaderContent, FileUploaderItem, AspectRatio, SubmitButton, Checkbox,
 } from '@/components';
 import {TCategory, TPost} from '@/types';
 import {FieldPath, useForm} from 'react-hook-form';
@@ -36,10 +36,10 @@ type TPostForm = z.infer<typeof createPostSchema>;
 
 export const PostForm = ({ categories = [] }: TPostFormProps) => {
   const router = useRouter();
-  const categoryOptions: Option[] = categories.map(({ id, name, isEnabled}) => ({
+  const categoryOptions: Option[] = categories.map(({ id, name, isActive}) => ({
     label: name,
     value: id,
-    disable: !isEnabled,
+    disable: !isActive,
   }));
 
   const form = useForm<TPostForm>({
@@ -50,6 +50,7 @@ export const PostForm = ({ categories = [] }: TPostFormProps) => {
       description: '',
       categories: [],
       files: [],
+      isActive: true,
     }
   });
 
@@ -187,6 +188,22 @@ export const PostForm = ({ categories = [] }: TPostFormProps) => {
                      </FormItem>
                    )}
         />
+
+        <FormField name="isActive"
+                   control={control}
+                   render={({field: { name, value, onChange}}) => (
+                     <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                       <FormControl>
+                         <Checkbox name={name} checked={value} onCheckedChange={onChange}/>
+                       </FormControl>
+                       <div className="space-y-1 leading-none">
+                         <FormLabel>Is active</FormLabel>
+                       </div>
+                       <FormMessage/>
+                     </FormItem>
+                   )}
+        />
+
         <SubmitButton />
       </form>
     </Form>

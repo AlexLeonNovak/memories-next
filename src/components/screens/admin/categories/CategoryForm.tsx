@@ -34,7 +34,7 @@ export const CategoryForm = ({onFormSubmit, submitRequested, isShowSubmitButton 
     resolver: zodResolver(createCategorySchema),
     defaultValues: {
       name: '',
-      isEnabled: true,
+      isActive: true,
     }
   });
 
@@ -82,7 +82,7 @@ export const CategoryForm = ({onFormSubmit, submitRequested, isShowSubmitButton 
                    )}
         />
 
-        <FormField name="isEnabled"
+        <FormField name="isActive"
                    control={control}
                    render={({field: { name, value, onChange}}) => (
                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">

@@ -13,11 +13,12 @@ export const PostsTable = async () => {
           <TableHead>#</TableHead>
           <TableHead>Name</TableHead>
           <TableHead>Categories</TableHead>
+          <TableHead>Is active</TableHead>
           <TableHead>Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-          { posts && posts.map(({ id, name, categories }, index) => (
+          { posts && posts.map(({ id, name, categories, isActive }, index) => (
             <TableRow key={id}>
               <TableCell>{ ++index }</TableCell>
               <TableCell>{name}</TableCell>
@@ -25,6 +26,11 @@ export const PostsTable = async () => {
                 {categories.map(({ id, name }) => (
                   <Badge key={id}>{name}</Badge>
                 ))}
+              </TableCell>
+              <TableCell>
+                <Badge variant={isActive ? 'success' : 'destructive'}>
+                  {isActive ? 'Active' : 'No active'}
+                </Badge>
               </TableCell>
               <TableCell>delete, update</TableCell>
             </TableRow>

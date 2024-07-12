@@ -4,9 +4,15 @@ export enum EPostMediaType {
 }
 
 export type TBaseEntity = {
-  id: string,
-  createdAt: Date,
-  updatedAt: Date,
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+
+}
+
+export type TBaseFields = {
+  name: string;
+  isActive: boolean;
 }
 
 export type TPostMedia = {
@@ -14,8 +20,7 @@ export type TPostMedia = {
   url: string,
 }
 
-export type TPost = {
-  name: string;
+export type TPost = TBaseFields & {
   description?: string;
   media: TPostMedia[];
   categories: string[];
@@ -23,7 +28,10 @@ export type TPost = {
 
 export type TCategory = {
   name: string;
-  isEnabled: boolean;
-}
+  isActive: boolean;
+};
+
+export type TPostEntity = TBaseEntity & TPost;
+export type TCategoryEntity = TBaseEntity & TCategory;
 
 export type TCollections = 'posts' | 'categories';

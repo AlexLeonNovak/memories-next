@@ -25,6 +25,7 @@ export const createPostSchema = z.object({
     .min(1, 'At least one file must be selected')
     .max(5, 'Maximum 5 files are allowed')
   ,
+  isActive: z.coerce.boolean(),
 });
 
 export const createPostSchemaFD = zfd.formData({
@@ -33,5 +34,6 @@ export const createPostSchemaFD = zfd.formData({
   categories: zfd.repeatable(z.array(zfd.text()).min(1, 'At least one category should be selected')),
   files: zfd.repeatable(
     z.array(zfd.file(z.instanceof(File))).min(1)
-  )
+  ),
+  isActive: z.coerce.boolean(),
 });

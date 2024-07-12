@@ -22,13 +22,13 @@ export const CategoriesTable = async () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        { categories && categories?.map(({ id, name, isEnabled }, index) => (
+        { categories && categories?.map(({ id, name, isActive }, index) => (
           <TableRow key={id}>
             <TableCell>{++index}</TableCell>
             <TableCell>{name}</TableCell>
             <TableCell>
-              <Badge variant={isEnabled ? 'success' : 'destructive'}>
-                {isEnabled ? 'Active' : 'No active'}
+              <Badge variant={isActive ? 'success' : 'destructive'}>
+                {isActive ? 'Active' : 'No active'}
               </Badge>
             </TableCell>
             <TableCell>delete, update</TableCell>
