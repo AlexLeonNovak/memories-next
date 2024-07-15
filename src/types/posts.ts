@@ -5,8 +5,8 @@ export enum EPostMediaType {
 
 export type TBaseEntity = {
   id: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 
 }
 

@@ -9,10 +9,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-  TableSkeleton,
+  DeleteForm,
 } from '@/components';
 import {fetchCategories, deleteCategory} from '@/server';
-import {DeleteForm} from '@/components/screens/admin/DeleteForm';
+import Link from 'next/link';
+import {Pencil} from 'lucide-react';
 
 export const CategoriesTable = async () => {
   const categories = await fetchCategories();
@@ -37,12 +38,17 @@ export const CategoriesTable = async () => {
                 {isActive ? 'Active' : 'No active'}
               </Badge>
             </TableCell>
-            <TableCell>
+            <TableCell className="flex gap-2">
               <DeleteForm id={id}
                           deleteAction={deleteCategory}
                           title='Delete category?'
                           description='Are you sure you want to delete this category?'
               />
+              <Button asChild variant='ghost'>
+                <Link href={`categories/${id}`}>
+                  <Pencil />
+                </Link>
+              </Button>
             </TableCell>
           </TableRow>
         ))}

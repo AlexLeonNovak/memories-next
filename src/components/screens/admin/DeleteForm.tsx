@@ -4,7 +4,7 @@ import {ConfirmDialog, Input, SubmitButton} from '@/components';
 import {useFormState} from 'react-dom';
 import {Trash} from 'lucide-react';
 import {toast} from 'sonner';
-import {FormEvent, MouseEvent, useEffect, useRef, useState} from 'react';
+import { MouseEvent, useEffect, useRef, useState} from 'react';
 import {TDeleteFormState} from '@/types';
 
 

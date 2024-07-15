@@ -3,7 +3,7 @@
 import {CategoryForm} from '@/components';
 import {useRouter} from 'next/navigation';
 
-export default function AddPostPage() {
+export default function AddCategoryPage() {
   const router = useRouter();
 
   return (

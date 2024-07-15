@@ -27,6 +27,7 @@ import {useEffect} from 'react';
 import {DropzoneOptions} from 'react-dropzone';
 import Image from 'next/image';
 import {useRouter} from 'next/navigation';
+import {toast} from 'sonner';
 
 type TPostFormProps = {
   categories: Array<TCategory & { id: string }>
@@ -72,6 +73,7 @@ export const PostForm = ({categories = []}: TPostFormProps) => {
       return;
     }
     if (!state.success) {
+      toast.error('One or more fields have an error. Please check them and try again.');
       state.errors?.forEach((error) => {
         setError(error.path as FieldPath<TPostForm>, {
           message: error.message,

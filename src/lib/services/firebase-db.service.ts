@@ -2,6 +2,7 @@ import {
   getFirestore,
   addDoc,
   deleteDoc,
+  updateDoc,
   collection,
   getDocs,
   QueryDocumentSnapshot,
@@ -15,7 +16,7 @@ import {
   OrderByDirection,
   QueryFieldFilterConstraint,
   QueryCompositeFilterConstraint,
-  QueryOrderByConstraint,
+  QueryOrderByConstraint, setDoc,
 } from '@firebase/firestore';
 import {getFirebaseApp} from '.';
 import {TBaseEntity, TCollections, TQueryFilter, TQueryOptions, TQueryOrder} from '@/types';
@@ -129,6 +130,20 @@ export const createCRUD = <T extends object>(path: TCollections) => {
     }
   }
 
+  const update = async (id: string, data: Partial<T>): Promise<TBaseEntity & T> => {
+    try {
+      const docRef = doc(_collection, id);
+      await setDoc(docRef, {
+        ...data,
+        updatedAt: new Date().toISOString(),
+      }, { merge: true });
+      return getById(id);
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
   const deleteById = async (id: string): Promise<void> => {
     try {
       const docRef = doc(_collection, id);
@@ -140,5 +155,5 @@ export const createCRUD = <T extends object>(path: TCollections) => {
   }
 
 
-  return { getAll, getById, create, delete: deleteById, getCollection: () => _collection };
+  return { getAll, getById, create, update, delete: deleteById, getCollection: () => _collection };
 }

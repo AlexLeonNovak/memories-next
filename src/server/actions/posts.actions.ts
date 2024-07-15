@@ -25,7 +25,7 @@ export const fetchPostsWithCategories = cache(async (query: TQueryOptions<TBaseE
 
 export const createPost = async (prevState: any, formData: FormData) => {
   console.log(formData.get('name'));
-  const parsed = parseSchemaFormData(createPostSchemaFD, formData);
+  const parsed = await parseSchemaFormData(createPostSchemaFD, formData);
   if (parsed.success) {
     const { files, ...rest } = parsed.data;
     const media: TPostMedia[] = [];

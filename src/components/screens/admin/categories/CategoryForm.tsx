@@ -1,8 +1,7 @@
 'use client';
 
-import {TCategory} from '@/types';
+import {TCategory, TCategoryEntity} from '@/types';
 import {
-  Button,
   Checkbox,
   Form,
   FormControl,
@@ -19,34 +18,39 @@ import {useFormState} from 'react-dom';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {useEffect, useRef} from 'react';
 import {createCategorySchema} from '@/lib/validations';
-import {createCategory} from '@/server';
+import {createCategory, updateCategory} from '@/server';
 import {Save} from 'lucide-react';
+import {toast} from 'sonner';
 
 type TCategoryFormProps = {
+  category?: TCategoryEntity;
   onFormSubmit?: (data: TCategory) => void,
   submitRequested?: boolean;
   isShowSubmitButton?: boolean;
 }
 
-export const CategoryForm = ({onFormSubmit, submitRequested, isShowSubmitButton = true}: TCategoryFormProps) => {
+export const CategoryForm = ({category, onFormSubmit, submitRequested, isShowSubmitButton = true}: TCategoryFormProps) => {
   const formRef = useRef<HTMLFormElement>(null);
   const form = useForm<TCategory>({
     mode: 'all',
     resolver: zodResolver(createCategorySchema),
-    defaultValues: {
+    defaultValues: category || {
       name: '',
       isActive: true,
     },
   });
 
+  const serverAction = category?.id ? updateCategory : createCategory;
+
   const {control, setError} = form;
-  const [state, action] = useFormState(createCategory, null);
+  const [state, action] = useFormState(serverAction, null);
 
   useEffect(() => {
     if (!state) {
       return;
     }
     if (!state.success) {
+      toast.error('One or more fields have an error. Please check them and try again.');
       state.errors?.forEach((error) => {
         setError(error.path as FieldPath<TCategory>, {
           message: error.message,
@@ -54,9 +58,10 @@ export const CategoryForm = ({onFormSubmit, submitRequested, isShowSubmitButton 
       });
     }
     if (state.success) {
+      toast.success(`Successfully ${category?.id ? 'updated' : 'created'}!`);
       onFormSubmit && onFormSubmit(state.data);
     }
-  }, [state, setError]);
+  }, [state, setError, category]);
 
   useEffect(() => {
     if (submitRequested) {
@@ -67,6 +72,9 @@ export const CategoryForm = ({onFormSubmit, submitRequested, isShowSubmitButton 
   return (
     <Form {...form}>
       <form action={action} ref={formRef} className="space-y-8">
+
+        { category?.id && <Input type='hidden' name='id' value={category.id} /> }
+
         <FormField name="name"
                    control={control}
                    render={({field}) => (
