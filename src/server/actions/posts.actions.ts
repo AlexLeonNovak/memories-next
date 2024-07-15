@@ -13,10 +13,11 @@ export const fetchPosts = cache(PostRepository.getAll);
 
 export const fetchPostsWithCategories = cache(async (query: TQueryOptions<TBaseEntity & TPost>) => {
   const categories = await fetchCategories();
+  const catIds = categories.map(category => category.id);
   const posts = await fetchPosts(query);
   return posts.map(post => ({
     ...post,
-    categories: post.categories.map(categoryId =>
+    categories: post.categories.filter(catId => catIds.includes(catId)).map(categoryId =>
       categories.find(({ id }) => categoryId === id)!
     ),
   }));
@@ -43,3 +44,5 @@ export const createPost = async (prevState: any, formData: FormData) => {
   }
   return parsed;
 }
+
+export const updatePost = async (prevState: any, formData: FormData) => {}

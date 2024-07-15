@@ -16,3 +16,5 @@ export type TFormStateSuccess<T extends object = {}> = {
 };
 
 export type TFormState<T extends object = {}> = TFormStateBase & (TFormStateError | TFormStateSuccess<T>);
+
+export type TDeleteFormState = Pick<TFormState, 'success' | 'message'>;

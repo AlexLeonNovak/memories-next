@@ -10,7 +10,9 @@ export const categoriesOptionSchema: z.ZodSchema<Option> = z.object({
 });
 
 export const createPostSchema = z.object({
-  name: z.string().min(1, 'Required'),
+  name: z.string()
+    .min(1, 'Required')
+    ,
   description: z.string().optional(),
   mediaType: z.nativeEnum(EPostMediaType),
   mediaUrl: z.string(),

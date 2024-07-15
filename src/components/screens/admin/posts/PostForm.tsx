@@ -29,14 +29,14 @@ import Image from 'next/image';
 import {useRouter} from 'next/navigation';
 
 type TPostFormProps = {
-  categories: Array<TCategory & {id: string}>
+  categories: Array<TCategory & { id: string }>
 }
 
 type TPostForm = z.infer<typeof createPostSchema>;
 
-export const PostForm = ({ categories = [] }: TPostFormProps) => {
+export const PostForm = ({categories = []}: TPostFormProps) => {
   const router = useRouter();
-  const categoryOptions: Option[] = categories.map(({ id, name, isActive}) => ({
+  const categoryOptions: Option[] = categories.map(({id, name, isActive}) => ({
     label: name,
     value: id,
     disable: !isActive,
@@ -51,7 +51,7 @@ export const PostForm = ({ categories = [] }: TPostFormProps) => {
       categories: [],
       files: [],
       isActive: true,
-    }
+    },
   });
 
   const dropzone = {
@@ -59,8 +59,8 @@ export const PostForm = ({ categories = [] }: TPostFormProps) => {
     maxFiles: 5,
     maxSize: 10 * 1024 * 1024,
     accept: {
-      "image/*": [".jpg", ".jpeg", ".png", ".gif"],
-      "video/*": [".mp4", ".mkv"],
+      'image/*': ['.jpg', '.jpeg', '.png', '.gif'],
+      'video/*': ['.mp4', '.mkv'],
     },
   } satisfies DropzoneOptions;
 
@@ -102,26 +102,26 @@ export const PostForm = ({ categories = [] }: TPostFormProps) => {
                    )}
         />
 
-        <div className="flex items-center">
         <FormField name="categories"
                    control={control}
                    render={({field}) => (
                      <FormItem className="w-full">
                        <FormLabel>Categories <span className="text-red-600">*</span></FormLabel>
-                       <FormControl>
-                         <MultipleSelector
-                           {...field}
-                           options={categoryOptions}
-                           placeholder="Select categories"
-                           emptyIndicator={<p>There are no one item</p>}
-                         />
-                       </FormControl>
+                       <div className="flex items-center">
+                         <FormControl className="flex items-center">
+                           <MultipleSelector
+                             {...field}
+                             options={categoryOptions}
+                             placeholder="Select categories"
+                             emptyIndicator={<p>There are no one item</p>}
+                           />
+                         </FormControl>
+                         <CategoryDialog/>
+                       </div>
                        <FormMessage/>
                      </FormItem>
                    )}
         />
-          <CategoryDialog />
-        </div>
 
         <FormField name="description"
                    control={control}
@@ -138,7 +138,7 @@ export const PostForm = ({ categories = [] }: TPostFormProps) => {
 
         <FormField name="files"
                    control={control}
-                   render={({ field }) => (
+                   render={({field}) => (
                      <FormItem>
                        <FormLabel>Images and videos</FormLabel>
                        <FormControl>
@@ -172,11 +172,11 @@ export const PostForm = ({ categories = [] }: TPostFormProps) => {
                                    <AspectRatio className="size-full">
                                      {file.type.includes('image')
                                        ? <Image src={URL.createObjectURL(file)}
-                                            alt={file.name}
-                                            className="object-cover"
-                                            fill
-                                     />
-                                       : <FileVideo className="size-full" />
+                                                alt={file.name}
+                                                className="object-cover"
+                                                fill
+                                       />
+                                       : <FileVideo className="size-full"/>
                                      }
                                    </AspectRatio>
                                  </FileUploaderItem>
@@ -191,7 +191,7 @@ export const PostForm = ({ categories = [] }: TPostFormProps) => {
 
         <FormField name="isActive"
                    control={control}
-                   render={({field: { name, value, onChange}}) => (
+                   render={({field: {name, value, onChange}}) => (
                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                        <FormControl>
                          <Checkbox name={name} checked={value} onCheckedChange={onChange}/>
@@ -204,7 +204,10 @@ export const PostForm = ({ categories = [] }: TPostFormProps) => {
                    )}
         />
 
-        <SubmitButton />
+        <SubmitButton label="Save"
+                      pendingLabel="Please wait..."
+                      icon={<Save/>}
+        />
       </form>
     </Form>
   );

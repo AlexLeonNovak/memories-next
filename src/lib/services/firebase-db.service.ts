@@ -1,6 +1,7 @@
 import {
   getFirestore,
   addDoc,
+  deleteDoc,
   collection,
   getDocs,
   QueryDocumentSnapshot,
@@ -10,10 +11,11 @@ import {
   orderBy,
   where,
   or,
+  and,
   OrderByDirection,
   QueryFieldFilterConstraint,
   QueryCompositeFilterConstraint,
-  QueryOrderByConstraint, and,
+  QueryOrderByConstraint,
 } from '@firebase/firestore';
 import {getFirebaseApp} from '.';
 import {TBaseEntity, TCollections, TQueryFilter, TQueryOptions, TQueryOrder} from '@/types';
@@ -127,7 +129,16 @@ export const createCRUD = <T extends object>(path: TCollections) => {
     }
   }
 
-  // const findOne = async (id: string): Promise<T> => {}
+  const deleteById = async (id: string): Promise<void> => {
+    try {
+      const docRef = doc(_collection, id);
+      await deleteDoc(docRef);
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
 
-  return { getAll, getById, create, collection: _collection };
+
+  return { getAll, getById, create, delete: deleteById, getCollection: () => _collection };
 }

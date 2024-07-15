@@ -1,15 +1,21 @@
 // 'use client';
 
-import {Badge, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableSkeleton} from '@/components';
-import {fetchCategories} from '@/server';
+import {
+  Badge,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableSkeleton,
+} from '@/components';
+import {fetchCategories, deleteCategory} from '@/server';
+import {DeleteForm} from '@/components/screens/admin/DeleteForm';
 
 export const CategoriesTable = async () => {
-  // const { data, isLoading } = useCategories();
   const categories = await fetchCategories();
-
-  // if (isLoading) {
-  //   return <TableSkeleton />;
-  // }
 
   return (
     <Table>
@@ -31,7 +37,13 @@ export const CategoriesTable = async () => {
                 {isActive ? 'Active' : 'No active'}
               </Badge>
             </TableCell>
-            <TableCell>delete, update</TableCell>
+            <TableCell>
+              <DeleteForm id={id}
+                          deleteAction={deleteCategory}
+                          title='Delete category?'
+                          description='Are you sure you want to delete this category?'
+              />
+            </TableCell>
           </TableRow>
         ))}
 

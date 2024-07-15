@@ -2,9 +2,9 @@
 
 import {
   Button, CategoryForm,
-  Modal,
+  Modal, SubmitButton,
 } from '@/components';
-import {LoaderCircle, Plus, Save} from 'lucide-react';
+import {Plus, Save} from 'lucide-react';
 import {useState} from 'react';
 
 export const CategoryDialog = () => {
@@ -20,14 +20,12 @@ export const CategoryDialog = () => {
       <Modal open={showCategoryDialog}
              setOpen={setShowCategoryDialog}
              title="Add new category"
-             footer={(
-               <Button type="button" onClick={() => setSubmitRequested(true)} disabled={submitRequested}>
-                 {submitRequested
-                   ? (<><LoaderCircle className="animate-spin" /><span>Please wait...</span></>)
-                   : (<><Save /><span>Save</span></>)
-                 }
-               </Button>
-             )}
+             footer={<SubmitButton onClick={() => setSubmitRequested(true)}
+                                   isPending={submitRequested}
+                                   label="Create category"
+                                   pendingLabel='Please wait...'
+                                   icon={<Save />}
+             />}
       >
         <CategoryForm submitRequested={submitRequested}
                       onFormSubmit={() => {

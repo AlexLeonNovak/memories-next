@@ -12,14 +12,15 @@ import {
   FormLabel,
   FormMessage,
   Input,
-  SubmitButton
+  SubmitButton,
 } from '@/components';
 import {FieldPath, useForm} from 'react-hook-form';
-import { useFormState } from 'react-dom';
+import {useFormState} from 'react-dom';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {useEffect, useRef} from 'react';
 import {createCategorySchema} from '@/lib/validations';
 import {createCategory} from '@/server';
+import {Save} from 'lucide-react';
 
 type TCategoryFormProps = {
   onFormSubmit?: (data: TCategory) => void,
@@ -35,10 +36,10 @@ export const CategoryForm = ({onFormSubmit, submitRequested, isShowSubmitButton 
     defaultValues: {
       name: '',
       isActive: true,
-    }
+    },
   });
 
-  const { control, setError } = form;
+  const {control, setError} = form;
   const [state, action] = useFormState(createCategory, null);
 
   useEffect(() => {
@@ -65,7 +66,7 @@ export const CategoryForm = ({onFormSubmit, submitRequested, isShowSubmitButton 
 
   return (
     <Form {...form}>
-      <form action={action} ref={formRef} className='space-y-8'>
+      <form action={action} ref={formRef} className="space-y-8">
         <FormField name="name"
                    control={control}
                    render={({field}) => (
@@ -84,7 +85,7 @@ export const CategoryForm = ({onFormSubmit, submitRequested, isShowSubmitButton 
 
         <FormField name="isActive"
                    control={control}
-                   render={({field: { name, value, onChange}}) => (
+                   render={({field: {name, value, onChange}}) => (
                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                        <FormControl>
                          <Checkbox name={name} checked={value} onCheckedChange={onChange}/>
@@ -94,10 +95,14 @@ export const CategoryForm = ({onFormSubmit, submitRequested, isShowSubmitButton 
                        </div>
                        <FormMessage/>
                      </FormItem>
-                     )}
-          />
-        {isShowSubmitButton && <SubmitButton />}
+                   )}
+        />
+        {isShowSubmitButton && <SubmitButton label="Save"
+				                                     pendingLabel="Please wait..."
+				                                     icon={<Save/>}
+				/>
+        }
       </form>
     </Form>
   );
-}
+};

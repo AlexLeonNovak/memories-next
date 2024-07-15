@@ -3,7 +3,7 @@ import {authMiddleware, redirectToLogin} from 'next-firebase-auth-edge';
 import { firebaseConfig, serverConfig } from "@/lib/services";
 import {redirectToAdmin} from '@/lib/redirects';
 
-const PUBLIC_PATHS = ['/admin/login'];
+const PUBLIC_PATHS = ['/', '/admin/login'];
 export async function middleware(request: NextRequest) {
   return authMiddleware(request, {
     loginPath: "/api/login",
