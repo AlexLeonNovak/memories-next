@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  Button,
   Form,
   FormControl,
   FormDescription,
@@ -15,27 +14,29 @@ import {
   Option,
   CategoryDialog, FileUploader, FileInput, FileUploaderContent, FileUploaderItem, AspectRatio, SubmitButton, Checkbox,
 } from '@/components';
-import {TCategory, TPost} from '@/types';
+import {TCategory, TPostEntity} from '@/types';
 import {FieldPath, useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {LoaderCircle, Save, CloudUpload, FileVideo} from 'lucide-react';
+import {Save, CloudUpload, FileVideo} from 'lucide-react';
 import {createPostSchema} from '@/lib/validations';
 import {z} from 'zod';
-import {createPost} from '@/server';
-import {useFormState, useFormStatus} from 'react-dom';
-import {useEffect} from 'react';
+import {createPost, updatePost} from '@/server';
+import {useFormState} from 'react-dom';
+import {useEffect, useState} from 'react';
 import {DropzoneOptions} from 'react-dropzone';
 import Image from 'next/image';
 import {useRouter} from 'next/navigation';
 import {toast} from 'sonner';
+import {getFileJs} from '@/lib/services';
 
 type TPostFormProps = {
   categories: Array<TCategory & { id: string }>
+  post?: TPostEntity;
 }
 
 type TPostForm = z.infer<typeof createPostSchema>;
 
-export const PostForm = ({categories = []}: TPostFormProps) => {
+export const PostForm = ({post, categories = [], }: TPostFormProps) => {
   const router = useRouter();
   const categoryOptions: Option[] = categories.map(({id, name, isActive}) => ({
     label: name,
@@ -43,16 +44,20 @@ export const PostForm = ({categories = []}: TPostFormProps) => {
     disable: !isActive,
   }));
 
+  const defaultValues: TPostForm = {
+    name: post?.name || '',
+    description: post?.description || '',
+    categories: post?.categories ? categoryOptions.filter(
+      ({ value }) => post.categories.includes(value)
+    ) : [],
+    isActive: post?.isActive || false,
+    files: []
+  };
+
   const form = useForm<TPostForm>({
     mode: 'all',
     resolver: zodResolver(createPostSchema),
-    defaultValues: {
-      name: '',
-      description: '',
-      categories: [],
-      files: [],
-      isActive: true,
-    },
+    defaultValues,
   });
 
   const dropzone = {
@@ -61,12 +66,13 @@ export const PostForm = ({categories = []}: TPostFormProps) => {
     maxSize: 10 * 1024 * 1024,
     accept: {
       'image/*': ['.jpg', '.jpeg', '.png', '.gif'],
-      'video/*': ['.mp4', '.mkv'],
+      'video/*': ['.mp4', '.mkv', '.mov'],
     },
   } satisfies DropzoneOptions;
 
-  const {control, setError} = form;
-  const [state, action] = useFormState(createPost, null);
+  const {control, setError, setValue} = form;
+  const serverAction = post?.id ? updatePost : createPost;
+  const [state, action] = useFormState(serverAction, null);
 
   useEffect(() => {
     if (!state) {
@@ -81,13 +87,24 @@ export const PostForm = ({categories = []}: TPostFormProps) => {
       });
     }
     if (state.success) {
+      toast.success(`Successfully ${post?.id ? 'updated' : 'created'}!`);
       router.push('/admin/posts');
     }
   }, [state, setError, router]);
 
+  useEffect(() => {
+    if (post?.media) {
+      Promise.all(post.media.map(({ url }) => getFileJs(url)))
+        .then(files => setValue('files', files));
+    }
+  }, [post, setValue]);
+
   return (
     <Form {...form}>
       <form action={action} className="space-y-8">
+
+        { post?.id && <Input type='hidden' name='id' value={post.id} /> }
+
         <FormField name="name"
                    control={control}
                    render={({field}) => (
@@ -170,7 +187,6 @@ export const PostForm = ({categories = []}: TPostFormProps) => {
                              {field.value && field.value.length > 0 &&
                                field.value.map((file, i) => (
                                  <FileUploaderItem key={i} index={i} className="size-20">
-
                                    <AspectRatio className="size-full">
                                      {file.type.includes('image')
                                        ? <Image src={URL.createObjectURL(file)}

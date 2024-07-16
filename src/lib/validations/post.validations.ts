@@ -14,8 +14,6 @@ export const createPostSchema = z.object({
     .min(1, 'Required')
     ,
   description: z.string().optional(),
-  mediaType: z.nativeEnum(EPostMediaType),
-  mediaUrl: z.string(),
   categories: z.array(categoriesOptionSchema).min(1),
   files: z
     .array(
@@ -30,12 +28,29 @@ export const createPostSchema = z.object({
   isActive: z.coerce.boolean(),
 });
 
-export const createPostSchemaFD = zfd.formData({
+const basePostSchema = z.object({
   name: zfd.text(z.string().min(1, 'Required')),
   description: zfd.text(z.string().optional().default('')),
-  categories: zfd.repeatable(z.array(zfd.text()).min(1, 'At least one category should be selected')),
+  categories: zfd.repeatable(
+    // z.preprocess(val => [val].flat(),
+      z.array(zfd.text())
+
+      // .array()
+      .min(1, 'At least one category should be selected')
+    // )
+  ),
   files: zfd.repeatable(
-    z.array(zfd.file(z.instanceof(File))).min(1)
+    // z.preprocess(val => [val].flat(),
+      z.array(zfd.file(z.instanceof(File)))
+      .min(1)
+    // )
   ),
   isActive: z.coerce.boolean(),
 });
+
+
+export const createPostSchemaFD = zfd.formData(basePostSchema);
+
+export const updatePostSchemaFD = zfd.formData(basePostSchema.and(z.object({
+  id: zfd.text(),
+})));

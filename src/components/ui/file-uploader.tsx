@@ -89,22 +89,22 @@ export const FileUploader = forwardRef<
     const reSelectAll = maxFiles === 1 ? true : reSelect;
     const direction: DirectionOptions = dir === 'rtl' ? 'rtl' : 'ltr';
 
-    const setFiles = (files: File[]) => {
+    const setFilesToInput = useCallback((files: File[]) => {
       const dataTransfer = new DataTransfer();
       files.forEach(file => dataTransfer.items.add(file));
       if (dropzoneState.inputRef.current) {
         dropzoneState.inputRef.current.files = dataTransfer.files;
       }
-      onValueChange(files);
-    }
+    }, []);
 
     const removeFileFromSet = useCallback(
       (i: number) => {
         if (!value) return;
         const newFiles = value.filter((_, index) => index !== i);
-        setFiles(newFiles);
+        setFilesToInput(newFiles);
+        onValueChange(newFiles);
       },
-      [value, setFiles],
+      [value, setFilesToInput, onValueChange],
     );
 
     const handleKeyDown = useCallback(
@@ -183,7 +183,8 @@ export const FileUploader = forwardRef<
           }
         });
 
-        setFiles(newValues);
+        setFilesToInput(newValues);
+        onValueChange(newValues);
 
         if (rejectedFiles.length > 0) {
           for (let i = 0; i < rejectedFiles.length; i++) {
@@ -205,11 +206,11 @@ export const FileUploader = forwardRef<
 
     useEffect(() => {
       if (!value) return;
-      if (value.length === maxFiles) {
-        setIsLOF(true);
-        return;
+
+      setIsLOF(value.length === maxFiles);
+      if (value.length) {
+        setFilesToInput(value);
       }
-      setIsLOF(false);
     }, [value, maxFiles]);
 
     const opts = dropzoneOptions

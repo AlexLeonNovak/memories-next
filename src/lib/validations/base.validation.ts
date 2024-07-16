@@ -9,7 +9,7 @@ export const baseSchema = z.object({
 
 export const baseSchemaWithId = z.object({
   id: z.string(),
-})
+});
 
 export const baseSchemaFD = zfd.formData({
   name: zfd.text(),
@@ -24,8 +24,8 @@ export const parseSchemaFormData = async <T extends ZodSchema>(schema: T, fd: Fo
     success,
     data: data ? data as z.infer<typeof schema> : undefined,
     errors: success ? [] : error?.issues.map(({path, message}) => ({
-      path: path.join('.'),
+      path: path[0],
       message,
     })),
   } as TFormState<z.infer<typeof schema>>;
-}
+};

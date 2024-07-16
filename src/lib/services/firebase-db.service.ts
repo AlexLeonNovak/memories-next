@@ -105,11 +105,13 @@ export const createCRUD = <T extends object>(path: TCollections) => {
     }
   }
 
-  const getById = async (id: string): Promise<TBaseEntity & T> => {
+  const getById = async (id: string): Promise<TBaseEntity & T | undefined> => {
     try {
       const docRef = doc(_collection, id);
       const document = await getDoc(docRef);
-      return { id: document.id, ...document.data()! } as TBaseEntity & T;
+      if (document.data()) {
+        return {id: document.id, ...document.data()} as TBaseEntity & T;
+      }
     } catch (error) {
       console.error(error);
       throw error;
@@ -123,7 +125,7 @@ export const createCRUD = <T extends object>(path: TCollections) => {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       });
-      return getById(document.id);
+      return (await getById(document.id))!;
     } catch (error) {
       console.error(error);
       throw error;
@@ -137,7 +139,7 @@ export const createCRUD = <T extends object>(path: TCollections) => {
         ...data,
         updatedAt: new Date().toISOString(),
       }, { merge: true });
-      return getById(id);
+      return (await getById(id))!;
     } catch (error) {
       console.error(error);
       throw error;

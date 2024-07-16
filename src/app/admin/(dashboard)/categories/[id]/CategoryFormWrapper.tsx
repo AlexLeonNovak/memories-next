@@ -5,7 +5,7 @@ import {useRouter} from 'next/navigation';
 import {CategoryForm} from '@/components';
 
 type TCategoryFormWrapperProps = {
-  category?: TCategoryEntity;
+  category: TCategoryEntity;
 }
 
 export const CategoryFormWrapper = ({category}: TCategoryFormWrapperProps) => {
