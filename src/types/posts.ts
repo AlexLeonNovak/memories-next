@@ -1,13 +1,8 @@
+import {TBaseEntity} from '.';
+
 export enum EPostMediaType {
   IMAGE = 'image',
   VIDEO = 'video',
-}
-
-export type TBaseEntity = {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-
 }
 
 export type TBaseFields = {
@@ -33,5 +28,3 @@ export type TCategory = {
 
 export type TPostEntity = TBaseEntity & TPost;
 export type TCategoryEntity = TBaseEntity & TCategory;
-
-export type TCollections = 'posts' | 'categories';

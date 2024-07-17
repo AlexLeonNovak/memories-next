@@ -1,6 +1,6 @@
 import {fetchCategories, fetchPostById} from '@/server';
 import {notFound} from 'next/navigation';
-import {PostForm} from '@/components';
+import { PageTitle, PostForm} from '@/components';
 
 type TEditCategoryPage = {
   params: {
@@ -18,9 +18,9 @@ export default async function EditPostPage({params: { id }}: TEditCategoryPage) 
   const categories = await fetchCategories();
 
   return (
-    <div>
-      <h1 className="text-3xl mb-2">Edit post: &ldquo;{post.name}&rdquo;</h1>
+    <>
+      <PageTitle title={`Edit post: &ldquo;${post.name}&rdquo;`} />
       <PostForm post={post} categories={categories} />
-    </div>
+    </>
   )
 }

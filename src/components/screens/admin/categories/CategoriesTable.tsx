@@ -52,7 +52,13 @@ export const CategoriesTable = async () => {
             </TableCell>
           </TableRow>
         ))}
-
+        { !categories?.length && (
+          <TableRow>
+            <TableCell colSpan={4}>
+              <p className="text-center text-2xl text-muted-foreground">There are no items to display yet</p>
+            </TableCell>
+          </TableRow>
+        )}
       </TableBody>
     </Table>
   )

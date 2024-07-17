@@ -1,6 +1,6 @@
 'use client';
 
-import {CategoryForm} from '@/components';
+import {CategoryForm, PageTitle} from '@/components';
 import {useRouter} from 'next/navigation';
 
 export default function AddCategoryPage() {
@@ -8,7 +8,7 @@ export default function AddCategoryPage() {
 
   return (
     <div>
-      <h1 className="text-3xl mb-2">Create new category</h1>
+      <PageTitle title='Create new category' />
       <CategoryForm onFormSubmit={() => router.back()} />
     </div>
   )

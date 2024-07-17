@@ -1,6 +1,7 @@
 import {CategoryFormWrapper} from './CategoryFormWrapper';
 import {fetchCategoryById} from '@/server';
 import {notFound} from 'next/navigation';
+import {PageTitle} from '@/components';
 
 type TEditCategoryPage = {
   params: {
@@ -10,13 +11,14 @@ type TEditCategoryPage = {
 
 export default async function EditCategoryPage({params: { id }}: TEditCategoryPage) {
   const category = await fetchCategoryById(id);
-  console.log('category', category);
+
   if (!category) {
     return notFound();
   }
 
   return (
     <div>
+      <PageTitle title={`Edit category: &ldquo;${category.name}&rdquo;`} />
       <h1 className="text-3xl mb-2">Edit category: &ldquo;{category.name}&rdquo;</h1>
       <CategoryFormWrapper category={category} />
     </div>

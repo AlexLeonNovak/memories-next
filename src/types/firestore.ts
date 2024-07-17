@@ -15,3 +15,5 @@ export type TQueryOptions<T extends object> = {
   where?: TQueryFilter<T> | TQueryFilter<T>[];
   or?: TQueryFilter<T> | TQueryFilter<T>[];
 }
+
+export type TCollections = 'posts' | 'categories' | 'leads';

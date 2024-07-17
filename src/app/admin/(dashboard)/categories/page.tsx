@@ -5,7 +5,7 @@ import {Plus} from 'lucide-react';
 export default function CategoryPage() {
 
   return (
-    <div className="space-y-4">
+    <>
       <PageTitle title="Categories"/>
       <div className="row">
         <Button asChild>
@@ -16,6 +16,6 @@ export default function CategoryPage() {
         </Button>
       </div>
         <CategoriesTable/>
-    </div>
+    </>
   )
 }

@@ -48,6 +48,15 @@ export const PostsTable = async () => {
               </TableCell>
             </TableRow>
           ))}
+
+        { !posts?.length && (
+          <TableRow>
+            <TableCell colSpan={5}>
+              <p className="text-center text-2xl text-muted-foreground">There are no items to display yet</p>
+            </TableCell>
+          </TableRow>
+        )}
+
       </TableBody>
     </Table>
   )
