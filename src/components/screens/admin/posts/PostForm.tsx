@@ -17,8 +17,8 @@ import {
 import {TCategory, TPostEntity} from '@/types';
 import {FieldPath, useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {Save, CloudUpload, FileVideo} from 'lucide-react';
-import {createPostSchema} from '@/lib/validations';
+import {Save, CloudUpload, FileVideo, LoaderCircle} from 'lucide-react';
+import {createPostSchema, MAX_SIZE_IMAGE, MAX_SIZE_VIDEO} from '@/lib/validations';
 import {z} from 'zod';
 import {createPost, updatePost} from '@/server';
 import {useFormState} from 'react-dom';
@@ -28,6 +28,7 @@ import Image from 'next/image';
 import {useRouter} from 'next/navigation';
 import {toast} from 'sonner';
 import {getFileJs} from '@/lib/services';
+import {getFileType} from '@/lib/utils';
 
 type TPostFormProps = {
   categories: Array<TCategory & { id: string }>
@@ -37,6 +38,7 @@ type TPostFormProps = {
 type TPostForm = z.infer<typeof createPostSchema>;
 
 export const PostForm = ({post, categories = [], }: TPostFormProps) => {
+  const [isMediaLoading, setIsMediaLoading] = useState(false);
   const router = useRouter();
   const categoryOptions: Option[] = categories.map(({id, name, isActive}) => ({
     label: name,
@@ -50,7 +52,7 @@ export const PostForm = ({post, categories = [], }: TPostFormProps) => {
     categories: post?.categories ? categoryOptions.filter(
       ({ value }) => post.categories.includes(value)
     ) : [],
-    isActive: post?.isActive || false,
+    isActive: post?.isActive || true,
     files: []
   };
 
@@ -63,14 +65,15 @@ export const PostForm = ({post, categories = [], }: TPostFormProps) => {
   const dropzone = {
     multiple: true,
     maxFiles: 5,
-    maxSize: 10 * 1024 * 1024,
+    maxSize: Infinity,
     accept: {
       'image/*': ['.jpg', '.jpeg', '.png', '.gif'],
       'video/*': ['.mp4', '.mkv', '.mov'],
     },
   } satisfies DropzoneOptions;
 
-  const {control, setError, setValue} = form;
+  const {control, setError, setValue, formState} = form;
+  console.log(formState.errors);
   const serverAction = post?.id ? updatePost : createPost;
   const [state, action] = useFormState(serverAction, null);
 
@@ -94,10 +97,12 @@ export const PostForm = ({post, categories = [], }: TPostFormProps) => {
 
   useEffect(() => {
     if (post?.media) {
+      setIsMediaLoading(true);
       Promise.all(post.media.map(({ url }) => getFileJs(url)))
-        .then(files => setValue('files', files));
+        .then(files => setValue('files', files))
+        .finally(() => setIsMediaLoading(false));
     }
-  }, [post, setValue]);
+  }, [post, setValue, setIsMediaLoading]);
 
   return (
     <Form {...form}>
@@ -176,22 +181,26 @@ export const PostForm = ({post, categories = [], }: TPostFormProps) => {
                                  &nbsp; or drag and drop
                                </p>
                                <p className="text-xs text-gray-500 dark:text-gray-400">
-                                 <strong>Images: </strong>SVG, PNG, JPG or GIF
+                                 <strong>Images: </strong>SVG, PNG, JPG or GIF&nbsp;
+                                 <span className="text-muted-foreground">(Max {MAX_SIZE_IMAGE}MB)</span>
                                </p>
                                <p className="text-xs text-gray-500 dark:text-gray-400">
-                                 <strong>Videos: </strong>MP4, MKV, MOV
+                                 <strong>Videos: </strong>MP4, MKV, MOV&nbsp;
+                                 <span className="text-muted-foreground">(Max {MAX_SIZE_VIDEO}MB)</span>
                                </p>
                              </div>
                            </FileInput>
                            <FileUploaderContent>
-                             {field.value && field.value.length > 0 &&
+                             {isMediaLoading && <LoaderCircle className="animate-spin size-10" />}
+                             {!isMediaLoading && field.value && field.value.length > 0 &&
                                field.value.map((file, i) => (
                                  <FileUploaderItem key={i} index={i} className="size-20">
                                    <AspectRatio className="size-full">
-                                     {file.type.includes('image')
+                                     {getFileType(file) === 'image'
                                        ? <Image src={URL.createObjectURL(file)}
                                                 alt={file.name}
                                                 className="object-cover"
+                                                loading="eager"
                                                 fill
                                        />
                                        : <FileVideo className="size-full"/>

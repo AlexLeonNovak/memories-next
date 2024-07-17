@@ -12,7 +12,7 @@ export default async function AdminLayout({children}: { children: ReactNode }) {
       <div className="flex flex-col">
         <main className="p-4 bg-gray-50 min-h-screen">
           <div className="p-4 border bg-white h-full">
-            <Suspense fallback={<LoaderCircle className="animate-spin" />}>
+            <Suspense fallback={<LoaderCircle className="animate-spin size-10" />}>
               <PageContent>
                 {children}
               </PageContent>

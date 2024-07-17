@@ -19,7 +19,7 @@ export default async function EditPostPage({params: { id }}: TEditCategoryPage) 
 
   return (
     <>
-      <PageTitle title={`Edit post: &ldquo;${post.name}&rdquo;`} />
+      <PageTitle title={`Edit post: "${post.name}"`} />
       <PostForm post={post} categories={categories} />
     </>
   )

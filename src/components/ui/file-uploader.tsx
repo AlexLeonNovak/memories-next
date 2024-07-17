@@ -361,7 +361,7 @@ export const FileInput = forwardRef<
       <Input
         ref={dropzoneState.inputRef}
         type="file"
-        disabled={isLOF}
+        readOnly={isLOF}
         {...dropzoneState.getInputProps({ name })}
         className={`${isLOF ? 'cursor-not-allowed' : ''}`}
       />
