@@ -1,13 +1,13 @@
-import {PostForm} from '@/components';
+import {PageTitle, PostForm} from '@/components';
 import {fetchCategories} from '@/server';
 
 export default async function AddPostPage() {
   const categories = await fetchCategories();
 
   return (
-    <div>
-      <h1 className="text-3xl">Create new post</h1>
+    <>
+      <PageTitle title='Create new post' />
       <PostForm categories={categories} />
-    </div>
+    </>
   )
 }

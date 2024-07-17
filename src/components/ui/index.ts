@@ -12,3 +12,5 @@ export * from './checkbox';
 export * from './skeleton';
 export * from './file-uploader';
 export * from './aspect-ratio';
+export * from './alert-dialog';
+

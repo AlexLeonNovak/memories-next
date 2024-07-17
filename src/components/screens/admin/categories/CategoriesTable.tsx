@@ -1,15 +1,22 @@
 // 'use client';
 
-import {Badge, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableSkeleton} from '@/components';
-import {fetchCategories} from '@/server';
+import {
+  Badge,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  DeleteForm,
+} from '@/components';
+import {fetchCategories, deleteCategory} from '@/server';
+import Link from 'next/link';
+import {Pencil} from 'lucide-react';
 
 export const CategoriesTable = async () => {
-  // const { data, isLoading } = useCategories();
   const categories = await fetchCategories();
-
-  // if (isLoading) {
-  //   return <TableSkeleton />;
-  // }
 
   return (
     <Table>
@@ -31,10 +38,27 @@ export const CategoriesTable = async () => {
                 {isActive ? 'Active' : 'No active'}
               </Badge>
             </TableCell>
-            <TableCell>delete, update</TableCell>
+            <TableCell className="flex gap-2">
+              <DeleteForm id={id}
+                          deleteAction={deleteCategory}
+                          title='Delete category?'
+                          description='Are you sure you want to delete this category?'
+              />
+              <Button asChild variant='ghost'>
+                <Link href={`categories/${id}`}>
+                  <Pencil />
+                </Link>
+              </Button>
+            </TableCell>
           </TableRow>
         ))}
-
+        { !categories?.length && (
+          <TableRow>
+            <TableCell colSpan={4}>
+              <p className="text-center text-2xl text-muted-foreground">There are no items to display yet</p>
+            </TableCell>
+          </TableRow>
+        )}
       </TableBody>
     </Table>
   )

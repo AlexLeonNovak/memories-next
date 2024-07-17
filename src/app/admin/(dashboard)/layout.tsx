@@ -1,5 +1,6 @@
-import {ReactNode} from 'react';
-import {AdminHeader, Sidebar} from '@/components';
+import {ReactNode, Suspense} from 'react';
+import {AdminHeader, PageContent, Sidebar} from '@/components';
+import {LoaderCircle} from 'lucide-react';
 
 export default async function AdminLayout({children}: { children: ReactNode }) {
   return (
@@ -11,7 +12,11 @@ export default async function AdminLayout({children}: { children: ReactNode }) {
       <div className="flex flex-col">
         <main className="p-4 bg-gray-50 min-h-screen">
           <div className="p-4 border bg-white h-full">
-            {children}
+            <Suspense fallback={<LoaderCircle className="animate-spin" />}>
+              <PageContent>
+                {children}
+              </PageContent>
+            </Suspense>
           </div>
         </main>
       </div>

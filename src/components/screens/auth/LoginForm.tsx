@@ -17,7 +17,7 @@ export const LoginForm = () => {
   const handleLoginWithRedirect = async () => {
     const auth = getFirebaseAuth();
     const credential = await getRedirectResult(auth);
-    console.log(credential);
+
     if (credential?.user) {
       router.push('/admin');
     }

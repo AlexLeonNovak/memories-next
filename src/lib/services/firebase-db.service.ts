@@ -1,6 +1,8 @@
 import {
   getFirestore,
   addDoc,
+  deleteDoc,
+  updateDoc,
   collection,
   getDocs,
   QueryDocumentSnapshot,
@@ -10,10 +12,11 @@ import {
   orderBy,
   where,
   or,
+  and,
   OrderByDirection,
   QueryFieldFilterConstraint,
   QueryCompositeFilterConstraint,
-  QueryOrderByConstraint, and,
+  QueryOrderByConstraint, setDoc,
 } from '@firebase/firestore';
 import {getFirebaseApp} from '.';
 import {TBaseEntity, TCollections, TQueryFilter, TQueryOptions, TQueryOrder} from '@/types';
@@ -102,11 +105,13 @@ export const createCRUD = <T extends object>(path: TCollections) => {
     }
   }
 
-  const getById = async (id: string): Promise<TBaseEntity & T> => {
+  const getById = async (id: string): Promise<TBaseEntity & T | undefined> => {
     try {
       const docRef = doc(_collection, id);
       const document = await getDoc(docRef);
-      return { id: document.id, ...document.data()! } as TBaseEntity & T;
+      if (document.data()) {
+        return {id: document.id, ...document.data()} as TBaseEntity & T;
+      }
     } catch (error) {
       console.error(error);
       throw error;
@@ -120,14 +125,37 @@ export const createCRUD = <T extends object>(path: TCollections) => {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       });
-      return getById(document.id);
+      return (await getById(document.id))!;
     } catch (error) {
       console.error(error);
       throw error;
     }
   }
 
-  // const findOne = async (id: string): Promise<T> => {}
+  const update = async (id: string, data: Partial<T>): Promise<TBaseEntity & T> => {
+    try {
+      const docRef = doc(_collection, id);
+      await setDoc(docRef, {
+        ...data,
+        updatedAt: new Date().toISOString(),
+      }, { merge: true });
+      return (await getById(id))!;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
 
-  return { getAll, getById, create, collection: _collection };
+  const deleteById = async (id: string): Promise<void> => {
+    try {
+      const docRef = doc(_collection, id);
+      await deleteDoc(docRef);
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+
+  return { getAll, getById, create, update, delete: deleteById, getCollection: () => _collection };
 }

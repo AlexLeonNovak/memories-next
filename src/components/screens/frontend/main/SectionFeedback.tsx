@@ -1,7 +1,9 @@
+import {FeedbackForm} from '@/components';
+
 export const SectionFeedback = () => {
   return (
     <section className="feedback-section">
-      FORM HERE
+      <FeedbackForm />
     </section>
   )
 }

@@ -1,5 +1,7 @@
-import {Badge, Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/components';
-import { fetchPostsWithCategories} from '@/server';
+import {Badge, Button, DeleteForm, Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/components';
+import {deletePost, fetchPostsWithCategories} from '@/server';
+import Link from 'next/link';
+import {Pencil} from 'lucide-react';
 
 export const PostsTable = async () => {
   const posts = await fetchPostsWithCategories({
@@ -32,9 +34,29 @@ export const PostsTable = async () => {
                   {isActive ? 'Active' : 'No active'}
                 </Badge>
               </TableCell>
-              <TableCell>delete, update</TableCell>
+              <TableCell className="flex gap-2">
+                <DeleteForm id={id}
+                            deleteAction={deletePost}
+                            title='Delete category?'
+                            description='Are you sure you want to delete this category?'
+                />
+                <Button asChild variant='ghost'>
+                  <Link href={`posts/${id}`}>
+                    <Pencil />
+                  </Link>
+                </Button>
+              </TableCell>
             </TableRow>
           ))}
+
+        { !posts?.length && (
+          <TableRow>
+            <TableCell colSpan={5}>
+              <p className="text-center text-2xl text-muted-foreground">There are no items to display yet</p>
+            </TableCell>
+          </TableRow>
+        )}
+
       </TableBody>
     </Table>
   )

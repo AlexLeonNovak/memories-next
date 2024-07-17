@@ -3,7 +3,7 @@ import {authMiddleware, redirectToLogin} from 'next-firebase-auth-edge';
 import { firebaseConfig, serverConfig } from "@/lib/services";
 import {redirectToAdmin} from '@/lib/redirects';
 
-const PUBLIC_PATHS = ['/admin/login'];
+const PUBLIC_PATHS = ['/', '/admin/login'];
 export async function middleware(request: NextRequest) {
   return authMiddleware(request, {
     loginPath: "/api/login",
@@ -13,18 +13,17 @@ export async function middleware(request: NextRequest) {
     cookieSignatureKeys: serverConfig.cookieSignatureKeys,
     cookieSerializeOptions: serverConfig.cookieSerializeOptions,
     serviceAccount: serverConfig.serviceAccount,
-    handleValidToken: async ({token, decodedToken}, headers) => {
-      // Authenticated user should not be able to access /login, /register and /reset-password routes
-      if (PUBLIC_PATHS.includes(request.nextUrl.pathname)) {
-        return redirectToAdmin(request);
-      }
-
-      return NextResponse.next({
-        request: {
-          headers
-        }
-      });
-    },
+    // handleValidToken: async ({token, decodedToken}, headers) => {
+    //   if (PUBLIC_PATHS.includes(request.nextUrl.pathname)) {
+    //     return redirectToAdmin(request);
+    //   }
+    //
+    //   return NextResponse.next({
+    //     request: {
+    //       headers
+    //     }
+    //   });
+    // },
     handleInvalidToken: async (reason) => {
       console.info('Missing or malformed credentials', {reason});
 
