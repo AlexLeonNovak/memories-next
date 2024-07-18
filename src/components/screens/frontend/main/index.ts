@@ -6,3 +6,4 @@ export * from './SectionFeedback';
 export * from './Footer';
 export * from './FeedbackForm';
 export * from './MapParallax';
+export * from './RandomGallery';
