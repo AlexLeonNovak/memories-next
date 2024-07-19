@@ -5,8 +5,6 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "predeploy": "npm run build",
-    "deploy": "firebase deploy --only hosting:memories",
     "start": "next start",
     "lint": "next lint"
   },
