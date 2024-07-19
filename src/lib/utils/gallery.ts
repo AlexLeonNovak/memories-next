@@ -1,41 +1,54 @@
 import {random} from '.';
 import {TPostMedia} from '@/types';
+import {CSSProperties, JSX} from 'react';
+import {async} from '@firebase/util';
 
-const MIN_PAD = 10;
-const MAX_PAD = 100;
+const MIN_PAD = 5;
+const MAX_PAD = 15;
 const MIN_WIDTH = 160;
 const MIN_HEIGHT = 125;
 const MAX_WIDTH = 300;
 const MAX_HEIGHT = 300;
 
 type TPlacementArgs = {
-  image: HTMLImageElement;
+  item: Element;
   containerWidth: number;
   containerHeight: number;
 }
-export const place = ({ image, containerWidth, containerHeight }: TPlacementArgs) => {
+
+const randomColor = () => '#'+Math.floor(Math.random()*16777215).toString(16);
+export const createDiv = (container: HTMLDivElement) => {
+  const containerWidth = container.getBoundingClientRect().width;
+  const containerHeight = container.getBoundingClientRect().height;
   const pad = random(MIN_PAD, MAX_PAD);
-  // const padTop = random(MIN_PAD, MAX_PAD);
   const width = random(MIN_WIDTH, MAX_WIDTH);
-  const scale = width / image.naturalWidth;
-  const height = image.naturalHeight * scale;
+  const height = random(MIN_HEIGHT, MAX_HEIGHT);
   const left = random(pad, containerWidth - (width + pad));
   const top = random(pad, containerHeight - (height + pad));
-  // const right = left + width;
-  // const bottom = top + height;
+  const divEl = document.createElement('div');
+  divEl.style.width = `${width}px`;
+  divEl.style.height = `${height}px`;
+  divEl.style.left = `${left}px`;
+  divEl.style.top = `${top}px`;
+  divEl.style.position = 'absolute';
+  //
+  divEl.style.background = randomColor();
 
+  container.appendChild(divEl);
   return {
+    element: divEl,
     pad,
-    style: {
-      width: `${width}px`,
-      left: `${left}px`,
-      top: `${top}px`,
-      // right,
-      // bottom,
-      // height,
-    }
-  }
+    width,
+    height,
+    left,
+    top,
+  };
 }
+
+export const randomSize = () => ({
+  width: random(MIN_WIDTH, MAX_WIDTH),
+  height: random(MIN_HEIGHT, MAX_HEIGHT),
+})
 
 type TCoordinatesArgs = {
   x: number;
@@ -75,53 +88,136 @@ export const overlaps = (img1: TImageCoords, img2: TImageCoords, offset: number)
 
 const isImageLoaded = (image: HTMLImageElement): Promise<HTMLImageElement> => new Promise(resolve => image.onload = () => resolve(image));
 
-export const createGallery = async (el: HTMLDivElement) => {
-  const images = [...el.getElementsByTagName('img')];
-  if (!images.length) return;
-  images.forEach((image: HTMLImageElement) => {
-    console.log(image.naturalWidth);
-  })
+export const checkPlacement = ({
+                                 item,
+                                 placedItems,
+ // galleryWidth,
+ // galleryHeight,
+ offset = 0
+}: {
+  item: HTMLDivElement,
+  placedItems: HTMLDivElement[],
+  // galleryWidth: number,
+  // galleryHeight: number,
+  offset?: number,
+}) => {
+  const coordinates1 = getCoordinates(item.getBoundingClientRect())
 
-  const galleryWidth = el.getBoundingClientRect().width;
-  const galleryHeight = el.getBoundingClientRect().height;
+  // if (isOffCanvas(coordinates1, galleryWidth, galleryHeight)) return false
 
-  const loadedImages = await Promise.all(images.map(isImageLoaded));
-  loadedImages.forEach((image: HTMLImageElement) => {
-    image.style.display = 'none';
-  })
-  const placedImages: HTMLImageElement[] = [];
+  return !(placedItems.some((placedItem) => {
+    const coordinates2 = getCoordinates(placedItem.getBoundingClientRect())
+
+    return contains(coordinates1, coordinates2) || overlaps(coordinates1, coordinates2, offset)
+  }))
+}
+
+
+
+type TPlaceItem = {
+  item: any,
+  position: {
+    pad: number;
+    width: number;
+    height: number;
+    left: number;
+    top: number;
+  },
+}
+
+type TPlacement = {
+  placedItems: TPlaceItem[],
+  unplacedItems: any[],
+}
+
+const getPlacement = (el: HTMLDivElement, items: any[] = []) => {
+  const placedDivs: HTMLDivElement[] = [];
+  const placedItems: TPlaceItem[] = [];
   let tries = 0;
   const maxTries = 100;
-  while (loadedImages.length) {
+  while (items.length) {
     tries++;
-    const [image] = loadedImages;
-    const {style, pad } = place({
-      image,
-      containerWidth: galleryWidth,
-      containerHeight: galleryHeight,
-    })
-    image.style.top = style.top;
-    image.style.left = style.left;
-    image.style.width = style.width;
-    image.style.height = 'auto';
-    image.style.display = 'block';
-
-    const coordinates1 = getCoordinates(image);
-
-
-    const isIntersecting = placedImages.some(placedImage => {
-      const coordinates2 = getCoordinates(placedImage);
-      return contains(coordinates1, coordinates2) || overlaps(coordinates1, coordinates2, pad);
+    const [item] = items;
+    const { element, ...position} = createDiv(el);
+    const goodPlacement = checkPlacement({
+      item: element,
+      placedItems: placedDivs,
+      offset: position.pad
     });
 
-    if (!isIntersecting) {
-      loadedImages.splice(loadedImages.indexOf(image), 1);
-      placedImages.push(image);
+    if (goodPlacement) {
+      placedDivs.push(element);
+      placedItems.push({ item, position });
+      items.splice(items.indexOf(item), 1);
+      tries = 0;
+      continue;
     }
+    element.remove();
 
     if (tries === maxTries) {
       break;
     }
   }
 
+  placedDivs.forEach(placedDiv => placedDiv.remove());
+
+  return {
+    placedItems,
+    unplacedItems: items,
+  }
+}
+
+export type TGalleryItemsWithLevel = {
+  level: number;
+  placedItems: TPlaceItem[];
+}
+
+export type TGallery = {
+  itemsWithLevels: TGalleryItemsWithLevel[];
+  unplacedItems: any[];
+}
+
+export const createGallery = (el: HTMLDivElement, items: any[] = [], levels = 3):TGallery => {
+  let level = 1;
+  let itemsToPlace = [...items];
+  const itemsWithLevels: { level: number; placedItems: TPlaceItem[]; }[] = [];
+  do {
+    const { placedItems, unplacedItems } = getPlacement(el, itemsToPlace);
+    itemsWithLevels.push({
+      level,
+      placedItems,
+    });
+    itemsToPlace = unplacedItems;
+    level++;
+  } while (!!itemsToPlace.length && level <= levels);
+
+
+  return {
+    itemsWithLevels,
+    unplacedItems: itemsToPlace,
+  }
+}
+
+
+export const randomPlaceItem = (item: JSX.Element, items: JSX.Element[]) => {
+  // for (const item of items) {
+  //   console.log(item.props);
+  // }
+  const pad = random(MIN_PAD, MAX_PAD);
+  const { width, height } = item.props.style;
+  item.props.style.left = random(pad, (width + pad));
+  item.props.style.top = random(pad, (height + pad));
+
+  //
+  // return {
+  //   pad,
+  //   style: {
+  //     width,
+  //     left,
+  //     top,
+  //     // right,
+  //     // bottom,
+  //     // height,
+  //   }
+  // }
 }

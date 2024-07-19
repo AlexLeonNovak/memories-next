@@ -1,42 +1,38 @@
 'use client';
 
-import {ImgHTMLAttributes, useCallback, useEffect, useRef, useState} from 'react';
-import Image from 'next/image';
-import {TPostMedia} from '@/types';
-import {createGallery, place} from '@/lib/utils';
+import {useEffect, useRef, useState} from 'react';
+import {MouseParallax} from 'react-just-parallax';
+import {createGallery, TGalleryItemsWithLevel} from '@/lib/utils';
+import {GalleryItem} from '@/components/screens/frontend/main/GalleryItem';
 
 type TRandomGalleryProps = {
-  media: TPostMedia[];
+  media: any[];
 }
 
 export const RandomGallery = ({media}: TRandomGalleryProps) => {
-
+  const [gallery, setGallery] = useState<TGalleryItemsWithLevel[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    console.log('useEffect call');
     if (!containerRef.current) return;
-    createGallery(containerRef.current);
-    // for (const image of images) {
-    //   place({
-    //     image: images[2],
-    //     containerWidth: containerRef.current.clientWidth || 0,
-    //     containerHeight: containerRef.current.clientHeight || 0,
-    //   })
-    // }
-  }, [containerRef])
+    const {itemsWithLevels} = createGallery(containerRef.current, media);
+    setGallery(itemsWithLevels);
+  }, []);
 
   return (
     <div className="w-full h-full relative" ref={containerRef}>
-      {media.map(({ url, type }, index) => {
-        if (type === 'image') {
-          return <Image key={index}
-                        src={url}
-                        alt={url}
-                        fill
-                        className="absolute"
-          />
-        }
-      })}
+      { gallery.length && gallery.map(({ level, placedItems }, index) =>
+        placedItems.map(({ item, position}, i) => (
+            <GalleryItem key={i} style={{...position}} className="absolute" item={item} />
+        ))
+      )}
+      {/*{gallery?.length && gallery.map(({ element }) => (*/}
+      {/*  <>{element}</>*/}
+      {/*))}*/}
+      {/*{[...Array(20).keys()].map((a, index) => {*/}
+      {/*    return <GalleryItem key={index} style={{...randomSize()}} />;*/}
+      {/*})}*/}
 
     </div>
   );
