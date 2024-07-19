@@ -73,4 +73,20 @@
     body {
       @apply bg-background text-foreground;
     }
+
+    .wrapper {
+      max-width: 1340px;
+      width: 100%;
+      margin: 0 auto;
+      box-sizing: border-box;
+      padding: 0 20px;
+    }
+
+
+    @media screen and (max-width: 980px) {
+      .wrapper {
+        max-width: 100%;
+        padding: 0 25px;
+      }
+    }
   }

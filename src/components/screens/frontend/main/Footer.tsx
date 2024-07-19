@@ -1,9 +1,11 @@
+import "./css/footer.css";
+
 export const Footer = () => {
   return (
     <footer className="footer">
-      <p>© 2024 Zberezhemo.</p>
-      <div>
-        <a href="/">Legal terms and privacy</a>
+      <div className="footer-left">© 2024 Zberezhemo.</div>
+      <div className="footer-right">
+        <a href="/legal-terms">Legal terms and privacy</a>
         <a href="/">Cookies</a>
       </div>
     </footer>

@@ -1,12 +1,17 @@
 import React from 'react';
+import "./css/hero.css";
+import Image from "next/image";
 
 export const Hero = () => {
   return (
-    <div>
-      <div className="text-9xl">MEMORY</div>
-      <div className="text-9xl">LIBRARY</div>
-      <div className="text-6xl">PEOPLE. CITIES. EVENTS</div>
-    </div>
+    <section className="hero">
+        <div className="wrapper">
+            <div className="hero__title">MEMORY</div>
+            <div className="hero__sub-title">LIBRARY</div>
+            <div className="hero__text">PEOPLE. CITIES. EVENTS</div>
+            <Image src="/memory-bg.png" className="hero__bg" alt="MEMORY LIBRARY PEOPLE. CITIES. EVENTS" width={160} height={288}/>
+        </div>
+    </section>
   );
 };
 
