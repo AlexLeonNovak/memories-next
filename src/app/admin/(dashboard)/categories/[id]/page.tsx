@@ -18,7 +18,7 @@ export default async function EditCategoryPage({params: { id }}: TEditCategoryPa
 
   return (
     <div>
-      <PageTitle title={`Edit category: &ldquo;${category.name}&rdquo;`} />
+      <PageTitle title={`Edit category: "${category.name}"`} />
       <h1 className="text-3xl mb-2">Edit category: &ldquo;{category.name}&rdquo;</h1>
       <CategoryFormWrapper category={category} />
     </div>

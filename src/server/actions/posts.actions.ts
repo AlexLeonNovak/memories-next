@@ -16,11 +16,12 @@ import {deleteFile, getFileJs, uploadFile} from '@/lib/services';
 import {cache} from 'react';
 import {fetchCategories} from '@/server';
 import {parseSchemaFormData} from '@/lib/validations';
+import {getFileType} from '@/lib/utils';
 
 export const fetchPosts = cache(PostRepository.getAll);
 export const fetchPostById = cache(PostRepository.getById);
 
-export const fetchPostsWithCategories = cache(async (query: TQueryOptions<TBaseEntity & TPost>) => {
+export const fetchPostsWithCategories = cache(async (query?: TQueryOptions<TBaseEntity & TPost>) => {
   const categories = await fetchCategories();
   const catIds = categories.map(category => category.id);
   const posts = await fetchPosts(query);
@@ -41,7 +42,7 @@ export const createPost = async (prevState: any, formData: FormData) => {
   const media: TPostMedia[] = [];
   const pathDir = new Date().getTime().toString();
   for (const file of files) {
-    const type = file.type.includes('image') ? EPostMediaType.IMAGE : EPostMediaType.VIDEO;
+    const type = getFileType(file);
     const url = await uploadFile(file, pathDir);
     media.push({type, url});
   }
@@ -80,7 +81,7 @@ export const updatePost = async (prevState: any, formData: FormData) => {
   }
   const pathDir = new Date().getTime().toString();
   for (const file of files) {
-    const type = file.type.includes('image') ? EPostMediaType.IMAGE : EPostMediaType.VIDEO;
+    const type = getFileType(file);
     const url = await uploadFile(file, pathDir);
     media.push({type, url});
   }
