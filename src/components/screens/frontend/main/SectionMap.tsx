@@ -1,23 +1,20 @@
-import {fetchPostsWithCategories} from '@/server';
-import {MapParallax} from '@/components';
+import {fetchCategories, fetchPosts} from '@/server';
+import {Button, MapNavigation, RandomGallery} from '@/components';
 import './css/map.css';
+import {cn} from '@/lib/utils';
 
 export const SectionMap = async () => {
-  const posts = await fetchPostsWithCategories();
-  const media = posts.map(({media}) => media).flat();
+  const posts = await fetchPosts();
+  const categories = await fetchCategories({
+    // order: {'order': 'asc'},
+  })
   return (
     <section className="map map-section w-full">
-      <div className="wrapper">
-        <div className="map__navigation">
-          <a href="#" className="map__navigation-item map__navigation-item_active">PEOPLE</a>
-          <span className="map__navigation-separator">/</span>
-          <a href="#" className="map__navigation-item">CITIES</a>
-          <span className="map__navigation-separator">/</span>
-          <a href="#" className="map__navigation-item">EVENTS</a>
+      <MapNavigation categories={categories}/>
+      <div className="map__container map__container_temp py-8">
+        <div className="w-full h-[870px] relative">
+          <RandomGallery posts={posts}/>
         </div>
-      </div>
-      <div className="map__container map__container_temp">
-        <MapParallax media={media}/>
       </div>
     </section>
   );

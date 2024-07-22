@@ -3,8 +3,8 @@ import {TPostMedia} from '@/types';
 import {CSSProperties, JSX} from 'react';
 import {async} from '@firebase/util';
 
-const MIN_PAD = 5;
-const MAX_PAD = 15;
+const MIN_PAD = -50;
+const MAX_PAD = -10;
 const MIN_WIDTH = 160;
 const MIN_HEIGHT = 125;
 const MAX_WIDTH = 300;
@@ -16,11 +16,11 @@ type TPlacementArgs = {
   containerHeight: number;
 }
 
-const randomColor = () => '#'+Math.floor(Math.random()*16777215).toString(16);
+// const randomColor = () => '#'+Math.floor(Math.random()*16777215).toString(16);
 export const createDiv = (container: HTMLDivElement) => {
   const containerWidth = container.getBoundingClientRect().width;
   const containerHeight = container.getBoundingClientRect().height;
-  const pad = random(MIN_PAD, MAX_PAD);
+  const pad = MIN_PAD; //random(MIN_PAD, MAX_PAD);
   const width = random(MIN_WIDTH, MAX_WIDTH);
   const height = random(MIN_HEIGHT, MAX_HEIGHT);
   const left = random(pad, containerWidth - (width + pad));
@@ -31,8 +31,6 @@ export const createDiv = (container: HTMLDivElement) => {
   divEl.style.left = `${left}px`;
   divEl.style.top = `${top}px`;
   divEl.style.position = 'absolute';
-  //
-  divEl.style.background = randomColor();
 
   container.appendChild(divEl);
   return {
@@ -86,8 +84,6 @@ export const overlaps = (img1: TImageCoords, img2: TImageCoords, offset: number)
   return true
 }
 
-const isImageLoaded = (image: HTMLImageElement): Promise<HTMLImageElement> => new Promise(resolve => image.onload = () => resolve(image));
-
 export const checkPlacement = ({
                                  item,
                                  placedItems,
@@ -114,8 +110,8 @@ export const checkPlacement = ({
 
 
 
-type TPlaceItem = {
-  item: any,
+type TPlaceItem<T> = {
+  item: T,
   position: {
     pad: number;
     width: number;
@@ -125,16 +121,16 @@ type TPlaceItem = {
   },
 }
 
-type TPlacement = {
-  placedItems: TPlaceItem[],
+type TPlacement<T> = {
+  placedItems: TPlaceItem<T>[],
   unplacedItems: any[],
 }
 
-const getPlacement = (el: HTMLDivElement, items: any[] = []) => {
+const getPlacement = <T>(el: HTMLDivElement, items: T[] = []) => {
   const placedDivs: HTMLDivElement[] = [];
-  const placedItems: TPlaceItem[] = [];
+  const placedItems: TPlaceItem<T>[] = [];
   let tries = 0;
-  const maxTries = 100;
+  const maxTries = 1000;
   while (items.length) {
     tries++;
     const [item] = items;
@@ -153,7 +149,6 @@ const getPlacement = (el: HTMLDivElement, items: any[] = []) => {
       continue;
     }
     element.remove();
-
     if (tries === maxTries) {
       break;
     }
@@ -167,26 +162,28 @@ const getPlacement = (el: HTMLDivElement, items: any[] = []) => {
   }
 }
 
-export type TGalleryItemsWithLevel = {
+export type TGalleryItemsWithLevel<T> = {
   level: number;
-  placedItems: TPlaceItem[];
+  placedItems: TPlaceItem<T>[];
 }
 
-export type TGallery = {
-  itemsWithLevels: TGalleryItemsWithLevel[];
-  unplacedItems: any[];
+export type TGallery<T> = {
+  itemsWithLevels: TGalleryItemsWithLevel<T>[];
+  unplacedItems: T[];
 }
 
-export const createGallery = (el: HTMLDivElement, items: any[] = [], levels = 3):TGallery => {
+export const createGallery = <T = any>(el: HTMLDivElement, items: T[] = [], levels = 3): TGallery<T> => {
   let level = 1;
   let itemsToPlace = [...items];
-  const itemsWithLevels: { level: number; placedItems: TPlaceItem[]; }[] = [];
+  const itemsWithLevels: TGalleryItemsWithLevel<T>[] = [];
+  // const allPlacedItems: TPlaceItem[] = [];
   do {
-    const { placedItems, unplacedItems } = getPlacement(el, itemsToPlace);
+    const { placedItems, unplacedItems } = getPlacement<T>(el, itemsToPlace);
     itemsWithLevels.push({
       level,
       placedItems,
     });
+    // allPlacedItems.push(...placedItems);
     itemsToPlace = unplacedItems;
     level++;
   } while (!!itemsToPlace.length && level <= levels);
