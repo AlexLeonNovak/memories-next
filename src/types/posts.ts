@@ -24,6 +24,7 @@ export type TPost = TBaseFields & {
 export type TCategory = {
   name: string;
   isActive: boolean;
+  order: number;
 };
 
 export type TPostEntity = TBaseEntity & TPost;

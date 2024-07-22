@@ -19,7 +19,7 @@ import {parseSchemaFormData} from '@/lib/validations';
 import {getFileType} from '@/lib/utils';
 
 export const fetchPosts = cache(PostRepository.getAll);
-export const fetchPostById = cache(PostRepository.getById);
+export const fetchPostById = (id: string) => PostRepository.getById(id);
 
 export const fetchPostsWithCategories = cache(async (query?: TQueryOptions<TBaseEntity & TPost>) => {
   const categories = await fetchCategories();
