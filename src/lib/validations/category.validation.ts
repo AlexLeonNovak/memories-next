@@ -6,6 +6,7 @@ import {fetchCategories} from '@/server';
 const baseCategorySchema = z.object({
   name: zfd.text(z.string().min(1, 'Required')),
   isActive: z.coerce.boolean(),
+  order: zfd.numeric(),
 });
 
 export const createCategorySchema = zfd.formData(baseCategorySchema

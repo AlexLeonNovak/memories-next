@@ -37,6 +37,7 @@ export const CategoryForm = ({category, onFormSubmit, submitRequested, isShowSub
     defaultValues: category || {
       name: '',
       isActive: true,
+      order: 0,
     },
   });
 
@@ -105,6 +106,20 @@ export const CategoryForm = ({category, onFormSubmit, submitRequested, isShowSub
                      </FormItem>
                    )}
         />
+
+        <FormField name="order"
+                   control={control}
+                   render={({field}) => (
+                     <FormItem>
+                       <FormLabel>Sort order</FormLabel>
+                       <FormControl>
+                         <Input placeholder="Sort order" {...field} />
+                       </FormControl>
+                       <FormMessage/>
+                     </FormItem>
+                   )}
+        />
+
         {isShowSubmitButton && <SubmitButton label="Save"
 				                                     pendingLabel="Please wait..."
 				                                     icon={<Save/>}
