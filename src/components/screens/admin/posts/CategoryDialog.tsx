@@ -13,18 +13,18 @@ export const CategoryDialog = () => {
 
   return (
     <>
-    <Button className="ml-auto" type="button" variant="link" onClick={() => setShowCategoryDialog(true)}>
-      <Plus />
-      <span>Add new category</span>
-    </Button>
+      <Button className="ml-auto" type="button" variant="link" onClick={() => setShowCategoryDialog(true)}>
+        <Plus/>
+        <span>Add new category</span>
+      </Button>
       <Modal open={showCategoryDialog}
              setOpen={setShowCategoryDialog}
              title="Add new category"
              footer={<SubmitButton onClick={() => setSubmitRequested(true)}
                                    isPending={submitRequested}
                                    label="Create category"
-                                   pendingLabel='Please wait...'
-                                   icon={<Save />}
+                                   pendingLabel="Please wait..."
+                                   icon={<Save/>}
              />}
       >
         <CategoryForm submitRequested={submitRequested}
@@ -37,4 +37,4 @@ export const CategoryDialog = () => {
       </Modal>
     </>
   );
-}
+};

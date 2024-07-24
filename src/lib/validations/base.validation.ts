@@ -20,12 +20,15 @@ export const baseSchemaFD = zfd.formData({
 export const parseSchemaFormData = async <T extends ZodSchema>(schema: T, fd: FormData): Promise<TFormState<z.infer<typeof schema>>> => {
   const parsed = await schema.safeParseAsync(fd);
   const { success, error, data } = parsed;
+  if (success) {
+    return {status: 'success', data};
+  }
+
   return {
-    success,
-    data: data ? data as z.infer<typeof schema> : undefined,
-    errors: success ? [] : error?.issues.map(({path, message}) => ({
-      path: path[0],
+    status: 'error',
+    errors: error.issues.map(({path, message}) => ({
+      path: path[0].toString(),
       message,
     })),
-  } as TFormState<z.infer<typeof schema>>;
+  };
 };

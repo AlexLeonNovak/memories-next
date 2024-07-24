@@ -29,6 +29,8 @@ import {useRouter} from 'next/navigation';
 import {toast} from 'sonner';
 import {getFileJs} from '@/lib/services';
 import {getFileType} from '@/lib/utils';
+import {useFormCheck} from '@/hooks';
+import {MediaRepository} from '@/lib/repositories';
 
 type TPostFormProps = {
   categories: Array<TCategory & { id: string }>
@@ -37,8 +39,9 @@ type TPostFormProps = {
 
 type TPostForm = z.infer<typeof createPostSchema>;
 
-export const PostForm = ({post, categories = [], }: TPostFormProps) => {
+export const PostForm = ({post, categories = []}: TPostFormProps) => {
   const [isMediaLoading, setIsMediaLoading] = useState(false);
+  const [pending, setPending] = useState(false);
   const router = useRouter();
   const categoryOptions: Option[] = categories.map(({id, name, isActive}) => ({
     label: name,
@@ -50,10 +53,10 @@ export const PostForm = ({post, categories = [], }: TPostFormProps) => {
     name: post?.name || '',
     description: post?.description || '',
     categories: post?.categories ? categoryOptions.filter(
-      ({ value }) => post.categories.includes(value)
+      ({value}) => post.categories.includes(value),
     ) : [],
     isActive: post?.isActive || true,
-    files: []
+    files: [],
   };
 
   const form = useForm<TPostForm>({
@@ -72,33 +75,38 @@ export const PostForm = ({post, categories = [], }: TPostFormProps) => {
     },
   } satisfies DropzoneOptions;
 
-  const {control, setError, setValue, formState} = form;
-  console.log(formState.errors);
+  const {control, setError, setValue, getValues} = form;
   const serverAction = post?.id ? updatePost : createPost;
   const [state, action] = useFormState(serverAction, null);
 
-  useEffect(() => {
-    if (!state) {
-      return;
-    }
-    if (!state.success) {
-      toast.error('One or more fields have an error. Please check them and try again.');
-      state.errors?.forEach((error) => {
-        setError(error.path as FieldPath<TPostForm>, {
-          message: error.message,
-        });
-      });
-    }
-    if (state.success) {
-      toast.success(`Successfully ${post?.id ? 'updated' : 'created'}!`);
-      router.push('/admin/posts');
-    }
-  }, [state, setError, router]);
+  useFormCheck({
+    state,
+    setError,
+    onSuccess: async (state) => {
+      try {
+        const {id} = state.data;
+        const files = getValues('files');
+        await MediaRepository.saveMedia(id, files);
+        toast.success(`Post successfully ${post?.id ? 'updated' : 'created'}!`);
+        router.push('/admin/posts');
+        router.refresh();
+      } catch (e) {
+        toast.error((e as Error).message);
+      }
+    },
+    onError: () => toast.error('One or more fields have an error. Please check them and try again.'),
+    onFail: (state) => toast.error(state.message),
+    onFinally: () => setPending(false),
+  });
 
   useEffect(() => {
-    if (post?.media) {
+    if (post?.id) {
       setIsMediaLoading(true);
-      Promise.all(post.media.map(({ url }) => getFileJs(url)))
+      const loadFiles = async (postId: string) => {
+        const medias = await MediaRepository.getMedias(postId);
+        return Promise.all(medias.map(({url}) => getFileJs(url)));
+      }
+      loadFiles(post.id)
         .then(files => setValue('files', files))
         .finally(() => setIsMediaLoading(false));
     }
@@ -106,9 +114,9 @@ export const PostForm = ({post, categories = [], }: TPostFormProps) => {
 
   return (
     <Form {...form}>
-      <form action={action} className="space-y-8">
+      <form action={action} onSubmit={() => setPending(true)} className="space-y-8">
 
-        { post?.id && <Input type='hidden' name='id' value={post.id} /> }
+        {post?.id && <Input type="hidden" name="id" value={post.id}/>}
 
         <FormField name="name"
                    control={control}
@@ -173,7 +181,7 @@ export const PostForm = ({post, categories = [], }: TPostFormProps) => {
                            orientation="horizontal"
                            className="relative bg-background border border-input p-2"
                          >
-                           <FileInput name="files" className="outline-dashed outline-1 outline-white">
+                           <FileInput className="outline-dashed outline-1 outline-white">
                              <div className="flex items-center justify-center flex-col pt-3 pb-4 w-full ">
                                <CloudUpload size={45}/>
                                <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
@@ -191,7 +199,7 @@ export const PostForm = ({post, categories = [], }: TPostFormProps) => {
                              </div>
                            </FileInput>
                            <FileUploaderContent>
-                             {isMediaLoading && <LoaderCircle className="animate-spin size-10" />}
+                             {isMediaLoading && <LoaderCircle className="animate-spin size-10"/>}
                              {!isMediaLoading && field.value && field.value.length > 0 &&
                                field.value.map((file, i) => (
                                  <FileUploaderItem key={i} index={i} className="size-20">
@@ -232,6 +240,7 @@ export const PostForm = ({post, categories = [], }: TPostFormProps) => {
         />
 
         <SubmitButton label="Save"
+                      isPending={pending}
                       pendingLabel="Please wait..."
                       icon={<Save/>}
         />

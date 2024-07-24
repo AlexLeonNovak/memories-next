@@ -2,7 +2,7 @@
 
 import {cache} from 'react';
 import {LeadRepository} from '@/lib/repositories';
-import {TDeleteFormState, TFormStateSuccess, TLead} from '@/types';
+import {TDeleteFormState, TFormState, TFormStateSuccess, TLead, TLeadEntity} from '@/types';
 import {revalidatePath} from 'next/cache';
 import {createLeadSchema, parseSchemaFormData} from '@/lib/validations';
 
@@ -17,22 +17,20 @@ export const deleteLead = async (prevState: any, formData: FormData): Promise<TD
       success: true,
     };
   } catch (error) {
-    return {
-      success: false,
-      message: (error as Error).message,
-    };
+    return {success: false, message: (error as Error).message};
   }
 }
 
-export const createLead = async (prevState: any, formData: FormData) => {
+export const createLead = async (prevState: any, formData: FormData): Promise<TFormState<TLeadEntity>> => {
+  try {
     const parsed = await parseSchemaFormData(createLeadSchema, formData);
-    if (!parsed.success) {
-      return parsed;
+    if (parsed.status === 'success') {
+      const data = await LeadRepository.create(parsed.data);
+      revalidatePath('/');
+      return {status: 'success', data};
     }
-    const lead = await LeadRepository.create(parsed.data);
-    revalidatePath('/');
-    return {
-      success: true,
-      data: lead,
-    } as TFormStateSuccess<TLead>
+    return parsed;
+  } catch (e) {
+    return {status: 'fail', message: (e as Error).message }
+  }
 };

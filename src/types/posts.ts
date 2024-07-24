@@ -1,23 +1,29 @@
 import {TBaseEntity} from '.';
 
-export enum EPostMediaType {
-  IMAGE = 'image',
-  VIDEO = 'video',
-}
 
 export type TBaseFields = {
   name: string;
   isActive: boolean;
 }
 
-export type TPostMedia = {
-  type: EPostMediaType,
+export enum EMediaType {
+  IMAGE = 'image',
+  VIDEO = 'video',
+}
+
+export type TMedia = {
+  postId: string;
+  mediaType: EMediaType,
   url: string,
+  name: string,
+  extension: string,
+  type: string;
+  lastModified: number;
+  size: number;
 }
 
 export type TPost = TBaseFields & {
   description?: string;
-  media: TPostMedia[];
   categories: string[];
 }
 
@@ -29,3 +35,4 @@ export type TCategory = {
 
 export type TPostEntity = TBaseEntity & TPost;
 export type TCategoryEntity = TBaseEntity & TCategory;
+export type TMediaEntity = TBaseEntity & TMedia;

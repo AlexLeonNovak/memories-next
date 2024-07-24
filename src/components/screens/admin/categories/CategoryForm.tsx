@@ -21,6 +21,7 @@ import {createCategorySchema} from '@/lib/validations';
 import {createCategory, updateCategory} from '@/server';
 import {Save} from 'lucide-react';
 import {toast} from 'sonner';
+import {useFormCheck} from '@/hooks';
 
 type TCategoryFormProps = {
   category?: TCategoryEntity;
@@ -46,23 +47,16 @@ export const CategoryForm = ({category, onFormSubmit, submitRequested, isShowSub
   const {control, setError} = form;
   const [state, action] = useFormState(serverAction, null);
 
-  useEffect(() => {
-    if (!state) {
-      return;
-    }
-    if (!state.success) {
-      toast.error('One or more fields have an error. Please check them and try again.');
-      state.errors?.forEach((error) => {
-        setError(error.path as FieldPath<TCategory>, {
-          message: error.message,
-        });
-      });
-    }
-    if (state.success) {
-      toast.success(`Successfully ${category?.id ? 'updated' : 'created'}!`);
-      onFormSubmit && onFormSubmit(state.data);
-    }
-  }, [state, setError, category]);
+  useFormCheck<TCategory>({
+    state,
+    setError,
+    onError: (state) => toast.error('One or more fields have an error. Please check them and try again.'),
+    onSuccess: (state) => {
+      toast.success(`Category successfully ${category?.id ? 'updated' : 'created'}!`);
+      onFormSubmit && onFormSubmit(state.data as TCategory);
+    },
+    onFail: (state) => toast.error(state.message),
+  });
 
   useEffect(() => {
     if (submitRequested) {
@@ -92,6 +86,19 @@ export const CategoryForm = ({category, onFormSubmit, submitRequested, isShowSub
                    )}
         />
 
+        <FormField name="order"
+                   control={control}
+                   render={({field}) => (
+                     <FormItem>
+                       <FormLabel>Sort order</FormLabel>
+                       <FormControl>
+                         <Input type='number' placeholder="Sort order" {...field} />
+                       </FormControl>
+                       <FormMessage/>
+                     </FormItem>
+                   )}
+        />
+
         <FormField name="isActive"
                    control={control}
                    render={({field: {name, value, onChange}}) => (
@@ -102,19 +109,6 @@ export const CategoryForm = ({category, onFormSubmit, submitRequested, isShowSub
                        <div className="space-y-1 leading-none">
                          <FormLabel>Is active</FormLabel>
                        </div>
-                       <FormMessage/>
-                     </FormItem>
-                   )}
-        />
-
-        <FormField name="order"
-                   control={control}
-                   render={({field}) => (
-                     <FormItem>
-                       <FormLabel>Sort order</FormLabel>
-                       <FormControl>
-                         <Input placeholder="Sort order" {...field} />
-                       </FormControl>
                        <FormMessage/>
                      </FormItem>
                    )}

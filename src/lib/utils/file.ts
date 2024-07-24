@@ -1,3 +1,3 @@
-import {EPostMediaType} from '@/types';
+import {EMediaType} from '@/types';
 
-export const getFileType = (file: File): EPostMediaType => file.type.includes('image') ? EPostMediaType.IMAGE : EPostMediaType.VIDEO;
+export const getFileType = (file: File): EMediaType => file.type.includes('image') ? EMediaType.IMAGE : EMediaType.VIDEO;

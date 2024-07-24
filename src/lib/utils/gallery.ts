@@ -1,7 +1,4 @@
 import {random} from '.';
-import {TPostMedia} from '@/types';
-import {CSSProperties, JSX} from 'react';
-import {async} from '@firebase/util';
 
 const MIN_PAD = -50;
 const MAX_PAD = -10;
@@ -43,11 +40,6 @@ export const createDiv = (container: HTMLDivElement) => {
   };
 }
 
-export const randomSize = () => ({
-  width: random(MIN_WIDTH, MAX_WIDTH),
-  height: random(MIN_HEIGHT, MAX_HEIGHT),
-})
-
 type TCoordinatesArgs = {
   x: number;
   y: number;
@@ -84,17 +76,9 @@ export const overlaps = (img1: TImageCoords, img2: TImageCoords, offset: number)
   return true
 }
 
-export const checkPlacement = ({
-                                 item,
-                                 placedItems,
- // galleryWidth,
- // galleryHeight,
- offset = 0
-}: {
+export const checkPlacement = ({item, placedItems,offset = 0 }: {
   item: HTMLDivElement,
   placedItems: HTMLDivElement[],
-  // galleryWidth: number,
-  // galleryHeight: number,
   offset?: number,
 }) => {
   const coordinates1 = getCoordinates(item.getBoundingClientRect())
@@ -195,26 +179,3 @@ export const createGallery = <T = any>(el: HTMLDivElement, items: T[] = [], leve
   }
 }
 
-
-export const randomPlaceItem = (item: JSX.Element, items: JSX.Element[]) => {
-  // for (const item of items) {
-  //   console.log(item.props);
-  // }
-  const pad = random(MIN_PAD, MAX_PAD);
-  const { width, height } = item.props.style;
-  item.props.style.left = random(pad, (width + pad));
-  item.props.style.top = random(pad, (height + pad));
-
-  //
-  // return {
-  //   pad,
-  //   style: {
-  //     width,
-  //     left,
-  //     top,
-  //     // right,
-  //     // bottom,
-  //     // height,
-  //   }
-  // }
-}

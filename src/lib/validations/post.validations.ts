@@ -1,6 +1,5 @@
 import {zfd} from 'zod-form-data';
 import {z} from 'zod';
-import {EPostMediaType, TPost} from '@/types';
 import {Option} from '@/components';
 import {getFileType} from '@/lib/utils';
 
@@ -59,12 +58,12 @@ const basePostSchema = z.object({
       .min(1, 'At least one category should be selected')
     // )
   ),
-  files: zfd.repeatable(
-    // z.preprocess(val => [val].flat(),
-      z.array(zfd.file(z.instanceof(File)))
-      .min(1)
-    // )
-  ),
+  // media: zfd.repeatable(
+  //   // z.preprocess(val => [val].flat(),
+  //   z.array(zfd.text())
+  //     .min(1)
+  //   // )
+  // ),
   isActive: z.coerce.boolean(),
 });
 

@@ -2,33 +2,43 @@
 
 import {CategoryRepository} from '@/lib/repositories';
 import {cache} from 'react';
-import {createCategorySchema, updateCategorySchema} from '@/lib/validations';
+import {createCategorySchemaServer, updateCategorySchema} from '@/lib/validations';
 import {revalidatePath} from 'next/cache';
 import {parseSchemaFormData} from '@/lib/validations';
-import {TDeleteFormState} from '@/types';
+import {TCategoryEntity, TDeleteFormState, TFormState} from '@/types';
 import {fetchPosts} from '@/server';
 
 export const fetchCategories = cache(CategoryRepository.getAll);
 
 export const fetchCategoryById = cache(CategoryRepository.getById);
 
-export const createCategory = async (prevState: any, formData: FormData) => {
-  const parsed = await parseSchemaFormData(createCategorySchema, formData);
-  if (parsed.success) {
-    await CategoryRepository.create(parsed.data);
+export const createCategory = async (prevState: any, formData: FormData): Promise<TFormState<TCategoryEntity>> => {
+  try {
+  const parsed = await parseSchemaFormData(createCategorySchemaServer, formData);
+  if (parsed.status === 'success') {
+    const data = await CategoryRepository.create(parsed.data);
     revalidatePath('/');
+    return { status: 'success', data };
   }
   return parsed;
+  } catch (e) {
+    return {status: 'fail', message: (e as Error).message}
+  }
 };
 
-export const updateCategory = async (prevState: any, formData: FormData) => {
+export const updateCategory = async (prevState: any, formData: FormData): Promise<TFormState<TCategoryEntity>> => {
+  try {
   const parsed = await parseSchemaFormData(updateCategorySchema, formData);
-  if (parsed.success) {
-    const {id, ...data} = parsed.data;
-    await CategoryRepository.update(id, data);
+  if (parsed.status === 'success') {
+    const {id, ...rest} = parsed.data;
+    const data = await CategoryRepository.update(id, rest);
     revalidatePath('/');
+    return { status: 'success', data };
   }
   return parsed;
+  } catch (e) {
+    return {status: 'fail', message: (e as Error).message}
+  }
 };
 
 

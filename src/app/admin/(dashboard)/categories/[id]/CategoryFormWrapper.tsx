@@ -10,5 +10,8 @@ type TCategoryFormWrapperProps = {
 
 export const CategoryFormWrapper = ({category}: TCategoryFormWrapperProps) => {
   const router = useRouter();
-  return <CategoryForm category={category} onFormSubmit={() => router.back()}/>;
+  return <CategoryForm category={category} onFormSubmit={() => {
+    router.back();
+    router.refresh();
+  }}/>;
 }

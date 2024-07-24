@@ -329,7 +329,7 @@ FileUploaderItem.displayName = 'FileUploaderItem';
 
 export const FileInput = forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & { name: string }
+  React.HTMLAttributes<HTMLDivElement> & { name?: string }
 >(({className, children, name, ...props}, ref) => {
   const {dropzoneState, isFileTooBig, isLOF} = useFileUpload();
   const rootProps = isLOF ? {} : dropzoneState.getRootProps();
