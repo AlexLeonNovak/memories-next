@@ -1,14 +1,14 @@
 'use server';
 
 import {cache} from 'react';
-import {MediaRepository} from '@/lib/repositories';
-import {fetchPosts} from '@/server';
+import {MediaRepository, PostRepository} from '@/lib/repositories';
+import {TMediaEntity, TQueryOptions} from '@/types';
 
-export const fetchMedias = cache(MediaRepository.getAll);
+export const fetchMedias = (queryOptions?: TQueryOptions<TMediaEntity>) => MediaRepository.getAll(queryOptions);
 
-export const fetchMediasWithActivePosts = cache(async () => {
+export const fetchMediasWithActivePosts = async () => {
   const medias = await fetchMedias();
-  const posts = await fetchPosts();
+  const posts = await PostRepository.getAll();
   const activeMedias = [];
   for (const media of medias) {
     const post = posts.find(post => post.id === media.postId);
@@ -17,4 +17,4 @@ export const fetchMediasWithActivePosts = cache(async () => {
     }
   }
   return activeMedias;
-});
+};

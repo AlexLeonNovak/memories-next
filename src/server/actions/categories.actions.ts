@@ -1,18 +1,16 @@
 'use server';
 
-import {CategoryRepository} from '@/lib/repositories';
-import {cache} from 'react';
+import {CategoryRepository, PostRepository} from '@/lib/repositories';
 import {createCategorySchemaServer, updateCategorySchema} from '@/lib/validations';
 import {revalidatePath} from 'next/cache';
 import {parseSchemaFormData} from '@/lib/validations';
-import {TCategoryEntity, TDeleteFormState, TFormState} from '@/types';
-import {fetchPosts} from '@/server';
+import {TCategoryEntity, TDeleteFormState, TFormState, TQueryOptions} from '@/types';
 
-export const fetchCategories = cache(CategoryRepository.getAll);
+export const fetchCategories = (queryOptions?: TQueryOptions<TCategoryEntity>) => CategoryRepository.getAll(queryOptions);
 
-export const fetchCategoryById = cache(CategoryRepository.getById);
+export const fetchCategoryById = (id: string) => CategoryRepository.getById(id);
 
-export const createCategory = async (prevState: any, formData: FormData): Promise<TFormState<TCategoryEntity>> => {
+export async function createCategory(prevState: any, formData: FormData): Promise<TFormState<TCategoryEntity>> {
   try {
   const parsed = await parseSchemaFormData(createCategorySchemaServer, formData);
   if (parsed.status === 'success') {
@@ -24,9 +22,9 @@ export const createCategory = async (prevState: any, formData: FormData): Promis
   } catch (e) {
     return {status: 'fail', message: (e as Error).message}
   }
-};
+}
 
-export const updateCategory = async (prevState: any, formData: FormData): Promise<TFormState<TCategoryEntity>> => {
+export async function updateCategory(prevState: any, formData: FormData): Promise<TFormState<TCategoryEntity>> {
   try {
   const parsed = await parseSchemaFormData(updateCategorySchema, formData);
   if (parsed.status === 'success') {
@@ -39,13 +37,13 @@ export const updateCategory = async (prevState: any, formData: FormData): Promis
   } catch (e) {
     return {status: 'fail', message: (e as Error).message}
   }
-};
+}
 
 
-export const deleteCategory = async (prevState: any, formData: FormData): Promise<TDeleteFormState> => {
+export async function deleteCategory(prevState: any, formData: FormData): Promise<TDeleteFormState> {
   try {
     const id = formData.get('id');
-    const posts = await fetchPosts({
+    const posts = await PostRepository.getAll({
       where: {
         fieldPath: 'categories',
         opStr: 'array-contains',
@@ -66,4 +64,4 @@ export const deleteCategory = async (prevState: any, formData: FormData): Promis
       message: (error as Error).message,
     };
   }
-};
+}

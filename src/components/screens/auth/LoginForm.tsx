@@ -1,4 +1,5 @@
 'use client';
+
 import {FormEvent, useEffect, useState} from 'react';
 import {useAuth} from '@/hooks';
 import {useRouter} from 'next/navigation';
@@ -14,18 +15,17 @@ export const LoginForm = () => {
   const { login, error } = useAuth();
   const router = useRouter();
 
-  const handleLoginWithRedirect = async () => {
-    const auth = getFirebaseAuth();
-    const credential = await getRedirectResult(auth);
-
-    if (credential?.user) {
-      router.push('/admin');
-    }
-  }
-
   useEffect(() => {
+    const handleLoginWithRedirect = async () => {
+      const auth = getFirebaseAuth();
+      const credential = await getRedirectResult(auth);
+
+      if (credential?.user) {
+        router.push('/admin');
+      }
+    }
     handleLoginWithRedirect();
-  }, []);
+  }, [router]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();

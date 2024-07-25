@@ -2,11 +2,11 @@
 
 import {cache} from 'react';
 import {LeadRepository} from '@/lib/repositories';
-import {TDeleteFormState, TFormState, TFormStateSuccess, TLead, TLeadEntity} from '@/types';
+import {TDeleteFormState, TFormState, TLeadEntity, TQueryOptions} from '@/types';
 import {revalidatePath} from 'next/cache';
 import {createLeadSchema, parseSchemaFormData} from '@/lib/validations';
 
-export const fetchLeads = cache(LeadRepository.getAll);
+export const fetchLeads = (queryOptions?: TQueryOptions<TLeadEntity>) => LeadRepository.getAll(queryOptions);
 
 export const deleteLead = async (prevState: any, formData: FormData): Promise<TDeleteFormState> => {
   try {

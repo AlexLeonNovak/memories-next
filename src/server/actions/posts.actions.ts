@@ -1,27 +1,23 @@
 'use server';
 
 import {createPostSchemaFD, updatePostSchemaFD} from '@/lib/validations';
-import {MediaRepository, PostRepository} from '@/lib/repositories';
+import {MediaRepository, PostRepository, CategoryRepository} from '@/lib/repositories';
 import {revalidatePath} from 'next/cache';
 import {
   TBaseEntity,
-  TDeleteFormState, TFormState,
-  TFormStateSuccess,
-  TPost, TPostEntity,
+  TDeleteFormState,
+  TFormState,
+  TPost,
+  TPostEntity,
   TQueryOptions,
 } from '@/types';
-import {deleteFile, getFileJs, uploadFile} from '@/lib/services';
-import {cache} from 'react';
-import {fetchCategories} from '@/server';
 import {parseSchemaFormData} from '@/lib/validations';
-import {getFileType} from '@/lib/utils';
-import {FieldValues} from 'react-hook-form';
 
-export const fetchPosts = cache(PostRepository.getAll);
+export const fetchPosts = (queryOptions?: TQueryOptions<TPostEntity>) => PostRepository.getAll(queryOptions);
 export const fetchPostById = (id: string) => PostRepository.getById(id);
 
-export const fetchPostsWithCategories = cache(async (query?: TQueryOptions<TBaseEntity & TPost>) => {
-  const categories = await fetchCategories();
+export const fetchPostsWithCategories = async (query?: TQueryOptions<TBaseEntity & TPost>) => {
+  const categories = await CategoryRepository.getAll();
   const catIds = categories.map(category => category.id);
   const posts = await fetchPosts(query);
   return posts.map(post => ({
@@ -30,7 +26,7 @@ export const fetchPostsWithCategories = cache(async (query?: TQueryOptions<TBase
       categories.find(({id}) => categoryId === id)!,
     ),
   }));
-});
+};
 
 export const createPost = async (prevState: any, formData: FormData): Promise<TFormState<TPostEntity>> => {
   try {
@@ -41,15 +37,6 @@ export const createPost = async (prevState: any, formData: FormData): Promise<TF
       return {status: 'success', data};
     }
     return parsed;
-    // const {files, ...rest} = parsed.data;
-    // const media: TPostMedia[] = [];
-    // const pathDir = new Date().getTime().toString();
-    // for (const file of files) {
-    //   const type = getFileType(file);
-    //   const url = await uploadFile(file, pathDir);
-    //   media.push({type, url});
-    // }
-
   } catch (e) {
     return {
       status: 'fail',
@@ -69,34 +56,7 @@ export const updatePost = async (prevState: any, formData: FormData): Promise<TF
 
       return {status: 'success', data};
     }
-      return parsed;
-    // const {id, ...rest} = parsed.data;
-    // const media: TPostMedia[] = [];
-    // const post = await fetchPostById(id);
-    // if (post?.media) {
-    //   const postMedia = post.media;
-    //   for (const [idx, _media] of postMedia.entries()) {
-    //     const postFile = await getFileJs(_media.url);
-    //     const fileIndex = files.findIndex(
-    //       file => file.name === postFile.name && file.size === postFile.size
-    //     );
-    //     if (fileIndex !== -1) {
-    //       files.splice(fileIndex, 1);
-    //       postMedia.splice(idx, 1);
-    //       media.push(_media);
-    //     }
-    //   }
-    //   for (const {url} of postMedia) {
-    //     await deleteFile(url);
-    //   }
-    // }
-    // const pathDir = new Date().getTime().toString();
-    // for (const file of files) {
-    //   const type = getFileType(file);
-    //   const url = await uploadFile(file, pathDir);
-    //   media.push({type, url});
-    // }
-
+    return parsed;
   } catch (e) {
     return {status: 'fail', message: (e as Error).message}
   }
@@ -105,12 +65,6 @@ export const updatePost = async (prevState: any, formData: FormData): Promise<TF
 export const deletePost = async (prevState: any, formData: FormData): Promise<TDeleteFormState> => {
   try {
     const id = formData.get('id') as string;
-    // const post = await fetchPostById(id);
-    // if (post?.media) {
-    //   for (const media of post.media) {
-    //     await deleteFile(media.url);
-    //   }
-    // }
     await PostRepository.delete(id);
     await MediaRepository.deleteMedia(id);
     revalidatePath('/');
