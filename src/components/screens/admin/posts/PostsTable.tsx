@@ -24,17 +24,20 @@ export const PostsTable = async () => {
             <TableRow key={id}>
               <TableCell>{ ++index }</TableCell>
               <TableCell>{name}</TableCell>
-              <TableCell className="flex flex-wrap gap-1">
+              <TableCell>
+                <div className="flex flex-wrap gap-1">
                 {categories.map(({ id, name }) => (
                   <Badge key={id}>{name}</Badge>
                 ))}
+                </div>
               </TableCell>
               <TableCell>
                 <Badge variant={isActive ? 'success' : 'destructive'}>
                   {isActive ? 'Active' : 'No active'}
                 </Badge>
               </TableCell>
-              <TableCell className="flex gap-2">
+              <TableCell>
+                <div className="flex gap-2">
                 <DeleteForm id={id}
                             deleteAction={deletePost}
                             title='Delete category?'
@@ -45,6 +48,7 @@ export const PostsTable = async () => {
                     <Pencil />
                   </Link>
                 </Button>
+                </div>
               </TableCell>
             </TableRow>
           ))}

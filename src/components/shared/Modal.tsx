@@ -8,9 +8,13 @@ type TModalProps = {
   setOpen: Dispatch<SetStateAction<boolean>>,
   title?: string;
   footer?: ReactNode;
+  closeButton?: false | {
+    icon?: ReactNode;
+    label?: string;
+  };
 };
 
-export const Modal = ({ children, open, setOpen, title, footer }: TModalProps) => {
+export const Modal = ({ children, open, setOpen, title, footer, closeButton = {icon: <Ban />, label: 'Close'} }: TModalProps) => {
 
   return (
   <Dialog open={open} onOpenChange={setOpen}>
@@ -19,12 +23,13 @@ export const Modal = ({ children, open, setOpen, title, footer }: TModalProps) =
       {children}
       <DialogFooter>
         {footer}
-        <DialogClose asChild>
+        {closeButton && <DialogClose asChild>
           <Button type="button" variant="secondary">
-            <Ban />
-            Close
+            {closeButton.icon}
+            {closeButton.label && <span>{closeButton.label}</span>}
           </Button>
         </DialogClose>
+        }
       </DialogFooter>
     </DialogContent>
   </Dialog>

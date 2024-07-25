@@ -1,11 +1,11 @@
 'use client';
 
-import {TPostEntity} from '@/types';
+import {TPostWithMediaEntity} from '@/types';
 import {Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious} from '@/components';
 import Image from 'next/image';
 
 type TModalContentProps = {
-  post: TPostEntity;
+  post: TPostWithMediaEntity;
 }
 export const ModalContent = ({ post }: TModalContentProps) => {
   const { media, description, categories, name} = post;
@@ -13,16 +13,16 @@ export const ModalContent = ({ post }: TModalContentProps) => {
     <div>
       <Carousel className="py-4 relative">
         <CarouselContent>
-          {media.map(({ type, url }, index) => (
+          {media.map(({ mediaType, url }, index) => (
             <CarouselItem key={index}
                           className="flex aspect-video relative"
             >
-              { type === 'image' && <Image src={url}
+              { mediaType === 'image' && <Image src={url}
                                            alt={`${name} (${index})`}
                                            fill
-                                           className="object-cover"
+                                           className="object-contain"
               /> }
-              { type === 'video' && <video controls preload='metadata'>
+              { mediaType === 'video' && <video controls preload='metadata'>
                 <source src={url} />
 	              Your browser does not support the video tag.
               </video> }

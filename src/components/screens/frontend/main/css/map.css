@@ -56,7 +56,4 @@
         position: relative;
         height: 213.487vw;
     }
-    .map__container_temp img {
-        object-fit: cover !important;
-    }
 }

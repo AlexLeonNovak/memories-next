@@ -2,40 +2,35 @@
 
 import {useEffect, useRef, useState} from 'react';
 import {createGallery, TGalleryItemsWithLevel} from '@/lib/utils';
-import {GalleryItem} from '@/components/screens/frontend/main/GalleryItem';
-import {TPostEntity, TPostIdWMedia} from '@/types';
-import {Modal, ModalContent} from '@/components';
-import {Loader, LoaderCircle} from 'lucide-react';
-import {fetchPostById} from '@/server';
+import {TMediaWithPostEntity, TPostWithMediaEntity} from '@/types';
+import {Modal, ModalContent, GalleryItem} from '@/components';
+import {LoaderCircle} from 'lucide-react';
+import {MediaRepository} from '@/lib/repositories';
 
 type TRandomGalleryProps = {
-  posts: TPostEntity[];
+  medias: TMediaWithPostEntity[];
 }
 
-export const RandomGallery = ({posts}: TRandomGalleryProps) => {
-  const [gallery, setGallery] = useState<TGalleryItemsWithLevel<TPostIdWMedia>[]>([]);
+export const RandomGallery = ({medias}: TRandomGalleryProps) => {
+  const [gallery, setGallery] = useState<TGalleryItemsWithLevel<TMediaWithPostEntity>[]>([]);
   const [showModalInfo, setShowModalInfo] = useState(false);
-  const [postId, setPostId] = useState<string>();
-  const [post, setPost] = useState<TPostEntity>();
+  const [post, setPost] = useState<TPostWithMediaEntity>();
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const onItemClick = async (item: TPostIdWMedia) => {
+  const onItemClick = async (item: TMediaWithPostEntity) => {
     setShowModalInfo(true);
-    const post = await fetchPostById(item.id);
-    setPost(post);
+    const media = await MediaRepository.getMedias(item.postId);
+    setPost({ ...item.post, media });
   }
 
   useEffect(() => {
     if (!containerRef.current) return;
-    const media = posts.map(
-      ({media, id, categories}) =>
-        media.map(m => ({ ...m, id, categories}))
-    ).flat();
     const {itemsWithLevels, unplacedItems} = createGallery(
       containerRef.current,
-      media,
+      medias,
       1
     );
+    console.log('itemsWithLevels', itemsWithLevels);
     setGallery(itemsWithLevels);
   }, []);
 

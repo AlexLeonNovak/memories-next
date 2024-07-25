@@ -1,13 +1,14 @@
 import {cn, random} from '@/lib/utils';
 import {HTMLAttributes} from 'react';
-import {TPostIdWMedia, TPostMedia} from '@/types';
+import {TMediaWithPostEntity} from '@/types';
 import Image from 'next/image';
 import {MouseParallax} from 'react-just-parallax';
 import {useGalleryStore} from '@/lib/store';
+import {Play} from 'lucide-react';
 
 type TGalleryItemProps = HTMLAttributes<HTMLDivElement> & {
-  item: TPostIdWMedia;
-  onItemClick?: (item: TPostIdWMedia) => void;
+  item: TMediaWithPostEntity;
+  onItemClick?: (item: TMediaWithPostEntity) => void;
 }
 export const GalleryItem = ({item, onItemClick, className, ...props}: TGalleryItemProps) => {
   const {hoveredCategories, setHoveredCategories, categorySelected} = useGalleryStore();
@@ -26,20 +27,37 @@ export const GalleryItem = ({item, onItemClick, className, ...props}: TGalleryIt
       >
         <div className={cn('opacity-50 hover:opacity-100 ease-in-out duration-300 cursor-pointer',
           (
-            hoveredCategories.some(cat => item.categories.includes(cat)) ||
-            (categorySelected && item.categories.includes(categorySelected))
+            hoveredCategories.some(cat => item.post.categories.includes(cat)) ||
+            (categorySelected && item.post.categories.includes(categorySelected))
           ) && 'opacity-100',
         )}
-             onMouseEnter={() => setHoveredCategories(item.categories)}
+             onMouseEnter={() => setHoveredCategories(item.post.categories)}
              onMouseLeave={() => setHoveredCategories([])}
              onClick={() => onItemClick && onItemClick(item)}
         >
-          {item.type === 'image' &&
+          {item.mediaType === 'image' &&
 						<Image src={item.url}
 						       alt={item.url}
 						       fill
-						       className="object-cover hover:scale-125 ease-in-out duration-300"
+						       className="object-contain hover:scale-125 ease-in-out duration-300"
 						/>
+          }
+          {item.mediaType === 'video' && (
+            <div className='relative hover:scale-125 ease-in-out duration-300'>
+              <video controls={false}
+                     preload="metadata"
+                     onMouseEnter={(e) => {
+                       e.currentTarget.volume = 0;
+                       e.currentTarget.play();
+                     }}
+                     onMouseLeave={(e) => e.currentTarget.pause()}
+              >
+                <source src={item.url}/>
+                Your browser does not support the video tag.
+              </video>
+              <Play className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 size-1/3 text-primary-foreground'/>
+            </div>
+          )
           }
         </div>
       </MouseParallax>
