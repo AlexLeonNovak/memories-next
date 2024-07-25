@@ -2,9 +2,8 @@
 
 import {useFormState} from 'react-dom';
 import {createLead} from '@/server';
-import {useEffect} from 'react';
 import {toast} from 'sonner';
-import {FieldPath, useForm} from 'react-hook-form';
+import {useForm} from 'react-hook-form';
 import {TLead} from '@/types';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {createLeadSchema} from '@/lib/validations';
@@ -18,6 +17,7 @@ import {
   Input,
   SubmitButton,
 } from '@/components';
+import {useFormCheck} from '@/hooks';
 
 const defaultValues: TLead = {
   organisation: '',
@@ -37,23 +37,16 @@ export const FeedbackForm = () => {
 
   const [state, action] = useFormState(createLead, null);
 
-  useEffect(() => {
-    if (!state) {
-      return;
-    }
-    if (!state.success) {
-      toast.error('One or more fields have an error. Please check them and try again.');
-      state.errors?.forEach((error) => {
-        setError(error.path as FieldPath<TLead>, {
-          message: error.message,
-        });
-      });
-    }
-    if (state.success) {
+  useFormCheck<TLead>({
+    state,
+    setError,
+    onError: () => toast.error('One or more fields have an error. Please check them and try again.'),
+    onSuccess: () => {
       toast.success('Feedback was successfully sent!');
       reset(defaultValues);
-    }
-  }, [state, setError, reset]);
+    },
+    onFail: (state) => toast.error(state.message),
+  });
 
   return (
     <Form {...form}>
