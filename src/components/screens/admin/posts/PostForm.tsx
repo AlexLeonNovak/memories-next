@@ -15,7 +15,7 @@ import {
   CategoryDialog, FileUploader, FileInput, FileUploaderContent, FileUploaderItem, AspectRatio, SubmitButton, Checkbox,
 } from '@/components';
 import {TCategory, TPostEntity} from '@/types';
-import {FieldPath, useForm} from 'react-hook-form';
+import { useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {Save, CloudUpload, FileVideo, LoaderCircle} from 'lucide-react';
 import {createPostSchema, MAX_SIZE_IMAGE, MAX_SIZE_VIDEO} from '@/lib/validations';
@@ -31,6 +31,7 @@ import {getFileJs} from '@/lib/services';
 import {getFileType} from '@/lib/utils';
 import {useFormCheck} from '@/hooks';
 import {MediaRepository} from '@/lib/repositories';
+import PostRepository from '@/lib/repositories/post.repository';
 
 type TPostFormProps = {
   categories: Array<TCategory & { id: string }>
@@ -83,8 +84,8 @@ export const PostForm = ({post, categories = []}: TPostFormProps) => {
     state,
     setError,
     onSuccess: async (state) => {
+      const {id} = state.data;
       try {
-        const {id} = state.data;
         const files = getValues('files');
         await MediaRepository.saveMedia(id, files);
         toast.success(`Post successfully ${post?.id ? 'updated' : 'created'}!`);
@@ -92,6 +93,8 @@ export const PostForm = ({post, categories = []}: TPostFormProps) => {
         router.refresh();
       } catch (e) {
         toast.error((e as Error).message);
+        await PostRepository.delete(id);
+        await MediaRepository.deleteMedia(id);
       }
     },
     onError: () => toast.error('One or more fields have an error. Please check them and try again.'),

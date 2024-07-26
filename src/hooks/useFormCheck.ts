@@ -7,10 +7,10 @@ import {TFormState, TFormStateFail, TFormStateError, TFormStateSuccess} from '@/
 type TFormCheckArgs<T extends FieldValues, F extends FieldValues = T> = {
   state: TFormState<T> | null;
   setError: UseFormSetError<F>;
-  onError?: (state: TFormStateError) => void,
-  onFail?: (state: TFormStateFail) => void,
-  onSuccess?: (state: TFormStateSuccess<T>) => void,
-  onFinally?: () => void,
+  onError?: (state: TFormStateError) => unknown,
+  onFail?: (state: TFormStateFail) => unknown,
+  onSuccess?: (state: TFormStateSuccess<T>) => unknown,
+  onFinally?: () => unknown,
 }
 
 export const useFormCheck = <T extends FieldValues, F extends FieldValues = T>({
@@ -25,25 +25,28 @@ export const useFormCheck = <T extends FieldValues, F extends FieldValues = T>({
     if (!state) {
       return;
     }
-    switch (state.status) {
-      case 'fail':
-        onFail && onFail(state);
-        break;
-      case 'error':
-        state.errors?.forEach((error) => {
-          setError(error.path as FieldPath<F>, {
-            message: error.message,
+    const checkStatus = async (state: TFormState<T>) => {
+      switch (state.status) {
+        case 'fail':
+          onFail && await Promise.resolve(onFail(state));
+          break;
+        case 'error':
+          state.errors?.forEach((error) => {
+            setError(error.path as FieldPath<F>, {
+              message: error.message,
+            });
           });
-        });
-        onError && onError(state);
-        break;
-      case 'success':
-        onSuccess && onSuccess(state);
-        break;
-      default:
-        break;
+          onError && await Promise.resolve(onError(state));
+          break;
+        case 'success':
+          onSuccess && await Promise.resolve(onSuccess(state));
+          break;
+        default:
+          break;
+      }
+      onFinally && await Promise.resolve(onFinally());
     }
-    onFinally && onFinally();
+    checkStatus(state);
   }, [state]);
 
 };

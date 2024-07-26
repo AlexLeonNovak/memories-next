@@ -17,7 +17,7 @@ export const LoginForm = () => {
 
   useEffect(() => {
     const handleLoginWithRedirect = async () => {
-      const auth = getFirebaseAuth();
+      const auth = await getFirebaseAuth();
       const credential = await getRedirectResult(auth);
 
       if (credential?.user) {

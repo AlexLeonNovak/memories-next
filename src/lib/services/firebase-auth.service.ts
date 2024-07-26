@@ -1,8 +1,8 @@
-import {getAuth, inMemoryPersistence, setPersistence} from 'firebase/auth';
+import {getAuth, inMemoryPersistence, browserLocalPersistence, setPersistence} from 'firebase/auth';
 import {getFirebaseApp} from '.';
 
-export const getFirebaseAuth = () => {
+export const getFirebaseAuth = async () => {
   const auth = getAuth(getFirebaseApp());
-  setPersistence(auth, inMemoryPersistence);
+  await setPersistence(auth, browserLocalPersistence);
   return auth;
 }

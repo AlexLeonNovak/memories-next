@@ -7,10 +7,10 @@ import { getFirebaseAuth } from '@/lib/services';
 
 export const useAuth = () => {
   const [error, setError] = useState<string>();
-  const auth = getFirebaseAuth();
 
   const login = async ({ email, password }: TCredentials) => {
     try {
+      const auth = await getFirebaseAuth();
       const cred = await signInWithEmailAndPassword(
         auth, email, password
       );
@@ -28,6 +28,7 @@ export const useAuth = () => {
   }
 
   const logout = async () => {
+    const auth = await getFirebaseAuth();
     await signOut(auth);
     await fetch('/api/logout');
   }
