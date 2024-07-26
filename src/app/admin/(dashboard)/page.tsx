@@ -1,7 +1,7 @@
-import {redirect} from 'next/navigation';
-import {getTokens} from 'next-firebase-auth-edge';
-import {cookies} from 'next/headers';
-import {firebaseConfig, getFirebaseAuth, serverConfig} from '@/lib/services';
+import { firebaseConfig, getFirebaseAuth, serverConfig } from '@/lib/services';
+import { getTokens } from 'next-firebase-auth-edge';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 export default async function AdminPage() {
   const tokens = await getTokens(cookies(), {
@@ -17,8 +17,5 @@ export default async function AdminPage() {
     redirect('/auth/login');
   }
 
-  return (
-    <div>Admin dashboard</div>
-  );
+  return <div>Admin dashboard</div>;
 }
-

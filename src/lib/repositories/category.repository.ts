@@ -1,5 +1,5 @@
-import {createCRUD} from '@/lib/services';
-import {TCategory} from '@/types';
+import { createCRUD } from '@/lib/services';
+import { TCategory } from '@/types';
 
 const crud = createCRUD<TCategory>('categories');
 

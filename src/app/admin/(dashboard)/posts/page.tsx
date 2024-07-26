@@ -1,14 +1,14 @@
-import {Button, PageTitle, PostsTable} from '@/components';
-import {Plus} from 'lucide-react';
+import { Button, PageTitle, PostsTable } from '@/components';
+import { Plus } from 'lucide-react';
 import Link from 'next/link';
 
 export default function PostsPage() {
   return (
     <>
       <PageTitle title='Posts' />
-      <div className="row">
+      <div className='row'>
         <Button asChild>
-          <Link href="posts/add">
+          <Link href='posts/add'>
             <Plus />
             <span>Add new post</span>
           </Link>
@@ -16,5 +16,5 @@ export default function PostsPage() {
       </div>
       <PostsTable />
     </>
-  )
+  );
 }

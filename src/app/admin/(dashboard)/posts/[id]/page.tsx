@@ -1,15 +1,15 @@
-import {notFound} from 'next/navigation';
-import { PageTitle, PostForm} from '@/components';
-import {fetchPostById} from '@/server/actions/posts.actions';
-import {fetchCategories} from '@/server/actions/categories.actions';
+import { PageTitle, PostForm } from '@/components';
+import { fetchCategories } from '@/server/actions/categories.actions';
+import { fetchPostById } from '@/server/actions/posts.actions';
+import { notFound } from 'next/navigation';
 
 type TEditCategoryPage = {
   params: {
     id: string;
-  }
-}
+  };
+};
 
-export default async function EditPostPage({params: { id }}: TEditCategoryPage) {
+export default async function EditPostPage({ params: { id } }: TEditCategoryPage) {
   const post = await fetchPostById(id);
 
   if (!post) {
@@ -23,5 +23,5 @@ export default async function EditPostPage({params: { id }}: TEditCategoryPage) 
       <PageTitle title={`Edit post: "${post.name}"`} />
       <PostForm post={post} categories={categories} />
     </>
-  )
+  );
 }

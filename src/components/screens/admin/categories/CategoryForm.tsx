@@ -1,6 +1,5 @@
 'use client';
 
-import {TCategory, TCategoryEntity} from '@/types';
 import {
   Checkbox,
   Form,
@@ -13,24 +12,30 @@ import {
   Input,
   SubmitButton,
 } from '@/components';
-import {FieldPath, useForm} from 'react-hook-form';
-import {useFormState} from 'react-dom';
-import {zodResolver} from '@hookform/resolvers/zod';
-import {useEffect, useRef} from 'react';
-import {createCategorySchema} from '@/lib/validations';
-import {createCategory, updateCategory} from '@/server/actions/categories.actions';
-import {Save} from 'lucide-react';
-import {toast} from 'sonner';
-import {useFormCheck} from '@/hooks';
+import { useFormCheck } from '@/hooks';
+import { createCategorySchema } from '@/lib/validations';
+import { createCategory, updateCategory } from '@/server/actions/categories.actions';
+import { TCategory, TCategoryEntity } from '@/types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Save } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+import { useFormState } from 'react-dom';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 type TCategoryFormProps = {
   category?: TCategoryEntity;
-  onFormSubmit?: (data: TCategory) => void,
+  onFormSubmit?: (data: TCategory) => void;
   submitRequested?: boolean;
   isShowSubmitButton?: boolean;
-}
+};
 
-export const CategoryForm = ({category, onFormSubmit, submitRequested, isShowSubmitButton = true}: TCategoryFormProps) => {
+export const CategoryForm = ({
+  category,
+  onFormSubmit,
+  submitRequested,
+  isShowSubmitButton = true,
+}: TCategoryFormProps) => {
   const formRef = useRef<HTMLFormElement>(null);
   const form = useForm<TCategory>({
     mode: 'all',
@@ -44,7 +49,7 @@ export const CategoryForm = ({category, onFormSubmit, submitRequested, isShowSub
 
   const serverAction = category?.id ? updateCategory : createCategory;
 
-  const {control, setError} = form;
+  const { control, setError } = form;
   const [state, action] = useFormState(serverAction, null);
 
   useFormCheck<TCategory>({
@@ -66,59 +71,57 @@ export const CategoryForm = ({category, onFormSubmit, submitRequested, isShowSub
 
   return (
     <Form {...form}>
-      <form action={action} ref={formRef} className="space-y-8">
+      <form action={action} ref={formRef} className='space-y-8'>
+        {category?.id && <Input type='hidden' name='id' value={category.id} />}
 
-        { category?.id && <Input type='hidden' name='id' value={category.id} /> }
-
-        <FormField name="name"
-                   control={control}
-                   render={({field}) => (
-                     <FormItem>
-                       <FormLabel>Name <span className="text-red-600">*</span></FormLabel>
-                       <FormControl>
-                         <Input placeholder="Name" {...field} />
-                       </FormControl>
-                       <FormDescription>
-                         Enter category name
-                       </FormDescription>
-                       <FormMessage/>
-                     </FormItem>
-                   )}
+        <FormField
+          name='name'
+          control={control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                Name <span className='text-red-600'>*</span>
+              </FormLabel>
+              <FormControl>
+                <Input placeholder='Name' {...field} />
+              </FormControl>
+              <FormDescription>Enter category name</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
         />
 
-        <FormField name="order"
-                   control={control}
-                   render={({field}) => (
-                     <FormItem>
-                       <FormLabel>Sort order</FormLabel>
-                       <FormControl>
-                         <Input type='number' placeholder="Sort order" {...field} />
-                       </FormControl>
-                       <FormMessage/>
-                     </FormItem>
-                   )}
+        <FormField
+          name='order'
+          control={control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Sort order</FormLabel>
+              <FormControl>
+                <Input type='number' placeholder='Sort order' {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
 
-        <FormField name="isActive"
-                   control={control}
-                   render={({field: {name, value, onChange}}) => (
-                     <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                       <FormControl>
-                         <Checkbox name={name} checked={value} onCheckedChange={onChange}/>
-                       </FormControl>
-                       <div className="space-y-1 leading-none">
-                         <FormLabel>Is active</FormLabel>
-                       </div>
-                       <FormMessage/>
-                     </FormItem>
-                   )}
+        <FormField
+          name='isActive'
+          control={control}
+          render={({ field: { name, value, onChange } }) => (
+            <FormItem className='flex flex-row items-start space-x-3 space-y-0'>
+              <FormControl>
+                <Checkbox name={name} checked={value} onCheckedChange={onChange} />
+              </FormControl>
+              <div className='space-y-1 leading-none'>
+                <FormLabel>Is active</FormLabel>
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
         />
 
-        {isShowSubmitButton && <SubmitButton label="Save"
-				                                     pendingLabel="Please wait..."
-				                                     icon={<Save/>}
-				/>
-        }
+        {isShowSubmitButton && <SubmitButton label='Save' pendingLabel='Please wait...' icon={<Save />} />}
       </form>
     </Form>
   );

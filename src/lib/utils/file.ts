@@ -1,3 +1,4 @@
-import {EMediaType} from '@/types';
+import { EMediaType } from '@/types';
 
-export const getFileType = (file: File): EMediaType => file.type.includes('image') ? EMediaType.IMAGE : EMediaType.VIDEO;
+export const getFileType = (file: File): EMediaType =>
+  file.type.includes('image') ? EMediaType.IMAGE : EMediaType.VIDEO;

@@ -1,5 +1,5 @@
-import type {Metadata} from 'next';
-import {LegalTerms} from "@/components/screens/frontend/main/LegalTerms";
+import { LegalTerms } from '@/components/screens/frontend/main/LegalTerms';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Zberezhemo - Legal terms',
@@ -8,8 +8,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout() {
   return (
-      <>
-          <LegalTerms />
-      </>
+    <>
+      <LegalTerms />
+    </>
   );
 }

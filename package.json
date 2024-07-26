@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint --fix && biome lint ./src",
+    "check": "biome check --write ./src",
+    "format": "biome format --write ./src"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.6.0",
