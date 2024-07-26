@@ -1,6 +1,7 @@
-import {fetchCategories, fetchPostById} from '@/server';
 import {notFound} from 'next/navigation';
 import { PageTitle, PostForm} from '@/components';
+import {fetchPostById} from '@/server/actions/posts.actions';
+import {fetchCategories} from '@/server/actions/categories.actions';
 
 type TEditCategoryPage = {
   params: {

@@ -1,8 +1,8 @@
-import {useEffect, useState} from 'react';
+'use client';
+
+import {useEffect} from 'react';
 import {FieldPath, FieldValues, UseFormSetError} from 'react-hook-form';
 import {TFormState, TFormStateFail, TFormStateError, TFormStateSuccess} from '@/types';
-import {Simulate} from 'react-dom/test-utils';
-import error = Simulate.error;
 
 type TFormCheckArgs<T extends FieldValues, F extends FieldValues = T> = {
   state: TFormState<T> | null;

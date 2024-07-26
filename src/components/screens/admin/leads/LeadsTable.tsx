@@ -1,5 +1,5 @@
 import {DeleteForm, Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/components';
-import {deleteLead, fetchLeads} from '@/server';
+import {deleteLead, fetchLeads} from '@/server/actions/leads.actions';
 import {DateTime} from 'luxon';
 
 export const LeadsTable = async () => {

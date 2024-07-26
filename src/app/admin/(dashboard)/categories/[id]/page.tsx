@@ -1,7 +1,7 @@
 import {CategoryFormWrapper} from './CategoryFormWrapper';
-import {fetchCategoryById} from '@/server';
 import {notFound} from 'next/navigation';
 import {PageTitle} from '@/components';
+import {fetchCategoryById} from '@/server/actions/categories.actions';
 
 type TEditCategoryPage = {
   params: {

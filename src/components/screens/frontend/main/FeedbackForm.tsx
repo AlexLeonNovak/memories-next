@@ -1,7 +1,7 @@
 'use client'
 
 import {useFormState} from 'react-dom';
-import {createLead} from '@/server';
+import {createLead} from '@/server/actions/leads.actions';
 import {toast} from 'sonner';
 import {useForm} from 'react-hook-form';
 import {TLead} from '@/types';

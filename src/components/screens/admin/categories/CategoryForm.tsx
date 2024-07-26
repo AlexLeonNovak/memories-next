@@ -18,7 +18,7 @@ import {useFormState} from 'react-dom';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {useEffect, useRef} from 'react';
 import {createCategorySchema} from '@/lib/validations';
-import {createCategory, updateCategory} from '@/server';
+import {createCategory, updateCategory} from '@/server/actions/categories.actions';
 import {Save} from 'lucide-react';
 import {toast} from 'sonner';
 import {useFormCheck} from '@/hooks';

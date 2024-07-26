@@ -1,7 +1,7 @@
 import {z} from 'zod';
 import {TCategory} from '@/types';
 import {zfd} from 'zod-form-data';
-import {fetchCategories} from '@/server';
+import {fetchCategories} from '@/server/actions/categories.actions';
 
 const baseCategorySchema = z.object({
   name: zfd.text(z.string().min(1, 'Required')),

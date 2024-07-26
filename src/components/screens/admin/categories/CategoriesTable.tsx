@@ -11,7 +11,7 @@ import {
   TableRow,
   DeleteForm,
 } from '@/components';
-import {fetchCategories, deleteCategory} from '@/server';
+import {fetchCategories, deleteCategory} from '@/server/actions/categories.actions';
 import Link from 'next/link';
 import {Pencil} from 'lucide-react';
 

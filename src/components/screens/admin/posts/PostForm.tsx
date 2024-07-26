@@ -20,7 +20,7 @@ import {zodResolver} from '@hookform/resolvers/zod';
 import {Save, CloudUpload, FileVideo, LoaderCircle} from 'lucide-react';
 import {createPostSchema, MAX_SIZE_IMAGE, MAX_SIZE_VIDEO} from '@/lib/validations';
 import {z} from 'zod';
-import {createPost, updatePost} from '@/server';
+import {createPost, updatePost} from '@/server/actions/posts.actions';
 import {useFormState} from 'react-dom';
 import {useEffect, useState} from 'react';
 import {DropzoneOptions} from 'react-dropzone';

@@ -1,5 +1,5 @@
 import {Badge, Button, DeleteForm, Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/components';
-import {deletePost, fetchPostsWithCategories} from '@/server';
+import {deletePost, fetchPostsWithCategories} from '@/server/actions/posts.actions';
 import Link from 'next/link';
 import {Pencil} from 'lucide-react';
 

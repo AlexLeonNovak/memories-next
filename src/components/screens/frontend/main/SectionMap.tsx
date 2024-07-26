@@ -1,7 +1,7 @@
-import {fetchCategories, fetchMediasWithActivePosts} from '@/server';
-import {Button, MapNavigation, RandomGallery} from '@/components';
+import {MapNavigation, RandomGallery} from '@/components';
 import './css/map.css';
-import {cn} from '@/lib/utils';
+import {fetchMediasWithActivePosts} from '@/server/actions/medias.actions';
+import {fetchCategories} from '@/server/actions/categories.actions';
 
 export const SectionMap = async () => {
   const medias = await fetchMediasWithActivePosts();
