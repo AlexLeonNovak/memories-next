@@ -90,7 +90,6 @@ export const PostForm = ({post, categories = []}: TPostFormProps) => {
         await MediaRepository.saveMedia(id, files);
         toast.success(`Post successfully ${post?.id ? 'updated' : 'created'}!`);
         router.push('/admin/posts');
-        router.refresh();
       } catch (e) {
         toast.error((e as Error).message);
         await PostRepository.delete(id);

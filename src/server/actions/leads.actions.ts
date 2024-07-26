@@ -12,7 +12,7 @@ export const deleteLead = async (prevState: any, formData: FormData): Promise<TD
   try {
     const id = formData.get('id') as string;
     id && await LeadRepository.delete(id);
-    revalidatePath('/');
+    revalidatePath('/admin/leads');
     return {
       success: true,
     };
@@ -26,7 +26,7 @@ export const createLead = async (prevState: any, formData: FormData): Promise<TF
     const parsed = await parseSchemaFormData(createLeadSchema, formData);
     if (parsed.status === 'success') {
       const data = await LeadRepository.create(parsed.data);
-      revalidatePath('/');
+      revalidatePath('/admin/leads');
       return {status: 'success', data};
     }
     return parsed;

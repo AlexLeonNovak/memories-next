@@ -15,6 +15,7 @@ export async function createCategory(prevState: any, formData: FormData): Promis
   const parsed = await parseSchemaFormData(createCategorySchemaServer, formData);
   if (parsed.status === 'success') {
     const data = await CategoryRepository.create(parsed.data);
+    revalidatePath('/admin/categories');
     revalidatePath('/');
     return { status: 'success', data };
   }
@@ -30,6 +31,7 @@ export async function updateCategory(prevState: any, formData: FormData): Promis
   if (parsed.status === 'success') {
     const {id, ...rest} = parsed.data;
     const data = await CategoryRepository.update(id, rest);
+    revalidatePath('/admin/categories');
     revalidatePath('/');
     return { status: 'success', data };
   }
@@ -54,6 +56,7 @@ export async function deleteCategory(prevState: any, formData: FormData): Promis
       throw new Error('This category used in posts: ' + posts.map(({name}) => name).join(', '));
     }
     id && await CategoryRepository.delete(id as string);
+    revalidatePath('/admin/categories');
     revalidatePath('/');
     return {
       success: true,
