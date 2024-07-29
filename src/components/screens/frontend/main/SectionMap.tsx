@@ -6,6 +6,7 @@ import { fetchMediasWithActivePosts } from '@/server/actions/medias.actions';
 export const SectionMap = async () => {
   const medias = await fetchMediasWithActivePosts();
   const categories = await fetchCategories({
+    where: { fieldPath: 'isActive', opStr: '==', value: true },
     order: { order: 'asc' },
   });
   return (

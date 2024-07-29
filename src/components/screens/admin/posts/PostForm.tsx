@@ -22,8 +22,7 @@ import {
   Textarea,
 } from '@/components';
 import { useFormCheck } from '@/hooks';
-import { MediaRepository } from '@/lib/repositories';
-import PostRepository from '@/lib/repositories/post.repository';
+import { MediaRepository, PostRepository } from '@/lib/repositories';
 import { getFileJs } from '@/lib/services';
 import { getFileType } from '@/lib/utils';
 import { MAX_SIZE_IMAGE, MAX_SIZE_VIDEO, createPostSchema } from '@/lib/validations';

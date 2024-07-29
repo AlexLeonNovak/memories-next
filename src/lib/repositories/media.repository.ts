@@ -53,4 +53,4 @@ const saveMedia = async (postId: string, files: File[]) => {
   return medias;
 };
 
-export default { ...crud, getMedias, saveMedia, deleteMedia };
+export const MediaRepository = { ...crud, getMedias, saveMedia, deleteMedia };

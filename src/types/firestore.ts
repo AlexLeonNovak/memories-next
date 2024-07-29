@@ -10,10 +10,15 @@ export type TQueryFilter<T> = {
   value?: unknown;
 };
 
-export type TQueryOptions<T extends object> = {
+export type TQueryOrderOption<T> = {
   order?: keyof T | TQueryOrder<T> | TQueryOrder<T>[];
+};
+
+export type TQueryOptionsWhere<T> = {
   where?: TQueryFilter<T> | TQueryFilter<T>[];
   or?: TQueryFilter<T> | TQueryFilter<T>[];
 };
 
-export type TCollections = 'posts' | 'medias' | 'categories' | 'leads';
+export type TQueryOptions<T> = TQueryOrderOption<T> & TQueryOptionsWhere<T>;
+
+export type TCollections = 'posts' | 'medias' | 'categories' | 'leads' | 'translations';

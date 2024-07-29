@@ -26,9 +26,8 @@ export const RandomGallery = ({ medias }: TRandomGalleryProps) => {
   useEffect(() => {
     if (!containerRef.current) return;
     const { itemsWithLevels, unplacedItems } = createGallery(containerRef.current, medias, 1);
-    console.log('itemsWithLevels', itemsWithLevels);
     setGallery(itemsWithLevels);
-  }, []);
+  }, [medias]);
 
   return (
     <div className='w-full h-full relative' ref={containerRef}>

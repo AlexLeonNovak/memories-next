@@ -2,7 +2,7 @@
 
 import { Button } from '@/components';
 import { useAuth } from '@/hooks';
-import { CircleGauge, Contact, List, LogOut, NotebookText } from 'lucide-react';
+import { CircleGauge, Contact, Languages, List, LogOut, NotebookText } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -42,6 +42,11 @@ export const Sidebar = () => {
         <NavItem href='/admin/leads'>
           <Contact />
           <span>Leads</span>
+        </NavItem>
+
+        <NavItem href='/admin/translations'>
+          <Languages />
+          <span>Translations</span>
         </NavItem>
       </div>
       <div className='p-4 flex mt-auto'>

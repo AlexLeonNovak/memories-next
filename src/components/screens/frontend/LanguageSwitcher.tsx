@@ -1,15 +1,40 @@
-import { FC } from 'react';
+'use client';
 
-export const LanguageSwitcher: FC = () => {
+import { useRouter, usePathname, useParams } from 'next/navigation';
+import { Button } from '@/components';
+import { MouseEvent } from 'react';
+import { cn } from '@/lib/utils';
+// import { TLocale } from '@/i18n';
+
+export const LanguageSwitcher = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const params = useParams<{ lang: string }>();
+
+  const onLanguageChange = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    router.push(e.currentTarget.value);
+  };
+
   return (
     <div className='header-lang-switcher'>
-      <a href='#' className='header-lang-switcher__item header-lang-switcher__item_active'>
+      <Button
+        variant='link'
+        className={cn('px-0', params.lang === 'en' && 'underline')}
+        value='en'
+        onClick={onLanguageChange}
+      >
         ENG
-      </a>
-      <span className='header-lang-switcher__separator'>/</span>
-      <a href='#' className='header-lang-switcher__item'>
+      </Button>
+      <span className='mx-[5px]'>/</span>
+      <Button
+        variant='link'
+        className={cn('px-0', params.lang === 'uk' && 'underline')}
+        value='uk'
+        onClick={onLanguageChange}
+      >
         UA
-      </a>
+      </Button>
     </div>
   );
 };

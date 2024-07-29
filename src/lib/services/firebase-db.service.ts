@@ -1,10 +1,7 @@
 import { TBaseEntity, TCollections, TQueryFilter, TQueryOptions, TQueryOrder } from '@/types';
 import {
   OrderByDirection,
-  QueryCompositeFilterConstraint,
   QueryDocumentSnapshot,
-  QueryFieldFilterConstraint,
-  QueryOrderByConstraint,
   addDoc,
   and,
   collection,
@@ -17,7 +14,6 @@ import {
   orderBy,
   query,
   setDoc,
-  updateDoc,
   where,
 } from '@firebase/firestore';
 import { getFirebaseApp } from '.';

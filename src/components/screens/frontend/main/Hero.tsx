@@ -5,10 +5,14 @@ import './css/hero.css';
 import Image from 'next/image';
 import ScrollAnimation from 'react-animate-on-scroll';
 import 'animate.css/animate.compat.css';
+import { useTranslations } from 'next-intl';
 
 export const Hero = () => {
+  const t = useTranslations();
+  console.log('translation test', t('test1'));
   return (
     <section className='hero'>
+      <span>{t('test1')}</span>
       <div className='wrapper'>
         <ScrollAnimation animateIn='fadeInDown'>
           <div className='hero__title'>MEMORY</div>

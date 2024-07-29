@@ -1,0 +1,49 @@
+'use client';
+
+import { Select, SelectContent, SelectItem, SelectSeparator, SelectTrigger, SelectValue, Button } from '@/components';
+import { SelectProps } from '@radix-ui/react-select';
+import { useState } from 'react';
+
+export type TSelectInputItem = {
+  value: string;
+  label: string;
+};
+
+type TSelectInputProps = SelectProps & {
+  items: TSelectInputItem[];
+  placeholder: string;
+  onValueChange?(value?: string): void;
+};
+export const SelectInput = ({ items, placeholder, onValueChange, ...props }: TSelectInputProps) => {
+  const [key, setKey] = useState(+new Date());
+  const [value, setValue] = useState<string | undefined>(undefined);
+
+  return (
+    <Select key={key} {...props} value={value} onValueChange={onValueChange}>
+      <SelectTrigger>
+        <SelectValue placeholder={placeholder} />
+      </SelectTrigger>
+      <SelectContent>
+        <Button
+          className='w-full px-2'
+          variant='secondary'
+          size='sm'
+          onClick={(e) => {
+            e.stopPropagation();
+            setValue(undefined);
+            setKey(+new Date());
+            onValueChange && onValueChange(undefined);
+          }}
+        >
+          Clear
+        </Button>
+        <SelectSeparator />
+        {items?.map(({ label, value }) => (
+          <SelectItem key={value} value={value}>
+            {label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+};

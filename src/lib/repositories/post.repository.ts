@@ -3,4 +3,4 @@ import { TPost } from '@/types';
 
 const crud = createCRUD<TPost>('posts');
 
-export default { ...crud };
+export const PostRepository = { ...crud };

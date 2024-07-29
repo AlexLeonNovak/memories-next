@@ -10,8 +10,8 @@ export default async function AdminPage() {
     cookieSignatureKeys: serverConfig.cookieSignatureKeys,
     serviceAccount: serverConfig.serviceAccount,
   });
-  console.log('currentUser', (await getFirebaseAuth()).currentUser);
-  console.log('tokens', tokens);
+  // console.log('currentUser', (await getFirebaseAuth()).currentUser);
+  // console.log('tokens', tokens);
 
   if (!tokens) {
     redirect('/auth/login');
