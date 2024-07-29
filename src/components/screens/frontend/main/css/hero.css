@@ -62,3 +62,138 @@
         height: 73.846vw;
     }
 }
+
+.hero-texts {
+    z-index: 100;
+    position: relative;
+    pointer-events: none;
+}
+
+.hero-square-lines {
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.hero-square {
+    width: 100%;
+    height: 100%;
+
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    opacity: 0;
+    transition: opacity 500ms ease-out;
+    transition-delay: 1s;
+}
+
+.hero-square:hover {
+    opacity: 0.7;
+    transition: opacity 300ms linear;
+}
+
+@media screen and (max-width: 980px) {
+    .hero-square-lines {
+        position: absolute;
+        top: -10vh;
+        left: 40vw;
+        z-index: 100;
+        width: 50vw;
+        height: 40vh;
+    }
+
+    .hero-square-line {
+        display: block;
+        height: 100%;
+    }
+
+    .hero-square {
+        width: 100%;
+        height: 100%;
+
+        background-repeat: no-repeat;
+        background-size: cover;
+
+        /* opacity: 0.7; */
+        transition: unset;
+        transition-delay: unset;
+        position: absolute;
+        top: 0;
+
+        z-index: -18;
+        opacity: 0;
+        animation-name: fade;
+        animation-duration: 16s;
+        animation-iteration-count: infinite;
+    }
+
+    .hero-square-1 {
+        animation-delay: 0s;
+    }
+    .hero-square-2 {
+        animation-delay: 4s;
+    }
+    .hero-square-3 {
+        animation-delay: 8s;
+    }
+    .hero-square-4 {
+        animation-delay: 12s;
+    }
+    .hero-square-5 {
+        animation-delay: 16s;
+    }
+    .hero-square-6 {
+        animation-delay: 20s;
+    }
+    .hero-square-7 {
+        animation-delay: 24s;
+    }
+    .hero-square-8 {
+        animation-delay: 28s;
+    }
+    .hero-square-9 {
+        animation-delay: 32s;
+    }
+    .hero-square-10 {
+        animation-delay: 36s;
+    }
+    .hero-square-11 {
+        animation-delay: 40s;
+    }
+    .hero-square-12 {
+        animation-delay: 44s;
+    }
+    .hero-square-13 {
+        animation-delay: 48s;
+    }
+    .hero-square-14 {
+        animation-delay: 52s;
+    }
+
+    @keyframes fade {
+        00.00% {
+            opacity: 0;
+            z-index: -10;
+        }
+        06.25% {
+            opacity: 1;
+            z-index: -10;
+        }
+        31.25% {
+            opacity: 1;
+            z-index: -12;
+        }
+        37.50% {
+            opacity: 0;
+            z-index: -14;
+        }
+        100.0% {
+            opacity: 0;
+            z-index: -16;
+        }
+    }
+}
