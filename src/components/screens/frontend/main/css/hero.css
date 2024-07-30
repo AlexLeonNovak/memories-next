@@ -9,6 +9,7 @@
     text-transform: uppercase;
     color: #1c1b1b;
     margin-left: 46px;
+    display: flex;
 }
 .hero__sub-title {
     font-weight: 500;
@@ -19,6 +20,7 @@
     margin-top: -83px;
     text-align: right;
     margin-right: 61px;
+    display: flex;
 }
 .hero__text {
     font-weight: 400;
@@ -29,6 +31,7 @@
     text-align: center;
     margin-top: -26px;
     margin-right: 174px;
+    display: flex;
 }
 .hero__bg {
     display: none;
@@ -79,6 +82,12 @@
     z-index: 100;
 }
 
+.hero-square-line {
+    display: flex;
+    height: 50%;
+    justify-content: space-evenly;
+}
+
 .hero-square {
     width: 100%;
     height: 100%;
@@ -92,8 +101,13 @@
 }
 
 .hero-square:hover {
-    opacity: 0.7;
+    opacity: 0.8;
     transition: opacity 300ms linear;
+}
+
+.word {
+    display: flex;
+    font-size: 40px;
 }
 
 @media screen and (max-width: 980px) {
