@@ -14,6 +14,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  TableSkeleton,
+  TranslationEditDialog,
   TSelectInputItem,
 } from '@/components';
 import { i18n, TLocale } from '@/i18n';
@@ -40,6 +42,7 @@ export const TranslationsTable = () => {
   const [keySearch, setKeySearch] = useState<string>();
   const [localeSearch, setLocaleSearch] = useState<{ [key in TLocale]?: string }>();
   const [debouncedLocale] = useDebounce(localeSearch, 1500);
+  const [loading, setLoading] = useState(false);
 
   const fetchTranslations = useCallback(async () => {
     const _translations = await TranslationRepository.getAll();
@@ -83,7 +86,8 @@ export const TranslationsTable = () => {
   // const debounceLocale = useDebouncedCallback((locale: TLocale, value) => handleSearch(locale, value), 1500);
 
   useEffect(() => {
-    fetchTranslations();
+    setLoading(true);
+    fetchTranslations().finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
@@ -98,6 +102,7 @@ export const TranslationsTable = () => {
   }, [searchParams]);
 
   useEffect(() => {
+    setLoading(true);
     // for (const locale in debouncedLocale) {
     //   const localeValue = debouncedLocale[locale as TLocale]?.toLowerCase();
     //   createQueryString(locale, localeValue);
@@ -106,7 +111,7 @@ export const TranslationsTable = () => {
     // const params = createQueryString('key', keySearch);
     // console.log(params);
     // router.push(`${pathname}?${params}`);
-    filterTranslations();
+    filterTranslations().finally(() => setLoading(false));
   }, [namespaceSearch, keySearch, debouncedLocale]);
 
   return (
@@ -158,20 +163,31 @@ export const TranslationsTable = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {translations?.map((translation, index) => {
-          const { id, namespace, key } = translation;
-          return (
-            <TableRow key={id}>
-              <TableCell>{++index}</TableCell>
-              <TableCell>{namespace}</TableCell>
-              <TableCell>{key}</TableCell>
-              {i18n.locales.map((locale) => (
-                <TableCell key={locale}>{translation[locale]}</TableCell>
-              ))}
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          );
-        })}
+        {loading && <TableSkeleton columns={4 + i18n.locales.length} />}
+        {!loading &&
+          translations?.map((translation, index) => {
+            const { id, namespace, key } = translation;
+            return (
+              <TableRow key={id}>
+                <TableCell>{++index}</TableCell>
+                <TableCell>{namespace}</TableCell>
+                <TableCell>{key}</TableCell>
+                {i18n.locales.map((locale) => (
+                  <TableCell key={locale}>{translation[locale]}</TableCell>
+                ))}
+                <TableCell>
+                  <TranslationEditDialog
+                    translation={translation}
+                    onUpdate={(data) => {
+                      const tIdx = translations?.findIndex((t) => t.id === data.id);
+                      translations[tIdx] = data;
+                      setTranslations(translations);
+                    }}
+                  />
+                </TableCell>
+              </TableRow>
+            );
+          })}
       </TableBody>
     </Table>
   );

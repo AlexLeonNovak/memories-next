@@ -1,13 +1,16 @@
 import { Button, LanguageSwitcher } from '@/components';
 import Image from 'next/image';
 import './css/header.css';
+import { Link } from '@/navigation';
 
 export const Header: React.FC = () => {
   return (
     <header className='header'>
       <div className='wrapper'>
         <div className='header-left'>
-          <Image src='/logo.svg' className='header-logo' alt='Zberezhemo logo' width={175} priority height={37} />
+          <Link href='/'>
+            <Image src='/logo.svg' className='header-logo' alt='Zberezhemo logo' width={175} priority height={37} />
+          </Link>
         </div>
         <div className='header-right'>
           <LanguageSwitcher />

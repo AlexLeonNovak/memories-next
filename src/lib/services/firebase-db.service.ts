@@ -17,6 +17,7 @@ import {
   where,
 } from '@firebase/firestore';
 import { getFirebaseApp } from '.';
+import { removeEmpty } from '../utils/object';
 
 export const getFirestoreDatabase = () => {
   return getFirestore(getFirebaseApp());
@@ -130,7 +131,7 @@ export const createCRUD = <T extends object>(path: TCollections) => {
       await setDoc(
         docRef,
         {
-          ...data,
+          ...removeEmpty(data),
           updatedAt: new Date().toISOString(),
         },
         { merge: true },

@@ -1,20 +1,21 @@
-import { Skeleton } from '@/components';
+import { Skeleton, TableCell, TableRow } from '@/components';
 
-export const TableSkeleton = () => {
-  const Row = () => (
-    <div className='flex items-center justify-between gap-2'>
-      <Skeleton className='h-5 w-14' />
-      <Skeleton className='h-5 grow w-24' />
-      <Skeleton className='h-5 grow w-32' />
-      <Skeleton className='h-5 w-14' />
-    </div>
-  );
-
+type TTableSkeletonProps = {
+  rows?: number;
+  columns?: number;
+};
+export const TableSkeleton = ({ rows = 3, columns = 4 }: TTableSkeletonProps) => {
   return (
-    <div className='flex flex-col gap-2'>
-      {[...Array(3)].map((_, i) => (
-        <Row key={i} />
+    <>
+      {[...Array(rows)].map((_, i) => (
+        <TableRow key={`row-${i}`}>
+          {[...Array(columns)].map((_, j) => (
+            <TableCell key={`col-${i}-${j}`}>
+              <Skeleton className='h-7 w-full' />
+            </TableCell>
+          ))}
+        </TableRow>
       ))}
-    </div>
+    </>
   );
 };

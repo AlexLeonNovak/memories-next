@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 import { Toaster } from 'sonner';
 import { TChildrenProps, TLocaleProps } from '@/types';
 import { i18n, TLocale } from '@/i18n';
 import './globals.css';
+import Intl from './Intl';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,10 +21,14 @@ export default async function RootLayout({ children, params }: TChildrenProps & 
     <html lang={params.locale}>
       <head />
       <body className={inter.className}>
-        <NextIntlClientProvider locale={params.locale} messages={messages}>
+        {/*<NextIntlClientProvider locale={params.locale} messages={messages}>*/}
+        {/*  {children}*/}
+        {/*  <Toaster richColors />*/}
+        {/*</NextIntlClientProvider>*/}
+        <Intl locale={params.locale} messages={messages}>
           {children}
           <Toaster richColors />
-        </NextIntlClientProvider>
+        </Intl>
       </body>
     </html>
   );

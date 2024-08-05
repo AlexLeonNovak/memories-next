@@ -4,6 +4,7 @@ import { CategoryRepository, MediaRepository, PostRepository } from '@/lib/repos
 import { createPostSchemaFD, updatePostSchemaFD } from '@/lib/validations';
 import { parseSchemaFormData } from '@/lib/validations';
 import { TBaseEntity, TDeleteFormState, TFormState, TPost, TPostEntity, TQueryOptions } from '@/types';
+import { revalidatePathLocales } from '@/lib/utils';
 import { revalidatePath } from 'next/cache';
 
 export const fetchPosts = (queryOptions?: TQueryOptions<TPostEntity>) => PostRepository.getAll(queryOptions);
@@ -26,7 +27,7 @@ export const createPost = async (prevState: any, formData: FormData): Promise<TF
     const parsed = await parseSchemaFormData(createPostSchemaFD, formData);
     if (parsed.status === 'success') {
       const data = await PostRepository.create(parsed.data);
-      revalidatePath('/admin/posts');
+      revalidatePathLocales('/admin/posts');
       revalidatePath('/');
       return { status: 'success', data };
     }
@@ -46,9 +47,8 @@ export const updatePost = async (prevState: any, formData: FormData): Promise<TF
       const { id, ...rest } = parsed.data;
       const data = await PostRepository.update(id, rest);
 
-      revalidatePath('/admin/posts');
+      revalidatePathLocales('/admin/posts');
       revalidatePath('/');
-
       return { status: 'success', data };
     }
     return parsed;
@@ -62,7 +62,7 @@ export const deletePost = async (prevState: any, formData: FormData): Promise<TD
     const id = formData.get('id') as string;
     await PostRepository.delete(id);
     await MediaRepository.deleteMedia(id);
-    revalidatePath('/admin/posts');
+    revalidatePathLocales('/admin/posts');
     revalidatePath('/');
     return {
       success: true,

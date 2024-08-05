@@ -1,21 +1,11 @@
 'use client';
 
-import { Button } from '@/components';
-import { useAuth } from '@/hooks';
-import { CircleGauge, Contact, Languages, List, LogOut, NotebookText } from 'lucide-react';
+import { CircleGauge, Contact, Languages, List, NotebookText } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { NavItem } from '.';
 
 export const Sidebar = () => {
-  const { logout } = useAuth();
-  const router = useRouter();
-  const handleLogOut = async () => {
-    await logout();
-    router.push('/');
-  };
-
   return (
     <aside className='flex flex-col border-r bg-gray-50'>
       <div className='flex h-[60px] items-center justify-center border-b'>
@@ -49,12 +39,7 @@ export const Sidebar = () => {
           <span>Translations</span>
         </NavItem>
       </div>
-      <div className='p-4 flex mt-auto'>
-        <Button onClick={handleLogOut} className='flex items-center gap-2 font-semibold w-full'>
-          <LogOut />
-          <span>Logout</span>
-        </Button>
-      </div>
+      <div className='p-4 flex mt-auto'></div>
     </aside>
   );
 };

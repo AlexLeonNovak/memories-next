@@ -2,7 +2,6 @@
 
 import { MediaRepository, PostRepository } from '@/lib/repositories';
 import { TMediaEntity, TQueryOptions } from '@/types';
-import { cache } from 'react';
 
 export const fetchMedias = (queryOptions?: TQueryOptions<TMediaEntity>) => MediaRepository.getAll(queryOptions);
 

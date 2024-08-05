@@ -6,9 +6,8 @@ import { getTranslations } from 'next-intl/server';
 export const generateMetadata = async ({ params: { locale } }: TLocaleProps): Promise<Metadata> => {
   const t = await getTranslations({ locale, namespace: 'Metadata' });
   return {
-    title: t('title', { defaultMessage: 'Zberezhemo' }),
-    description:
-      'The project exists with the support of donors, and we invite funds, organizations, and caring patrons to join us.',
+    title: t('title'),
+    description: t('description'),
   };
 };
 

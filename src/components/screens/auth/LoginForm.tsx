@@ -1,39 +1,61 @@
 'use client';
 
-import { Button, Input, Label } from '@/components';
-import { useAuth } from '@/hooks';
+import {
+  Button,
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+  Label,
+  SubmitButton,
+} from '@/components';
+import { useFormCheck } from '@/hooks';
 import { getFirebaseAuth } from '@/lib/services';
 import { getRedirectResult } from 'firebase/auth';
 import { LogIn } from 'lucide-react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/navigation';
 import { FormEvent, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { TCredentials, TTranslationEntity } from '@/types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { loginSchema } from '@/lib/validations';
+import { useFormState } from 'react-dom';
+import { createSession, loginWithEmailAndPassword } from '@/server/actions/auth.actions';
+import { toast } from 'sonner';
+import { UserInfo } from '@firebase/auth-types';
+import { useAuthStore } from '@/lib/store';
 
 export const LoginForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const { login, error } = useAuth();
+  const { setUser } = useAuthStore();
   const router = useRouter();
+  const form = useForm<TCredentials>({
+    mode: 'all',
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
 
-  useEffect(() => {
-    const handleLoginWithRedirect = async () => {
-      const auth = await getFirebaseAuth();
-      const credential = await getRedirectResult(auth);
+  const { control, setError } = form;
+  const [state, action] = useFormState(loginWithEmailAndPassword, null);
 
-      if (credential?.user) {
-        router.push('/admin');
-      }
-    };
-    handleLoginWithRedirect();
-  }, [router]);
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    const result = await login({ email, password });
-    if (result) {
-      router.push('/admin');
-    }
-  };
+  useFormCheck<UserInfo, TCredentials>({
+    state,
+    setError,
+    onError: () => toast.error('One or more fields have an error. Please check them and try again.'),
+    onSuccess: (state) => {
+      setUser(state.data);
+      toast.success('You successfully logged in!');
+      router.replace('/admin');
+    },
+    onFail: (state) => toast.error(state.message),
+  });
 
   return (
     <div className='p-6 bg-white border rounded'>
@@ -44,42 +66,41 @@ export const LoginForm = () => {
         </h2>
       </div>
       <div className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
-        <form className='space-y-5' onSubmit={handleSubmit}>
-          <div>
-            <Label htmlFor='login'>Email</Label>
-            <div className='mt-2'>
-              <Input
-                name='email'
-                placeholder='Email'
-                type='email'
-                required
-                onChange={(e) => setEmail(e.currentTarget.value)}
-              />
+        <Form {...form}>
+          <form className='space-y-5' action={action}>
+            <FormField
+              name='email'
+              control={control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder='name@example.com' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name='password'
+              control={control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input type='password' placeholder='Your password' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className='flex justify-center'>
+              <SubmitButton label='Sign in' icon={<LogIn />} pendingLabel='Please wait...' />
             </div>
-          </div>
-
-          <div>
-            <Label htmlFor='password'>Password</Label>
-            <div className='mt-2'>
-              <Input
-                name='password'
-                placeholder='Password'
-                type='password'
-                required
-                onChange={(e) => setPassword(e.currentTarget.value)}
-              />
-            </div>
-          </div>
-
-          <div>{error && <span className='text-red-600'>{error}</span>}</div>
-
-          <div className='flex justify-center'>
-            <Button className='flex gap-2' type='submit'>
-              <LogIn />
-              <span>Sign in</span>
-            </Button>
-          </div>
-        </form>
+          </form>
+        </Form>
       </div>
     </div>
   );

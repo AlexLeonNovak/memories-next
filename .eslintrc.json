@@ -6,7 +6,20 @@
       {
         "allowObject": true
       }
-    ]
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "name": "next/link",
+        "message": "Please import from `@/navigation` instead."
+      },
+      {
+        "name": "next/navigation",
+        "importNames": ["redirect", "permanentRedirect", "useRouter", "usePathname"],
+        "message": "Please import from `@/navigation` instead."
+      }
+    ],
+    "react/jsx-no-literals": "error"
   },
   "settings": {
     "import/resolver": {

@@ -6,7 +6,7 @@ import { FieldPath, FieldValues, UseFormSetError } from 'react-hook-form';
 
 type TFormCheckArgs<T extends FieldValues, F extends FieldValues = T> = {
   state: TFormState<T> | null;
-  setError: UseFormSetError<F>;
+  setError?: UseFormSetError<F>;
   onError?: (state: TFormStateError) => unknown;
   onFail?: (state: TFormStateFail) => unknown;
   onSuccess?: (state: TFormStateSuccess<T>) => unknown;
@@ -31,11 +31,12 @@ export const useFormCheck = <T extends FieldValues, F extends FieldValues = T>({
           onFail && (await Promise.resolve(onFail(state)));
           break;
         case 'error':
-          state.errors?.forEach((error) => {
-            setError(error.path as FieldPath<F>, {
-              message: error.message,
+          setError &&
+            state.errors?.forEach((error) => {
+              setError(error.path as FieldPath<F>, {
+                message: error.message,
+              });
             });
-          });
           onError && (await Promise.resolve(onError(state)));
           break;
         case 'success':

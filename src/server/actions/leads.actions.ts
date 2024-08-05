@@ -1,9 +1,9 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
 import { LeadRepository } from '@/lib/repositories';
 import { createLeadSchema, parseSchemaFormData } from '@/lib/validations';
 import { TDeleteFormState, TFormState, TLeadEntity, TQueryOptions } from '@/types';
+import { revalidatePathLocales } from '@/lib/utils';
 
 export const fetchLeads = (queryOptions?: TQueryOptions<TLeadEntity>) => LeadRepository.getAll(queryOptions);
 
@@ -11,7 +11,7 @@ export const deleteLead = async (prevState: any, formData: FormData): Promise<TD
   try {
     const id = formData.get('id') as string;
     id && (await LeadRepository.delete(id));
-    revalidatePath('/admin/leads');
+    revalidatePathLocales('/admin/leads');
     return {
       success: true,
     };
@@ -25,7 +25,7 @@ export const createLead = async (prevState: any, formData: FormData): Promise<TF
     const parsed = await parseSchemaFormData(createLeadSchema, formData);
     if (parsed.status === 'success') {
       const data = await LeadRepository.create(parsed.data);
-      revalidatePath('/admin/leads');
+      revalidatePathLocales('/admin/leads');
       return { status: 'success', data };
     }
     return parsed;

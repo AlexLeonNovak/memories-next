@@ -4,9 +4,9 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <SectionInfo />
-      <SectionMap />
-      <SectionFeedback />
+      {/*<SectionInfo />*/}
+      {/*<SectionMap />*/}
+      {/*<SectionFeedback />*/}
     </>
   );
 }

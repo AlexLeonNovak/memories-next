@@ -4,6 +4,7 @@ export type MiddlewareFactory = (middleware: NextMiddleware) => NextMiddleware;
 
 export function stackMiddlewares(functions: MiddlewareFactory[] = [], index = 0): NextMiddleware {
   const current = functions[index];
+  console.log('stackMiddlewares', current, index);
   if (current) {
     const next = stackMiddlewares(functions, index + 1);
     return current(next);

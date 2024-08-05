@@ -31,14 +31,15 @@ export default getRequestConfig(async ({ locale }) => {
   }
 
   return {
-    messages: { test: `Test message ${locale}` },
-    getMessageFallback: ({ key, namespace, error }) => {
-      const path = [namespace, key].filter((part) => part != null).join('.');
-      if (error.code === 'MISSING_MESSAGE') {
-        checkTranslation({ key, namespace });
-        return path;
-      }
-      return 'Dear developer, please fix this message: ' + path;
-    },
+    messages: await TranslationRepository.getMessages(locale as TLocale),
+    // getMessageFallback: ({ key, namespace, error }) => {
+    //   const path = [namespace, key].filter((part) => part != null).join('.');
+    //   if (error.code === 'MISSING_MESSAGE') {
+    //     checkTranslation({ key, namespace });
+    //     return key;
+    //   }
+    //   return 'Dear developer, please fix this message: ' + path;
+    // },
+    // timeZone: 'Europe/Kiev',
   };
 });

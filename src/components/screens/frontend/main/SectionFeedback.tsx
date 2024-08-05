@@ -3,7 +3,7 @@
 import { FeedbackForm } from '@/components';
 import './css/feedback.css';
 import ScrollAnimation from 'react-animate-on-scroll';
-import 'animate.css/animate.compat.css';
+import 'animate.css/source/fading_entrances/fadeInDown.css';
 
 export const SectionFeedback = () => {
   return (

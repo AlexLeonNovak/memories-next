@@ -1,2 +1,2 @@
-export * from './useAuth';
+export * from './useUserSession';
 export * from './useFormCheck';
