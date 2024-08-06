@@ -6,12 +6,18 @@ import { TGalleryItemsWithLevel, createGallery } from '@/lib/utils';
 import { TMediaWithPostEntity, TPostWithMediaEntity } from '@/types';
 import { LoaderCircle } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { useLocale } from 'use-intl';
+import { TLocale } from '@/i18n';
+import { useTranslations } from 'next-intl';
 
 type TRandomGalleryProps = {
   medias: TMediaWithPostEntity[];
 };
 
 export const RandomGallery = ({ medias }: TRandomGalleryProps) => {
+  const locale = useLocale() as TLocale;
+  const t = useTranslations('Main');
+
   const [gallery, setGallery] = useState<TGalleryItemsWithLevel<TMediaWithPostEntity>[]>([]);
   const [showModalInfo, setShowModalInfo] = useState(false);
   const [post, setPost] = useState<TPostWithMediaEntity>();
@@ -43,7 +49,7 @@ export const RandomGallery = ({ medias }: TRandomGalleryProps) => {
             />
           )),
         )}
-      <Modal open={showModalInfo} setOpen={setShowModalInfo} title={post?.name || 'Loading...'}>
+      <Modal open={showModalInfo} setOpen={setShowModalInfo} title={(post?.name && post.name[locale]) || t('Loading')}>
         {post ? <ModalContent post={post} /> : <LoaderCircle className='animate-spin size-10' />}
       </Modal>
     </div>

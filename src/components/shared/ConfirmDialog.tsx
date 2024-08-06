@@ -8,7 +8,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components';
-import { Dispatch, SetStateAction, useCallback, useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
+import { useTranslations } from 'next-intl';
 
 type TConfirmDialogProps = {
   open: boolean;
@@ -31,6 +32,7 @@ export const ConfirmDialog = ({
   onConfirm,
   onCancel,
 }: TConfirmDialogProps) => {
+  const tAdm = useTranslations('Admin');
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogContent>
@@ -39,8 +41,8 @@ export const ConfirmDialog = ({
           {description && <AlertDialogDescription>{description}</AlertDialogDescription>}
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={onCancel}>{cancelLabel || 'Cancel'}</AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm}>{confirmLabel || 'Continue'}</AlertDialogAction>
+          <AlertDialogCancel onClick={onCancel}>{cancelLabel || tAdm('Cancel')}</AlertDialogCancel>
+          <AlertDialogAction onClick={onConfirm}>{confirmLabel || tAdm('Continue')}</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

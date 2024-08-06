@@ -1,13 +1,9 @@
 'use client';
 
 import {
+  DeleteForm,
   Input,
-  Select,
-  SelectContent,
   SelectInput,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
   Table,
   TableBody,
   TableCell,
@@ -22,16 +18,16 @@ import { i18n, TLocale } from '@/i18n';
 import { TranslationRepository } from '@/lib/repositories';
 import { getArrayObjectValues } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from '@/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { TQueryFilter, TTranslationEntity } from '@/types';
-import * as sea from 'node:sea';
 import { useDebounce } from 'use-debounce';
-import { log } from 'node:util';
+import { deleteTranslation } from '@/server/actions/translations.actions';
+import { useSearchParams } from 'next/navigation';
 
 export const TranslationsTable = () => {
-  const tTr = useTranslations('AdminTranslations');
   const tAdm = useTranslations('Admin');
+  const t = useTranslations('AdminTranslations');
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -118,15 +114,15 @@ export const TranslationsTable = () => {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>#</TableHead>
-          <TableHead>{tTr('namespace')}</TableHead>
-          <TableHead>{tTr('key')}</TableHead>
+          <TableHead>{tAdm('#')}</TableHead>
+          <TableHead>{tAdm('Namespace')}</TableHead>
+          <TableHead>{tAdm('Key')}</TableHead>
           {i18n.locales.map((locale) => (
             <TableHead key={locale} className='uppercase'>
-              {locale}
+              {tAdm(locale)}
             </TableHead>
           ))}
-          <TableHead>{tAdm('actions')}</TableHead>
+          <TableHead>{tAdm('Actions')}</TableHead>
         </TableRow>
         <TableRow>
           <TableHead></TableHead>
@@ -135,7 +131,7 @@ export const TranslationsTable = () => {
               <SelectInput
                 items={namespaces}
                 value={namespaceSearch}
-                placeholder={tTr('Select namespace')}
+                placeholder={tAdm('Select namespace')}
                 onValueChange={setNamespaceSearch}
               />
             )}
@@ -145,7 +141,7 @@ export const TranslationsTable = () => {
               <SelectInput
                 items={keys}
                 value={keySearch}
-                placeholder={tTr('Select key')}
+                placeholder={tAdm('Select key')}
                 onValueChange={setKeySearch}
               />
             )}
@@ -176,14 +172,23 @@ export const TranslationsTable = () => {
                   <TableCell key={locale}>{translation[locale]}</TableCell>
                 ))}
                 <TableCell>
-                  <TranslationEditDialog
-                    translation={translation}
-                    onUpdate={(data) => {
-                      const tIdx = translations?.findIndex((t) => t.id === data.id);
-                      translations[tIdx] = data;
-                      setTranslations(translations);
-                    }}
-                  />
+                  <div className='flex gap-2'>
+                    <TranslationEditDialog
+                      translation={translation}
+                      onUpdate={(data) => {
+                        const tIdx = translations?.findIndex((t) => t.id === data.id);
+                        translations[tIdx] = data;
+                        setTranslations(translations);
+                      }}
+                    />
+                    <DeleteForm
+                      id={id}
+                      deleteAction={deleteTranslation}
+                      title={t('Delete translation?')}
+                      description={t('Are you sure you want to delete this translation?')}
+                      onDeleted={() => setTranslations(translations?.filter((t) => t.id !== id))}
+                    />
+                  </div>
                 </TableCell>
               </TableRow>
             );

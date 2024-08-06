@@ -1,20 +1,21 @@
 import { TBaseFields, TFormState } from '@/types';
 import { ZodSchema, z } from 'zod';
 import { zfd } from 'zod-form-data';
+import { i18n, TLocale } from '@/i18n';
 
-export const baseSchema = z.object({
-  name: z.string().min(1, 'Required'),
-  isActive: z.coerce.boolean(),
-}) satisfies z.ZodType<TBaseFields>;
+const localeShape = {} as { [key in TLocale]: any };
+for (const locale of i18n.locales) {
+  localeShape[locale] = zfd.text(z.string().optional()).default('');
+}
+export { localeShape };
 
-export const baseSchemaWithId = z.object({
-  id: z.string(),
-});
-
-export const baseSchemaFD = zfd.formData({
-  name: zfd.text(),
-  isActive: z.coerce.boolean(),
-});
+export const buildLocaleShape = (zod: z.ZodType) => {
+  const localeShape = {} as { [key in TLocale]: z.ZodType };
+  for (const locale of i18n.locales) {
+    localeShape[locale] = zod;
+  }
+  return z.object(localeShape);
+};
 
 export const parseSchemaFormData = async <T extends ZodSchema>(
   schema: T,

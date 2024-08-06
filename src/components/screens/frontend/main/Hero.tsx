@@ -9,26 +9,25 @@ import 'animate.css/source/fading_exits/fadeOutRight.css';
 import { useTranslations } from 'next-intl';
 
 export const Hero = () => {
-  const t = useTranslations();
-  console.log('translation test', t('test1'));
+  const t = useTranslations('MainHero');
+
   return (
     <section className='hero'>
-      <span>{t('test1')}</span>
       <div className='wrapper'>
         <ScrollAnimation animateIn='fadeInDown'>
-          <div className='hero__title'>MEMORY</div>
+          <div className='hero__title'>{t('MEMORY')}</div>
         </ScrollAnimation>
         <ScrollAnimation animateIn='fadeInDown'>
-          <div className='hero__sub-title'>LIBRARY</div>
+          <div className='hero__sub-title'>{t('LIBRARY')}</div>
         </ScrollAnimation>
         <ScrollAnimation animateIn='fadeInDown' animateOut='fadeOutRight'>
-          <div className='hero__text'>PEOPLE. CITIES. EVENTS</div>
+          <div className='hero__text'>{t('PEOPLE CITIES EVENTS')}</div>
         </ScrollAnimation>
 
         <Image
           src='/memory-bg.png'
           className='hero__bg'
-          alt='MEMORY LIBRARY PEOPLE. CITIES. EVENTS'
+          alt={t('bgImgAlt')} //'MEMORY LIBRARY PEOPLE. CITIES. EVENTS'
           width={160}
           height={288}
         />

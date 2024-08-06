@@ -1,9 +1,4 @@
-import { TLocale } from '@/i18n';
-import { TBaseEntity } from '.';
-
-type TTranslations = {
-  [locale in TLocale]?: string;
-};
+import { TBaseEntity, TTranslations } from '.';
 
 export type TTranslation = TTranslations & {
   key: string;

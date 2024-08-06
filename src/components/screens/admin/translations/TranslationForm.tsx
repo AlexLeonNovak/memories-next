@@ -9,6 +9,7 @@ import { updateTranslation } from '@/server/actions/translations.actions';
 import { useFormCheck } from '@/hooks';
 import { toast } from 'sonner';
 import { useEffect, useRef } from 'react';
+import { useTranslations } from 'next-intl';
 
 type TTranslationFormProps = {
   translation: TTranslationEntity;
@@ -18,6 +19,9 @@ type TTranslationFormProps = {
 };
 export const TranslationForm = ({ translation, onFormSubmit, onFinally, submitRequested }: TTranslationFormProps) => {
   const { id, key, namespace } = translation;
+  const tAdm = useTranslations('Admin');
+  const t = useTranslations('AdminTranslations');
+
   const formRef = useRef<HTMLFormElement>(null);
   const form = useForm<TTranslation>({
     mode: 'all',
@@ -30,12 +34,12 @@ export const TranslationForm = ({ translation, onFormSubmit, onFinally, submitRe
   useFormCheck<TTranslationEntity>({
     state,
     setError,
-    onError: () => toast.error('One or more fields have an error. Please check them and try again.'),
+    onError: () => toast.error(tAdm('One or more fields have an error. Please check them and try again.')),
     onSuccess: (state) => {
-      toast.success(`Translation successfully updated!`);
+      toast.success(t('Translation successfully updated!'));
       onFormSubmit && onFormSubmit(state.data);
     },
-    onFail: (state) => toast.error(state.message),
+    onFail: (state) => toast.error(tAdm(state.message)),
     onFinally,
   });
 
@@ -47,15 +51,24 @@ export const TranslationForm = ({ translation, onFormSubmit, onFinally, submitRe
 
   return (
     <Form {...form}>
-      <form action={action} ref={formRef} className='space-y-8'>
+      <form action={action} ref={formRef} className='space-y-3'>
         <Input type='hidden' name='id' value={id} />
-        <div className='flex flex-col items-center'>
-          Key: {key}
-          Namespace: {namespace}
+        <div className='space-y-2'>
+          {namespace && (
+            <p className='space-x-2'>
+              <strong>{tAdm('Namespace:')}</strong>
+              <span>{namespace}</span>
+            </p>
+          )}
+          <p className='space-x-2'>
+            <strong>{tAdm('Key:')}</strong>
+            <span>{key}</span>
+          </p>
         </div>
 
         {i18n.locales.map((locale) => (
           <FormField
+            key={locale}
             name={locale}
             control={control}
             render={({ field }) => (

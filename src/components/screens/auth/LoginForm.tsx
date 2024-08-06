@@ -29,8 +29,11 @@ import { createSession, loginWithEmailAndPassword } from '@/server/actions/auth.
 import { toast } from 'sonner';
 import { UserInfo } from '@firebase/auth-types';
 import { useAuthStore } from '@/lib/store';
+import { useTranslations } from 'next-intl';
 
 export const LoginForm = () => {
+  const tAdm = useTranslations('Admin');
+  const t = useTranslations('LoginForm');
   const { setUser } = useAuthStore();
   const router = useRouter();
   const form = useForm<TCredentials>({
@@ -48,13 +51,13 @@ export const LoginForm = () => {
   useFormCheck<UserInfo, TCredentials>({
     state,
     setError,
-    onError: () => toast.error('One or more fields have an error. Please check them and try again.'),
+    onError: () => toast.error(tAdm('One or more fields have an error. Please check them and try again.')),
     onSuccess: (state) => {
       setUser(state.data);
-      toast.success('You successfully logged in!');
+      toast.success(t('You successfully logged in!'));
       router.replace('/admin');
     },
-    onFail: (state) => toast.error(state.message),
+    onFail: (state) => toast.error(tAdm(state.message)),
   });
 
   return (
@@ -62,7 +65,7 @@ export const LoginForm = () => {
       <div className='sm:mx-auto sm:w-full sm:max-w-sm'>
         <Image className='mx-auto h-10 w-auto' src='/logo.svg' alt='Zberezhemo logo' width={175} priority height={37} />
         <h2 className='mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900'>
-          Sign in to your account
+          {t('Sign in to your account')}
         </h2>
       </div>
       <div className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
@@ -73,9 +76,9 @@ export const LoginForm = () => {
               control={control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t('Email')}</FormLabel>
                   <FormControl>
-                    <Input placeholder='name@example.com' {...field} />
+                    <Input placeholder={t('name@example.com')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -87,9 +90,9 @@ export const LoginForm = () => {
               control={control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>{t('Password')}</FormLabel>
                   <FormControl>
-                    <Input type='password' placeholder='Your password' {...field} />
+                    <Input type='password' placeholder={t('Your password')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -97,7 +100,7 @@ export const LoginForm = () => {
             />
 
             <div className='flex justify-center'>
-              <SubmitButton label='Sign in' icon={<LogIn />} pendingLabel='Please wait...' />
+              <SubmitButton label={t('Sign in')} icon={<LogIn />} pendingLabel={tAdm('wait')} />
             </div>
           </form>
         </Form>

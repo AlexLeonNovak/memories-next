@@ -6,3 +6,4 @@ export * from './array';
 export * from './revalidate';
 export * from './string';
 export * from './object';
+export * from './translations';

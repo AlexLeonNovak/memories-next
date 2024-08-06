@@ -1,7 +1,7 @@
-import { TBaseEntity } from '.';
+import { TBaseEntity, TTranslations } from '.';
 
 export type TBaseFields = {
-  name: string;
+  name: TTranslations;
   isActive: boolean;
 };
 
@@ -22,13 +22,11 @@ export type TMedia = {
 };
 
 export type TPost = TBaseFields & {
-  description?: string;
+  description?: TTranslations;
   categories: string[];
 };
 
-export type TCategory = {
-  name: string;
-  isActive: boolean;
+export type TCategory = TBaseFields & {
   order: number;
 };
 

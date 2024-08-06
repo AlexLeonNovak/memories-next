@@ -1,9 +1,15 @@
 import { Badge, Button, DeleteForm, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components';
 import { deletePost, fetchPostsWithCategories } from '@/server/actions/posts.actions';
 import { Pencil } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@/navigation';
+import { getLocale, getTranslations } from 'next-intl/server';
+import { TLocale } from '@/i18n';
 
 export const PostsTable = async () => {
+  const tAdm = await getTranslations('Admin');
+  const t = await getTranslations('AdminPosts');
+  const locale = (await getLocale()) as TLocale;
+
   const posts = await fetchPostsWithCategories({
     order: { createdAt: 'desc' },
   });
@@ -12,11 +18,11 @@ export const PostsTable = async () => {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>#</TableHead>
-          <TableHead>Name</TableHead>
-          <TableHead>Categories</TableHead>
-          <TableHead>Is active</TableHead>
-          <TableHead>Actions</TableHead>
+          <TableHead>{tAdm('#')}</TableHead>
+          <TableHead>{tAdm('Name')}</TableHead>
+          <TableHead>{tAdm('Categories')}</TableHead>
+          <TableHead>{tAdm('Is active')}</TableHead>
+          <TableHead>{tAdm('Actions')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -24,24 +30,35 @@ export const PostsTable = async () => {
           posts.map(({ id, name, categories, isActive }, index) => (
             <TableRow key={id}>
               <TableCell>{++index}</TableCell>
-              <TableCell>{name}</TableCell>
+              <TableCell>
+                {typeof name === 'object'
+                  ? Object.entries(name).map(([locale, value]) => (
+                      <p key={locale} className='space-x-1'>
+                        <span className='text-muted-foreground uppercase'>{tAdm(`[${locale}]`)}</span>
+                        <span>{value}</span>
+                      </p>
+                    ))
+                  : name}
+              </TableCell>
               <TableCell>
                 <div className='flex flex-wrap gap-1'>
                   {categories.map(({ id, name }) => (
-                    <Badge key={id}>{name}</Badge>
+                    <Badge key={id}>{name[locale]}</Badge>
                   ))}
                 </div>
               </TableCell>
               <TableCell>
-                <Badge variant={isActive ? 'success' : 'destructive'}>{isActive ? 'Active' : 'No active'}</Badge>
+                <Badge variant={isActive ? 'success' : 'destructive'}>
+                  {isActive ? tAdm('Active') : tAdm('No active')}
+                </Badge>
               </TableCell>
               <TableCell>
                 <div className='flex gap-2'>
                   <DeleteForm
                     id={id}
                     deleteAction={deletePost}
-                    title='Delete category?'
-                    description='Are you sure you want to delete this category?'
+                    title={t('Delete post?')}
+                    description={t('Are you sure you want to delete this post?')}
                   />
                   <Button asChild variant='ghost'>
                     <Link href={`posts/${id}`}>
@@ -56,7 +73,7 @@ export const PostsTable = async () => {
         {!posts?.length && (
           <TableRow>
             <TableCell colSpan={5}>
-              <p className='text-center text-2xl text-muted-foreground'>There are no items to display yet</p>
+              <p className='text-center text-2xl text-muted-foreground'>{tAdm('There are no items to display yet')}</p>
             </TableCell>
           </TableRow>
         )}

@@ -7,6 +7,7 @@ import { Controller, ControllerProps, FieldPath, FieldValues, FormProvider, useF
 
 import { Label } from '@/components/ui';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 
 const Form = FormProvider;
 
@@ -67,7 +68,7 @@ const FormItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEl
 
     return (
       <FormItemContext.Provider value={{ id }}>
-        <div ref={ref} className={cn('space-y-1', className)} {...props} />
+        <div ref={ref} className={cn('space-y-1 mt-8', className)} {...props} />
       </FormItemContext.Provider>
     );
   },
@@ -116,6 +117,7 @@ const FormMessage = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<
   ({ className, children, ...props }, ref) => {
     const { error, formMessageId } = useFormField();
     const body = error ? String(error?.message) : children;
+    const tAdm = useTranslations('Admin');
 
     if (!body) {
       return null;
@@ -128,7 +130,7 @@ const FormMessage = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<
         className={cn('text-[0.8rem] font-medium text-destructive', className)}
         {...props}
       >
-        {body}
+        {tAdm(body)}
       </p>
     );
   },

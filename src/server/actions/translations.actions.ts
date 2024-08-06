@@ -1,6 +1,6 @@
 'use server';
 
-import { TFormState, TTranslationEntity } from '@/types';
+import { TDeleteFormState, TFormState, TTranslationEntity } from '@/types';
 import { parseSchemaFormData, updateTranslationSchema } from '@/lib/validations';
 import { TranslationRepository } from '@/lib/repositories';
 import { revalidatePathLocales } from '@/lib/utils';
@@ -22,5 +22,20 @@ export const updateTranslation = async (
     return parsed;
   } catch (e) {
     return { status: 'fail', message: (e as Error).message };
+  }
+};
+
+export const deleteTranslation = async (prevState: any, formData: FormData): Promise<TDeleteFormState> => {
+  try {
+    const id = formData.get('id');
+    id && (await TranslationRepository.delete(id as string));
+    revalidatePathLocales('/admin/translations');
+    revalidatePath('/');
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      message: (error as Error).message,
+    };
   }
 };

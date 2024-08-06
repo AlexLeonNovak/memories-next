@@ -2,6 +2,7 @@ import { Option } from '@/components';
 import { getFileType } from '@/lib/utils';
 import { z } from 'zod';
 import { zfd } from 'zod-form-data';
+import { buildLocaleShape } from '@/lib/validations/base.validation';
 
 export const MAX_SIZE_IMAGE = Number(process.env.NEXT_PUBLIC_MAX_SIZE_IMAGE) || 10;
 export const MAX_SIZE_VIDEO = Number(process.env.NEXT_PUBLIC_MAX_SIZE_VIDEO) || 100;
@@ -13,8 +14,8 @@ export const categoriesOptionSchema: z.ZodSchema<Option> = z.object({
 });
 
 export const createPostSchema = z.object({
-  name: z.string().min(1, 'Required'),
-  description: z.string().optional(),
+  name: buildLocaleShape(z.string().min(1, 'Required')),
+  description: buildLocaleShape(z.string().optional()),
   categories: z.array(categoriesOptionSchema).min(1),
   files: z
     .array(
@@ -43,8 +44,8 @@ export const createPostSchema = z.object({
 });
 
 const basePostSchema = z.object({
-  name: zfd.text(z.string().min(1, 'Required')),
-  description: zfd.text(z.string().optional().default('')),
+  name: buildLocaleShape(zfd.text(z.string().min(1, 'Required'))),
+  description: buildLocaleShape(zfd.text(z.string().optional().default(''))),
   categories: zfd.repeatable(
     // z.preprocess(val => [val].flat(),
     z

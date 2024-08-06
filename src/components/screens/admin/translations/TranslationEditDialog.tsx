@@ -5,7 +5,7 @@ import { Pencil, Save } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { TTranslationEntity } from '@/types';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/navigation';
 
 type TranslationEditDialogProps = {
   translation: TTranslationEntity;
@@ -15,6 +15,7 @@ export const TranslationEditDialog = ({ translation, onUpdate }: TranslationEdit
   const [show, setShow] = useState(false);
   const [submitRequested, setSubmitRequested] = useState(false);
   const router = useRouter();
+  const tAdm = useTranslations('Admin');
   const t = useTranslations('AdminTranslations');
   return (
     <>
@@ -29,8 +30,8 @@ export const TranslationEditDialog = ({ translation, onUpdate }: TranslationEdit
           <SubmitButton
             onClick={() => setSubmitRequested(true)}
             isPending={submitRequested}
-            label='Save'
-            pendingLabel='Please wait...'
+            label={t('Save translation')}
+            pendingLabel={tAdm('wait')}
             icon={<Save />}
           />
         }

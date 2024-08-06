@@ -3,6 +3,7 @@
 import { Select, SelectContent, SelectItem, SelectSeparator, SelectTrigger, SelectValue, Button } from '@/components';
 import { SelectProps } from '@radix-ui/react-select';
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 export type TSelectInputItem = {
   value: string;
@@ -17,6 +18,7 @@ type TSelectInputProps = SelectProps & {
 export const SelectInput = ({ items, placeholder, onValueChange, ...props }: TSelectInputProps) => {
   const [key, setKey] = useState(+new Date());
   const [value, setValue] = useState<string | undefined>(undefined);
+  const tAdm = useTranslations('Admin');
 
   return (
     <Select key={key} {...props} value={value} onValueChange={onValueChange}>
@@ -35,7 +37,7 @@ export const SelectInput = ({ items, placeholder, onValueChange, ...props }: TSe
             onValueChange && onValueChange(undefined);
           }}
         >
-          Clear
+          {tAdm('Clear')}
         </Button>
         <SelectSeparator />
         {items?.map(({ label, value }) => (

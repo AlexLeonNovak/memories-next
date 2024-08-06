@@ -24,20 +24,23 @@ import {
 import { useFormCheck } from '@/hooks';
 import { MediaRepository, PostRepository } from '@/lib/repositories';
 import { getFileJs } from '@/lib/services';
-import { getFileType } from '@/lib/utils';
+import { cn, defineLocaleValues, getFileType } from '@/lib/utils';
 import { MAX_SIZE_IMAGE, MAX_SIZE_VIDEO, createPostSchema } from '@/lib/validations';
 import { createPost, updatePost } from '@/server/actions/posts.actions';
 import { TCategory, TPostEntity } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CloudUpload, FileVideo, LoaderCircle, Save } from 'lucide-react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/navigation';
 import { useEffect, useState } from 'react';
 import { useFormState } from 'react-dom';
 import { DropzoneOptions } from 'react-dropzone';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { useTranslations } from 'next-intl';
+import { useLocale } from 'use-intl';
+import { i18n, TLocale } from '@/i18n';
 
 type TPostFormProps = {
   categories: Array<TCategory & { id: string }>;
@@ -47,18 +50,30 @@ type TPostFormProps = {
 type TPostForm = z.infer<typeof createPostSchema>;
 
 export const PostForm = ({ post, categories = [] }: TPostFormProps) => {
+  const tAdm = useTranslations('Admin');
+  const t = useTranslations('AdminPosts');
+
   const [isMediaLoading, setIsMediaLoading] = useState(false);
   const [pending, setPending] = useState(false);
   const router = useRouter();
+  const locale = useLocale() as TLocale;
   const categoryOptions: Option[] = categories.map(({ id, name, isActive }) => ({
-    label: name,
+    label: name[locale] || '',
     value: id,
     disable: !isActive,
   }));
 
+  if (post && typeof post?.name !== 'object') {
+    post.name = defineLocaleValues(post.name);
+  }
+
+  if (post && typeof post?.description !== 'object') {
+    post.description = defineLocaleValues(post.description);
+  }
+
   const defaultValues: TPostForm = {
-    name: post?.name || '',
-    description: post?.description || '',
+    name: post?.name || defineLocaleValues(''),
+    description: post?.description || defineLocaleValues(''),
     categories: post?.categories ? categoryOptions.filter(({ value }) => post.categories.includes(value)) : [],
     isActive: post?.isActive || true,
     files: [],
@@ -92,16 +107,16 @@ export const PostForm = ({ post, categories = [] }: TPostFormProps) => {
       try {
         const files = getValues('files');
         await MediaRepository.saveMedia(id, files);
-        toast.success(`Post successfully ${post?.id ? 'updated' : 'created'}!`);
+        toast.success(t(`Post successfully ${post?.id ? 'updated' : 'created'}!`));
         router.push('/admin/posts');
       } catch (e) {
-        toast.error((e as Error).message);
+        toast.error(tAdm((e as Error).message));
         await PostRepository.delete(id);
         await MediaRepository.deleteMedia(id);
       }
     },
-    onError: () => toast.error('One or more fields have an error. Please check them and try again.'),
-    onFail: (state) => toast.error(state.message),
+    onError: () => toast.error(tAdm('One or more fields have an error. Please check them and try again.')),
+    onFail: (state) => toast.error(tAdm(state.message)),
     onFinally: () => setPending(false),
   });
 
@@ -120,25 +135,49 @@ export const PostForm = ({ post, categories = [] }: TPostFormProps) => {
 
   return (
     <Form {...form}>
-      <form action={action} onSubmit={() => setPending(true)} className='space-y-8'>
+      <form action={action} onSubmit={() => setPending(true)}>
         {post?.id && <Input type='hidden' name='id' value={post.id} />}
 
-        <FormField
-          name='name'
-          control={control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                Name <span className='text-red-600'>*</span>
-              </FormLabel>
-              <FormControl>
-                <Input placeholder='Name' {...field} />
-              </FormControl>
-              <FormDescription>Enter post name</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {i18n.locales.map((locale, index) => (
+          <FormField
+            key={`name.${locale}`}
+            name={`name.${locale}`}
+            control={control}
+            render={({ field }) => (
+              <FormItem className={cn(!!index && 'mt-2')}>
+                <FormLabel className='space-x-1'>
+                  <span className='text-muted-foreground uppercase'>{tAdm(`[${locale}]`)}</span>
+                  <span>{t('Name')}</span>
+                  <span className='text-red-600'>*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input placeholder={t('Post name')} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        ))}
+
+        {i18n.locales.map((locale, index) => (
+          <FormField
+            key={`description.${locale}`}
+            name={`description.${locale}`}
+            control={control}
+            render={({ field }) => (
+              <FormItem className={cn(!!index && 'mt-2')}>
+                <FormLabel className='space-x-1'>
+                  <span className='text-muted-foreground uppercase'>{tAdm(`[${locale}]`)}</span>
+                  <span>{t('Description')}</span>
+                </FormLabel>
+                <FormControl>
+                  <Textarea placeholder={t('Description')} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        ))}
 
         <FormField
           name='categories'
@@ -146,15 +185,15 @@ export const PostForm = ({ post, categories = [] }: TPostFormProps) => {
           render={({ field }) => (
             <FormItem className='w-full'>
               <FormLabel>
-                Categories <span className='text-red-600'>*</span>
+                {tAdm('Categories')} <span className='text-red-600'>*</span>
               </FormLabel>
               <div className='flex items-center'>
                 <FormControl className='flex items-center'>
                   <MultipleSelector
                     {...field}
                     options={categoryOptions}
-                    placeholder='Select categories'
-                    emptyIndicator={<p>There are no one item</p>}
+                    placeholder={t('Select categories')}
+                    emptyIndicator={<p>{t('There are no one item')}</p>}
                   />
                 </FormControl>
                 <CategoryDialog />
@@ -165,25 +204,11 @@ export const PostForm = ({ post, categories = [] }: TPostFormProps) => {
         />
 
         <FormField
-          name='description'
-          control={control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Description</FormLabel>
-              <FormControl>
-                <Textarea placeholder='Description' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
           name='files'
           control={control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Images and videos</FormLabel>
+              <FormLabel>{t('Images and videos')}</FormLabel>
               <FormControl>
                 <FileUploader
                   value={field.value}
@@ -248,14 +273,20 @@ export const PostForm = ({ post, categories = [] }: TPostFormProps) => {
                 <Checkbox name={name} checked={value} onCheckedChange={onChange} />
               </FormControl>
               <div className='space-y-1 leading-none'>
-                <FormLabel>Is active</FormLabel>
+                <FormLabel>{tAdm('Is active')}</FormLabel>
               </div>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <SubmitButton label='Save' isPending={pending} pendingLabel='Please wait...' icon={<Save />} />
+        <SubmitButton
+          className='mt-10'
+          label={t('Save post')}
+          isPending={pending}
+          pendingLabel={tAdm('wait')}
+          icon={<Save />}
+        />
       </form>
     </Form>
   );

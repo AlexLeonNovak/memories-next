@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useFormState } from 'react-dom';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 
 const defaultValues: TLead = {
   organisation: '',
@@ -18,6 +19,8 @@ const defaultValues: TLead = {
 };
 
 export const FeedbackForm = () => {
+  const tAdm = useTranslations('Admin');
+  const t = useTranslations('MainFeedbackForm');
   const form = useForm<TLead>({
     mode: 'all',
     resolver: zodResolver(createLeadSchema),
@@ -25,18 +28,17 @@ export const FeedbackForm = () => {
   });
 
   const { control, setError, reset } = form;
-
   const [state, action] = useFormState(createLead, null);
 
   useFormCheck<TLead>({
     state,
     setError,
-    onError: () => toast.error('One or more fields have an error. Please check them and try again.'),
+    onError: () => toast.error(tAdm('One or more fields have an error. Please check them and try again.')),
     onSuccess: () => {
-      toast.success('Feedback was successfully sent!');
+      toast.success(t('Feedback was successfully sent!'));
       reset(defaultValues);
     },
-    onFail: (state) => toast.error(state.message),
+    onFail: (state) => toast.error(tAdm(state.message)),
   });
 
   return (
@@ -48,10 +50,10 @@ export const FeedbackForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                Organisation <span className='text-red-600'>*</span>
+                {t('Organisation')} <span className='text-red-600'>*</span>
               </FormLabel>
               <FormControl>
-                <Input placeholder='Organisation' {...field} />
+                <Input placeholder={t('Enter your organisation')} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -64,10 +66,10 @@ export const FeedbackForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                Name <span className='text-red-600'>*</span>
+                {t('Name')} <span className='text-red-600'>*</span>
               </FormLabel>
               <FormControl>
-                <Input placeholder='Name' {...field} />
+                <Input placeholder={t('Enter your name')} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -80,10 +82,10 @@ export const FeedbackForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                E-mail <span className='text-red-600'>*</span>
+                {t('E-mail')} <span className='text-red-600'>*</span>
               </FormLabel>
               <FormControl>
-                <Input placeholder='E-mail' {...field} />
+                <Input placeholder={t('Enter your e-mail')} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -96,17 +98,17 @@ export const FeedbackForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                Phone <span className='text-red-600'>*</span>
+                {t('Phone')} <span className='text-red-600'>*</span>
               </FormLabel>
               <FormControl>
-                <Input placeholder='Phone' {...field} />
+                <Input placeholder={t('Enter your phone')} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <SubmitButton label='I want to help' pendingLabel='Sending feedback...' />
+        <SubmitButton label={t('I want to help')} pendingLabel={t('Sending feedback')} />
       </form>
     </Form>
   );

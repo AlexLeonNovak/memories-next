@@ -3,7 +3,7 @@ import { LoaderCircle } from 'lucide-react';
 import { ReactNode, Suspense } from 'react';
 import { cookies } from 'next/headers';
 import { firebaseConfig, getFirebaseAuth } from '@/lib/services';
-import { redirect } from 'next/navigation';
+import { redirect } from '@/navigation';
 
 import { SESSION_COOKIE_NAME } from '@/lib/constants';
 import { useAuthStore } from '@/lib/store';
