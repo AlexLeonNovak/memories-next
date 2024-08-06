@@ -1,2 +1,2 @@
 export * from './main';
-export * from './LanguageSwitcher';
+export * from '../../shared/LanguageSwitcher';

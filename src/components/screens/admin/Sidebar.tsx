@@ -1,56 +1,48 @@
 'use client';
 
-import Link from 'next/link';
+import { CircleGauge, Contact, Languages, List, NotebookText } from 'lucide-react';
 import Image from 'next/image';
-import {NavItem} from '.';
-import {CircleGauge, LogOut, NotebookText, List, Contact} from 'lucide-react';
-import {Button} from '@/components';
-import {useAuth} from '@/hooks';
-import {useRouter} from 'next/navigation';
-
+import { Link } from '@/navigation';
+import { NavItem } from '.';
+import { useTranslations } from 'next-intl';
 
 export const Sidebar = () => {
-  const { logout } = useAuth();
-  const router = useRouter();
-  const handleLogOut = async () => {
-    await logout();
-    router.push('/');
-  }
+  const tAdm = useTranslations('Admin');
 
   return (
-    <aside className="flex flex-col border-r bg-gray-50">
-      <div className="flex h-[60px] items-center justify-center border-b">
-        <Link href="/admin" className="text-3xl">
-          <Image src="/logo.svg" alt="Zberezhemo logo" width={175} priority height={37}/>
+    <aside className='flex flex-col border-r bg-gray-50'>
+      <div className='flex h-[60px] items-center justify-center border-b'>
+        <Link href='/admin' className='text-3xl'>
+          <Image src='/logo.svg' alt='Zberezhemo logo' width={175} priority height={37} />
         </Link>
       </div>
-      <div className="p-4">
+      <div className='p-4'>
         <NavItem href='/admin'>
           <CircleGauge />
-          <span>Dashboard</span>
+          <span>{tAdm('Dashboard')}</span>
         </NavItem>
 
         <NavItem href='/admin/posts'>
           <NotebookText />
-          <span>Posts</span>
+          <span>{tAdm('Posts')}</span>
         </NavItem>
 
         <NavItem href='/admin/categories'>
           <List />
-          <span>Categories</span>
+          <span>{tAdm('Categories')}</span>
         </NavItem>
 
         <NavItem href='/admin/leads'>
           <Contact />
-          <span>Leads</span>
+          <span>{tAdm('Leads')}</span>
+        </NavItem>
+
+        <NavItem href='/admin/translations'>
+          <Languages />
+          <span>{tAdm('Translations')}</span>
         </NavItem>
       </div>
-      <div className="p-4 flex mt-auto">
-        <Button onClick={handleLogOut} className="flex items-center gap-2 font-semibold w-full">
-          <LogOut />
-          <span>Logout</span>
-        </Button>
-      </div>
+      <div className='p-4 flex mt-auto'></div>
     </aside>
-  )
-}
+  );
+};

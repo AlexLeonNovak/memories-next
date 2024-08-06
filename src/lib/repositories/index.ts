@@ -1,4 +1,5 @@
-export { default as CategoryRepository } from './category.repository';
-export { default as PostRepository } from './post.repository';
-export { default as MediaRepository } from './media.repository';
-export { default as LeadRepository } from './lead.repository';
+export * from './category.repository';
+export * from './post.repository';
+export * from './media.repository';
+export * from './lead.repository';
+export * from './translation.repository';

@@ -1,4 +1,4 @@
-import {FirebaseOptions, getApp, getApps, initializeApp} from 'firebase/app';
+import { FirebaseOptions, getApp, getApps, initializeApp } from 'firebase/app';
 
 const {
   AUTH_COOKIE_NAME,
@@ -13,17 +13,17 @@ export const serverConfig = {
   cookieName: AUTH_COOKIE_NAME!,
   cookieSignatureKeys: [AUTH_COOKIE_SIGNATURE_KEY_CURRENT!, AUTH_COOKIE_SIGNATURE_KEY_PREVIOUS!],
   cookieSerializeOptions: {
-    path: "/",
+    path: '/',
     httpOnly: true,
-    secure: USE_SECURE_COOKIES === "true",
-    sameSite: "lax" as const,
+    secure: USE_SECURE_COOKIES === 'true',
+    sameSite: 'lax' as const,
     maxAge: 12 * 60 * 60 * 24,
   },
   serviceAccount: {
     projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID!,
     clientEmail: FIREBASE_ADMIN_CLIENT_EMAIL!,
-    privateKey: FIREBASE_ADMIN_PRIVATE_KEY?.replace(/\\n/g, "\n")!,
-  }
+    privateKey: FIREBASE_ADMIN_PRIVATE_KEY?.replace(/\\n/g, '\n')!,
+  },
 };
 
 export const firebaseConfig: FirebaseOptions = {
@@ -36,7 +36,7 @@ export const firebaseConfig: FirebaseOptions = {
   // databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
 };
 
-export const BUCKET_URL =  `gs://${process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}`;
+export const BUCKET_URL = `gs://${process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}`;
 
 export const getFirebaseApp = () => {
   if (getApps().length) {

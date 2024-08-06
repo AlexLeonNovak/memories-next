@@ -1,43 +1,40 @@
+import { TBaseEntity, TCollections, TQueryFilter, TQueryOptions, TQueryOrder } from '@/types';
 import {
-  getFirestore,
-  addDoc,
-  deleteDoc,
-  updateDoc,
-  collection,
-  getDocs,
-  QueryDocumentSnapshot,
-  getDoc,
-  doc,
-  query,
-  orderBy,
-  where,
-  or,
-  and,
   OrderByDirection,
-  QueryFieldFilterConstraint,
-  QueryCompositeFilterConstraint,
-  QueryOrderByConstraint, setDoc,
+  QueryDocumentSnapshot,
+  addDoc,
+  and,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+  or,
+  orderBy,
+  query,
+  setDoc,
+  where,
 } from '@firebase/firestore';
-import {getFirebaseApp} from '.';
-import {TBaseEntity, TCollections, TQueryFilter, TQueryOptions, TQueryOrder} from '@/types';
-
+import { getFirebaseApp } from '.';
+import { removeEmpty } from '../utils/object';
 
 export const getFirestoreDatabase = () => {
   return getFirestore(getFirebaseApp());
-}
+};
 
 const converter = <T>() => ({
   toFirestore: (data: T) => data,
   fromFirestore: (snap: QueryDocumentSnapshot<T & TBaseEntity>) => snap.data(),
-})
+});
 
 export const getCollection = <T extends object>(path: TCollections) => {
-    const database = getFirestoreDatabase();
-    return collection(database, path).withConverter(converter<T>());
-}
+  const database = getFirestoreDatabase();
+  return collection(database, path).withConverter(converter<T>());
+};
 
 const getWhere = <T>(wh: TQueryFilter<T> | TQueryFilter<T>[]) =>
-  [wh].flat().map(({fieldPath, opStr, value}) => where(fieldPath as string, opStr, value));
+  [wh].flat().map(({ fieldPath, opStr, value }) => where(fieldPath as string, opStr, value));
 
 export const createCRUD = <T extends object>(path: TCollections) => {
   const _collection = getCollection<T>(path);
@@ -60,11 +57,7 @@ export const createCRUD = <T extends object>(path: TCollections) => {
           } else if (orWhere.length === 1) {
             queryParams.push(or(andWhere[0], orWhere[0]));
           } else if (orWhere.length > 1) {
-            queryParams.push(and(
-                andWhere[0],
-                or(...orWhere)
-              )
-            );
+            queryParams.push(and(andWhere[0], or(...orWhere)));
           }
         } else if (andWhere.length > 1) {
           if (orWhere.length === 0) {
@@ -98,25 +91,25 @@ export const createCRUD = <T extends object>(path: TCollections) => {
       // @ts-ignore
       const q = queryParams.length ? query(_collection, ...queryParams) : _collection;
       const snapshot = await getDocs(q);
-      return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as TBaseEntity & T));
+      return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as TBaseEntity & T);
     } catch (error) {
       console.error(error);
       throw error;
     }
-  }
+  };
 
-  const getById = async (id: string): Promise<TBaseEntity & T | undefined> => {
+  const getById = async (id: string): Promise<(TBaseEntity & T) | undefined> => {
     try {
       const docRef = doc(_collection, id);
       const document = await getDoc(docRef);
       if (document.data()) {
-        return {id: document.id, ...document.data()} as TBaseEntity & T;
+        return { id: document.id, ...document.data() } as TBaseEntity & T;
       }
     } catch (error) {
       console.error(error);
       throw error;
     }
-  }
+  };
 
   const create = async (data: T): Promise<TBaseEntity & T> => {
     try {
@@ -130,21 +123,25 @@ export const createCRUD = <T extends object>(path: TCollections) => {
       console.error(error);
       throw error;
     }
-  }
+  };
 
   const update = async (id: string, data: Partial<T>): Promise<TBaseEntity & T> => {
     try {
       const docRef = doc(_collection, id);
-      await setDoc(docRef, {
-        ...data,
-        updatedAt: new Date().toISOString(),
-      }, { merge: true });
+      await setDoc(
+        docRef,
+        {
+          ...removeEmpty(data),
+          updatedAt: new Date().toISOString(),
+        },
+        { merge: true },
+      );
       return (await getById(id))!;
     } catch (error) {
       console.error(error);
       throw error;
     }
-  }
+  };
 
   const deleteById = async (id: string): Promise<void> => {
     try {
@@ -154,8 +151,7 @@ export const createCRUD = <T extends object>(path: TCollections) => {
       console.error(error);
       throw error;
     }
-  }
-
+  };
 
   return { getAll, getById, create, update, delete: deleteById, getCollection: () => _collection };
-}
+};

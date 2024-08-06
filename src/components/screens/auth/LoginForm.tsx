@@ -1,84 +1,110 @@
 'use client';
 
-import {FormEvent, useEffect, useState} from 'react';
-import {useAuth} from '@/hooks';
-import {useRouter} from 'next/navigation';
-import {getFirebaseAuth} from '@/lib/services';
-import {getRedirectResult} from 'firebase/auth';
+import {
+  Button,
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+  Label,
+  SubmitButton,
+} from '@/components';
+import { useFormCheck } from '@/hooks';
+import { getFirebaseAuth } from '@/lib/services';
+import { getRedirectResult } from 'firebase/auth';
+import { LogIn } from 'lucide-react';
 import Image from 'next/image';
-import {Button, Input, Label} from '@/components';
-import {LogIn} from 'lucide-react';
+import { useRouter } from '@/navigation';
+import { FormEvent, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { TCredentials, TTranslationEntity } from '@/types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { loginSchema } from '@/lib/validations';
+import { useFormState } from 'react-dom';
+import { createSession, loginWithEmailAndPassword } from '@/server/actions/auth.actions';
+import { toast } from 'sonner';
+import { UserInfo } from '@firebase/auth-types';
+import { useAuthStore } from '@/lib/store';
+import { useTranslations } from 'next-intl';
 
 export const LoginForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const { login, error } = useAuth();
+  const tAdm = useTranslations('Admin');
+  const t = useTranslations('LoginForm');
+  const { setUser } = useAuthStore();
   const router = useRouter();
+  const form = useForm<TCredentials>({
+    mode: 'all',
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
 
-  useEffect(() => {
-    const handleLoginWithRedirect = async () => {
-      const auth = await getFirebaseAuth();
-      const credential = await getRedirectResult(auth);
+  const { control, setError } = form;
+  const [state, action] = useFormState(loginWithEmailAndPassword, null);
 
-      if (credential?.user) {
-        router.push('/admin');
-      }
-    }
-    handleLoginWithRedirect();
-  }, [router]);
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    const result = await login({ email, password });
-    if (result) {
-      router.push('/admin');
-    }
-  }
+  useFormCheck<UserInfo, TCredentials>({
+    state,
+    setError,
+    onError: () => toast.error(tAdm('One or more fields have an error. Please check them and try again.')),
+    onSuccess: (state) => {
+      setUser(state.data);
+      toast.success(t('You successfully logged in!'));
+      router.replace('/admin');
+    },
+    onFail: (state) => toast.error(tAdm(state.message)),
+  });
 
   return (
-    <div className="p-6 bg-white border rounded">
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <Image className="mx-auto h-10 w-auto" src="/logo.svg" alt="Zberezhemo logo" width={175} priority height={37}/>
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
+    <div className='p-6 bg-white border rounded'>
+      <div className='sm:mx-auto sm:w-full sm:max-w-sm'>
+        <Image className='mx-auto h-10 w-auto' src='/logo.svg' alt='Zberezhemo logo' width={175} priority height={37} />
+        <h2 className='mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900'>
+          {t('Sign in to your account')}
+        </h2>
       </div>
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-5" onSubmit={handleSubmit}>
-          <div>
-            <Label htmlFor="login">Email</Label>
-            <div className="mt-2">
-              <Input name="email"
-                     placeholder="Email"
-                     type="email"
-                     required
-                     onChange={e => setEmail(e.currentTarget.value)}
-              />
+      <div className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
+        <Form {...form}>
+          <form className='space-y-5' action={action}>
+            <FormField
+              name='email'
+              control={control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('Email')}</FormLabel>
+                  <FormControl>
+                    <Input placeholder={t('exampleEmail')} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name='password'
+              control={control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('Password')}</FormLabel>
+                  <FormControl>
+                    <Input type='password' placeholder={t('Your password')} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className='flex justify-center'>
+              <SubmitButton label={t('Sign in')} icon={<LogIn />} pendingLabel={tAdm('wait')} />
             </div>
-          </div>
-
-          <div>
-            <Label htmlFor="password">Password</Label>
-            <div className="mt-2">
-              <Input name="password"
-                     placeholder="Password"
-                     type="password"
-                     required
-                     onChange={e => setPassword(e.currentTarget.value)}
-              />
-            </div>
-          </div>
-
-          <div>
-            { error && <span className="text-red-600">{error}</span>}
-          </div>
-
-          <div className="flex justify-center">
-            <Button className="flex gap-2" type="submit">
-              <LogIn />
-              <span>Sign in</span>
-            </Button>
-          </div>
-        </form>
+          </form>
+        </Form>
       </div>
     </div>
-  )
-}
+  );
+};

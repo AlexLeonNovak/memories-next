@@ -1,17 +1,17 @@
 'use client';
 
-import {useEffect} from 'react';
-import {FieldPath, FieldValues, UseFormSetError} from 'react-hook-form';
-import {TFormState, TFormStateFail, TFormStateError, TFormStateSuccess} from '@/types';
+import { TFormState, TFormStateError, TFormStateFail, TFormStateSuccess } from '@/types';
+import { useEffect } from 'react';
+import { FieldPath, FieldValues, UseFormSetError } from 'react-hook-form';
 
 type TFormCheckArgs<T extends FieldValues, F extends FieldValues = T> = {
   state: TFormState<T> | null;
-  setError: UseFormSetError<F>;
-  onError?: (state: TFormStateError) => unknown,
-  onFail?: (state: TFormStateFail) => unknown,
-  onSuccess?: (state: TFormStateSuccess<T>) => unknown,
-  onFinally?: () => unknown,
-}
+  setError?: UseFormSetError<F>;
+  onError?: (state: TFormStateError) => unknown;
+  onFail?: (state: TFormStateFail) => unknown;
+  onSuccess?: (state: TFormStateSuccess<T>) => unknown;
+  onFinally?: () => unknown;
+};
 
 export const useFormCheck = <T extends FieldValues, F extends FieldValues = T>({
   state,
@@ -28,25 +28,25 @@ export const useFormCheck = <T extends FieldValues, F extends FieldValues = T>({
     const checkStatus = async (state: TFormState<T>) => {
       switch (state.status) {
         case 'fail':
-          onFail && await Promise.resolve(onFail(state));
+          onFail && (await Promise.resolve(onFail(state)));
           break;
         case 'error':
-          state.errors?.forEach((error) => {
-            setError(error.path as FieldPath<F>, {
-              message: error.message,
+          setError &&
+            state.errors?.forEach((error) => {
+              setError(error.path as FieldPath<F>, {
+                message: error.message,
+              });
             });
-          });
-          onError && await Promise.resolve(onError(state));
+          onError && (await Promise.resolve(onError(state)));
           break;
         case 'success':
-          onSuccess && await Promise.resolve(onSuccess(state));
+          onSuccess && (await Promise.resolve(onSuccess(state)));
           break;
         default:
           break;
       }
-      onFinally && await Promise.resolve(onFinally());
-    }
+      onFinally && (await Promise.resolve(onFinally()));
+    };
     checkStatus(state);
   }, [state]);
-
 };
