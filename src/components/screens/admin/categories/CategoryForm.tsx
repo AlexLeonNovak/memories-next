@@ -96,6 +96,7 @@ export const CategoryForm = ({
                 <FormLabel className='space-x-1'>
                   <span className='text-muted-foreground uppercase'>{tAdm(`[${locale}]`)}</span>
                   <span>{t('Name')}</span>
+                  {/* eslint-disable-next-line react/jsx-no-literals */}
                   <span className='text-red-600'>*</span>
                 </FormLabel>
                 <FormControl>

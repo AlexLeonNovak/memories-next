@@ -52,6 +52,7 @@ export const GalleryItem = ({ item, onItemClick, className, ...props }: TGallery
                 }}
                 onMouseLeave={(e) => e.currentTarget.pause()}
               >
+                {/* eslint-disable-next-line react/jsx-no-literals */}
                 <source src={item.url} />
                 Your browser does not support the video tag.
               </video>

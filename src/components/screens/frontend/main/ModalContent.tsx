@@ -22,6 +22,7 @@ export const ModalContent = ({ post }: TModalContentProps) => {
               {mediaType === 'image' && <Image src={url} alt={`${name} (${index})`} fill className='object-contain' />}
               {mediaType === 'video' && (
                 <video controls preload='metadata'>
+                  {/* eslint-disable-next-line react/jsx-no-literals */}
                   <source src={url} />
                   Your browser does not support the video tag.
                 </video>

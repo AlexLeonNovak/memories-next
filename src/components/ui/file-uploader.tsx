@@ -19,6 +19,7 @@ import {
 } from 'react';
 import { DropzoneOptions, DropzoneState, FileRejection, useDropzone } from 'react-dropzone';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 
 type DirectionOptions = 'rtl' | 'ltr' | undefined;
 
@@ -253,6 +254,8 @@ export const FileUploaderItem = forwardRef<HTMLDivElement, { index: number } & R
   ({ className, index, children, ...props }, ref) => {
     const { removeFileFromSet, activeIndex, direction } = useFileUpload();
     const isSelected = index === activeIndex;
+    const t = useTranslations('Component');
+
     return (
       <div
         ref={ref}
@@ -275,7 +278,7 @@ export const FileUploaderItem = forwardRef<HTMLDivElement, { index: number } & R
           )}
           onClick={() => removeFileFromSet(index)}
         >
-          <span className='sr-only'>remove item {index}</span>
+          <span className='sr-only'>{t('remove item {index}', { index })}</span>
           <RemoveIcon className='w-10 h-10 stroke-destructive ease-in-out duration-300' />
         </button>
       </div>

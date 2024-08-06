@@ -36,6 +36,7 @@ export const LanguageSwitcher = () => {
           >
             {t(locale)}
           </Button>
+          {/* eslint-disable-next-line react/jsx-no-literals */}
           {index + 1 < i18n.locales.length && <span className='mx-[5px]'>/</span>}
         </Fragment>
       ))}

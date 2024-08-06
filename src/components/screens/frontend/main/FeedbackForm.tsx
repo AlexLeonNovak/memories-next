@@ -50,6 +50,7 @@ export const FeedbackForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>
+                {/* eslint-disable-next-line react/jsx-no-literals */}
                 {t('Organisation')} <span className='text-red-600'>*</span>
               </FormLabel>
               <FormControl>
@@ -66,6 +67,7 @@ export const FeedbackForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>
+                {/* eslint-disable-next-line react/jsx-no-literals */}
                 {t('Name')} <span className='text-red-600'>*</span>
               </FormLabel>
               <FormControl>
@@ -82,6 +84,7 @@ export const FeedbackForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>
+                {/* eslint-disable-next-line react/jsx-no-literals */}
                 {t('E-mail')} <span className='text-red-600'>*</span>
               </FormLabel>
               <FormControl>
@@ -98,6 +101,7 @@ export const FeedbackForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>
+                {/* eslint-disable-next-line react/jsx-no-literals */}
                 {t('Phone')} <span className='text-red-600'>*</span>
               </FormLabel>
               <FormControl>

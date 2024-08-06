@@ -4,14 +4,6 @@ import { SESSION_COOKIE_NAME } from '@/lib/constants';
 
 // export default stackMiddlewares([withI18n, withFirebaseAuth]);
 export async function middleware(request: NextRequest) {
-  // const resp = i18nMiddleware(request);
-  console.log('request.nextUrl.pathname', request.nextUrl.pathname);
-  if (request.nextUrl.pathname === '/admin') {
-    const session = request.cookies.get(SESSION_COOKIE_NAME);
-    if (!session) {
-      return NextResponse.redirect('/admin/login');
-    }
-  }
   return i18nMiddleware(request);
 }
 

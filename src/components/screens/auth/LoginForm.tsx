@@ -78,7 +78,7 @@ export const LoginForm = () => {
                 <FormItem>
                   <FormLabel>{t('Email')}</FormLabel>
                   <FormControl>
-                    <Input placeholder={t('name@example.com')} {...field} />
+                    <Input placeholder={t('exampleEmail')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

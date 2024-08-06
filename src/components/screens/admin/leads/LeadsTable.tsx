@@ -1,23 +1,27 @@
 import { DeleteForm, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components';
 import { deleteLead, fetchLeads } from '@/server/actions/leads.actions';
 import { DateTime } from 'luxon';
+import { getTranslations } from 'next-intl/server';
 
 export const LeadsTable = async () => {
   const leads = await fetchLeads({
     order: { createdAt: 'desc' },
   });
 
+  const tAdm = await getTranslations('Admin');
+  const t = await getTranslations('AdminLeads');
+
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>#</TableHead>
-          <TableHead>Name</TableHead>
-          <TableHead>Organisation</TableHead>
-          <TableHead>Phone</TableHead>
-          <TableHead>Email</TableHead>
-          <TableHead>Created at</TableHead>
-          <TableHead>Actions</TableHead>
+          <TableHead>{tAdm('#')}</TableHead>
+          <TableHead>{tAdm('Name')}</TableHead>
+          <TableHead>{tAdm('Organisation')}</TableHead>
+          <TableHead>{tAdm('Phone')}</TableHead>
+          <TableHead>{tAdm('Email')}</TableHead>
+          <TableHead>{tAdm('Created at')}</TableHead>
+          <TableHead>{tAdm('Actions')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -35,8 +39,8 @@ export const LeadsTable = async () => {
                   <DeleteForm
                     id={id}
                     deleteAction={deleteLead}
-                    title='Delete lead?'
-                    description='Are you sure you want to delete this lead?'
+                    title={t('Delete lead?')}
+                    description={t('Are you sure you want to delete this lead?')}
                   />
                 </div>
               </TableCell>
@@ -45,7 +49,7 @@ export const LeadsTable = async () => {
         {!leads.length && (
           <TableRow>
             <TableCell colSpan={7}>
-              <p className='text-center text-2xl text-muted-foreground'>There are no items to display yet</p>
+              <p className='text-center text-2xl text-muted-foreground'>{tAdm('There are no items to display yet')}</p>
             </TableCell>
           </TableRow>
         )}

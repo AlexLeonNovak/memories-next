@@ -35,7 +35,7 @@ export const DeleteForm = ({ id, title, description, onDeleted, deleteAction }: 
       toast.success(tAdm('Successfully deleted!'));
       onDeleted && onDeleted();
     }
-  }, [state]);
+  }, [onDeleted, state, tAdm]);
 
   const onSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

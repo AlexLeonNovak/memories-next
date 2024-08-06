@@ -23,6 +23,7 @@ export const MapNavigation = ({ categories }: TMapNavigationProps) => {
         {categories.length > 0 &&
           categories.map(({ id, name, isActive }, index) => (
             <Fragment key={id}>
+              {/* eslint-disable-next-line react/jsx-no-literals */}
               {index > 0 && <span className='text-xl map__navigation-separator'>/</span>}
               <Button
                 key={id}

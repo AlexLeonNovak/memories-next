@@ -148,6 +148,7 @@ export const PostForm = ({ post, categories = [] }: TPostFormProps) => {
                 <FormLabel className='space-x-1'>
                   <span className='text-muted-foreground uppercase'>{tAdm(`[${locale}]`)}</span>
                   <span>{t('Name')}</span>
+                  {/* eslint-disable-next-line react/jsx-no-literals */}
                   <span className='text-red-600'>*</span>
                 </FormLabel>
                 <FormControl>
@@ -185,6 +186,7 @@ export const PostForm = ({ post, categories = [] }: TPostFormProps) => {
           render={({ field }) => (
             <FormItem className='w-full'>
               <FormLabel>
+                {/* eslint-disable-next-line react/jsx-no-literals */}
                 {tAdm('Categories')} <span className='text-red-600'>*</span>
               </FormLabel>
               <div className='flex items-center'>
@@ -221,15 +223,20 @@ export const PostForm = ({ post, categories = [] }: TPostFormProps) => {
                     <div className='flex items-center justify-center flex-col pt-3 pb-4 w-full '>
                       <CloudUpload size={45} />
                       <p className='mb-1 text-sm text-gray-500 dark:text-gray-400'>
+                        {/* eslint-disable-next-line react/jsx-no-literals */}
                         <span className='font-semibold'>Click to upload</span>
                         &nbsp; or drag and drop
                       </p>
                       <p className='text-xs text-gray-500 dark:text-gray-400'>
+                        {/* eslint-disable-next-line react/jsx-no-literals */}
                         <strong>Images: </strong>SVG, PNG, JPG or GIF&nbsp;
+                        {/* eslint-disable-next-line react/jsx-no-literals */}
                         <span className='text-muted-foreground'>(Max {MAX_SIZE_IMAGE}MB)</span>
                       </p>
                       <p className='text-xs text-gray-500 dark:text-gray-400'>
+                        {/* eslint-disable-next-line react/jsx-no-literals */}
                         <strong>Videos: </strong>MP4, MKV, MOV&nbsp;
+                        {/* eslint-disable-next-line react/jsx-no-literals */}
                         <span className='text-muted-foreground'>(Max {MAX_SIZE_VIDEO}MB)</span>
                       </p>
                     </div>
