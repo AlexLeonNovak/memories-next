@@ -6,6 +6,7 @@ import {TMediaWithPostEntity, TPostWithMediaEntity} from '@/types';
 import {Modal, ModalContent, GalleryItem} from '@/components';
 import {LoaderCircle} from 'lucide-react';
 import {MediaRepository} from '@/lib/repositories';
+import { GalleryControlHelper } from './GalleryControlHelper';
 
 type TRandomGalleryProps = {
   medias: TMediaWithPostEntity[];
@@ -52,6 +53,7 @@ export const RandomGallery = ({medias}: TRandomGalleryProps) => {
       >
         {post ? <ModalContent post={post} /> : <LoaderCircle className="animate-spin size-10" />}
       </Modal>
+      <GalleryControlHelper></GalleryControlHelper>
     </div>
   );
 };

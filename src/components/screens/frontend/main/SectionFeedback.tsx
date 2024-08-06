@@ -6,6 +6,7 @@ import './css/feedback.css';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { generateSymbolsFromText } from '../jsx-utils/Symbols';
 
 gsap.registerPlugin(useGSAP);
 gsap.registerPlugin(ScrollTrigger);
@@ -33,11 +34,12 @@ export const SectionFeedback = () => {
                         filter: 'blur(0px)',
                         stagger: { each: 0.025, from: 'random' },
                         scrollTrigger: {
-                            trigger: '.feedback__title',
-                            start: 'top bottom',
-                            end: 'center center',
-                            toggleActions: 'play resume resume reset',
-                        },
+                          trigger: '.feedback__title',
+                          start: 'top bottom',
+                          end: '+=500',
+                          scrub: 1,
+                          toggleActions: 'play resume resume reset',
+                      },
                     }
                 );
             });
@@ -45,26 +47,14 @@ export const SectionFeedback = () => {
         { scope: container }
     );
 
-    console.log('test feedback');
-    const getSymbolItems = (text: string, className: string) => {
-        return text.split('').map((symbol, index) => {
-            const value = symbol !== ' ' ? symbol : <div>&nbsp;</div>;
-            return (
-                <div key={index} className={className}>
-                    {value}
-                </div>
-            );
-        });
-    };
-
     const lineOne = "LET'S SAVE";
     const lineTwo = 'THE PAST FOR';
     const lineThree = 'THE FUTURE.';
     const className = 'feedback-letter';
 
-    const lineOneItems = getSymbolItems(lineOne, className);
-    const lineTwoItems = getSymbolItems(lineTwo, className);
-    const lineThreeItems = getSymbolItems(lineThree, className);
+    const lineOneItems = generateSymbolsFromText(lineOne, className);
+    const lineTwoItems = generateSymbolsFromText(lineTwo, className);
+    const lineThreeItems = generateSymbolsFromText(lineThree, className);
 
     return (
         <section id="feedback" className="feedback">
