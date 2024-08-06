@@ -1,6 +1,8 @@
+'use client';
+
 import { Button, CategoriesTable, PageTitle } from '@/components';
 import { Plus } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@/navigation';
 
 export default function CategoryPage() {
   return (

@@ -19,7 +19,6 @@ export default async function RootLayout({ children, params }: TChildrenProps & 
 
   return (
     <html lang={params.locale}>
-      <head />
       <body className={inter.className}>
         {/*<NextIntlClientProvider locale={params.locale} messages={messages}>*/}
         {/*  {children}*/}

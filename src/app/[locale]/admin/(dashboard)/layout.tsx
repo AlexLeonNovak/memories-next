@@ -2,18 +2,17 @@ import { AdminHeader, PageContent, Sidebar } from '@/components';
 import { LoaderCircle } from 'lucide-react';
 import { ReactNode, Suspense } from 'react';
 import { cookies } from 'next/headers';
-import { firebaseConfig, getFirebaseAuth } from '@/lib/services';
+// import { firebaseConfig, getFirebaseAuth } from '@/lib/services';
 import { redirect } from '@/navigation';
 
 import { SESSION_COOKIE_NAME } from '@/lib/constants';
-import { useAuthStore } from '@/lib/store';
 import { getLocale } from 'next-intl/server';
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
-  const auth = await getFirebaseAuth();
-  console.log('currentUser', auth.currentUser);
+  // const auth = await getFirebaseAuth();
+  // console.log('currentUser', auth.currentUser);
   const session = cookies().get(SESSION_COOKIE_NAME)?.value || null;
-  console.log('session', session);
+  // console.log('session', session);
   if (!session) {
     redirect('/admin/login');
   }

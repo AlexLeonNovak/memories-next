@@ -1,6 +1,8 @@
+'use client';
+
 import { Button, PageTitle, PostsTable } from '@/components';
 import { Plus } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@/navigation';
 
 export default function PostsPage() {
   return (

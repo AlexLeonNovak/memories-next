@@ -2,8 +2,7 @@
 
 import { TChildrenProps } from '@/types';
 import { clsx } from 'clsx';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, Link } from '@/navigation';
 
 type TProps = TChildrenProps & {
   href: string;

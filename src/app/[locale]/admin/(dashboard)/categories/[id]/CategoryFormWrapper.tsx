@@ -2,7 +2,7 @@
 
 import { CategoryForm } from '@/components';
 import { TCategoryEntity } from '@/types';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/navigation';
 
 type TCategoryFormWrapperProps = {
   category: TCategoryEntity;

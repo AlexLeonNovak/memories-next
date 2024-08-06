@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/navigation';
 
 export default function NotFoundPage() {
   const router = useRouter();
