@@ -33,6 +33,7 @@ export type TCategory = TBaseFields & {
 export type TPostEntity = TBaseEntity & TPost;
 export type TCategoryEntity = TBaseEntity & TCategory;
 export type TMediaEntity = TBaseEntity & TMedia;
+export type TPostWithCategories = Omit<TPostEntity, 'categories'> & { categories: TCategoryEntity[] };
 
 export type TMediaWithPostEntity = TMediaEntity & { post: TPostEntity };
 export type TPostWithMediaEntity = TPostEntity & { media: TMediaEntity[] };

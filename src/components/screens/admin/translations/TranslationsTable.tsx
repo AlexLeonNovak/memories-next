@@ -38,7 +38,7 @@ export const TranslationsTable = () => {
   const [keySearch, setKeySearch] = useState<string>();
   const [localeSearch, setLocaleSearch] = useState<{ [key in TLocale]?: string }>();
   const [debouncedLocale] = useDebounce(localeSearch, 1500);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const fetchTranslations = useCallback(async () => {
     const _translations = await TranslationRepository.getAll();
@@ -125,39 +125,41 @@ export const TranslationsTable = () => {
           ))}
           <TableHead>{tAdm('Actions')}</TableHead>
         </TableRow>
-        <TableRow>
-          <TableHead></TableHead>
-          <TableHead>
-            {namespaces && (
-              <SelectInput
-                items={namespaces}
-                value={namespaceSearch}
-                placeholder={tAdm('Select namespace')}
-                onValueChange={setNamespaceSearch}
-              />
-            )}
-          </TableHead>
-          <TableHead>
-            {keys && (
-              <SelectInput
-                items={keys}
-                value={keySearch}
-                placeholder={tAdm('Select key')}
-                onValueChange={setKeySearch}
-              />
-            )}
-          </TableHead>
-          {i18n.locales.map((locale) => (
-            <TableHead key={locale} className='uppercase'>
-              <Input
-                name={locale}
-                value={localeSearch && localeSearch[locale as TLocale]}
-                onChange={(e) => setLocaleSearch((state) => ({ ...state, [locale]: e.target.value }))}
-              />
+        {!loading && translations?.length && (
+          <TableRow>
+            <TableHead></TableHead>
+            <TableHead>
+              {namespaces && (
+                <SelectInput
+                  items={namespaces}
+                  value={namespaceSearch}
+                  placeholder={tAdm('Select namespace')}
+                  onValueChange={setNamespaceSearch}
+                />
+              )}
             </TableHead>
-          ))}
-          <TableHead></TableHead>
-        </TableRow>
+            <TableHead>
+              {keys && (
+                <SelectInput
+                  items={keys}
+                  value={keySearch}
+                  placeholder={tAdm('Select key')}
+                  onValueChange={setKeySearch}
+                />
+              )}
+            </TableHead>
+            {i18n.locales.map((locale) => (
+              <TableHead key={locale} className='uppercase'>
+                <Input
+                  name={locale}
+                  value={localeSearch && localeSearch[locale as TLocale]}
+                  onChange={(e) => setLocaleSearch((state) => ({ ...state, [locale]: e.target.value }))}
+                />
+              </TableHead>
+            ))}
+            <TableHead></TableHead>
+          </TableRow>
+        )}
       </TableHeader>
       <TableBody>
         {loading && <TableSkeleton columns={4 + i18n.locales.length} />}

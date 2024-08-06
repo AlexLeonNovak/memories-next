@@ -20,23 +20,18 @@ export default async function AdminLayout({ children }: { children: ReactNode })
   const locale = await getLocale();
 
   return (
-    <html lang={locale} className='h-full'>
-      <head />
-      <body suppressHydrationWarning={true}>
-        <div className='grid min-h-screen w-full grid-cols-[250px_1fr]'>
-          <Sidebar />
-          <div className='flex flex-col'>
-            <AdminHeader />
-            <main className='p-4 bg-gray-50 min-h-screen'>
-              <div className='p-4 border bg-white h-full'>
-                <Suspense fallback={<LoaderCircle className='animate-spin size-10' />}>
-                  <PageContent>{children}</PageContent>
-                </Suspense>
-              </div>
-            </main>
+    <div className='grid min-h-screen w-full grid-cols-[250px_1fr]'>
+      <Sidebar />
+      <div className='flex flex-col'>
+        <AdminHeader />
+        <main className='p-4 bg-gray-50 min-h-screen'>
+          <div className='p-4 border bg-white h-full'>
+            <Suspense fallback={<LoaderCircle className='animate-spin size-10' />}>
+              <PageContent>{children}</PageContent>
+            </Suspense>
           </div>
-        </div>
-      </body>
-    </html>
+        </main>
+      </div>
+    </div>
   );
 }

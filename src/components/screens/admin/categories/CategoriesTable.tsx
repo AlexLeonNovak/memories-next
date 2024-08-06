@@ -1,15 +1,36 @@
-// 'use client';
+'use client';
 
-import { Badge, Button, DeleteForm, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components';
+import {
+  Badge,
+  Button,
+  DeleteForm,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableSkeleton,
+} from '@/components';
 import { deleteCategory, fetchCategories } from '@/server/actions/categories.actions';
 import { Pencil } from 'lucide-react';
 import { Link } from '@/navigation';
-import { getTranslations } from 'next-intl/server';
+import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
+import { TCategoryEntity } from '@/types';
 
-export const CategoriesTable = async () => {
-  const categories = await fetchCategories();
-  const tAdm = await getTranslations('Admin');
-  const t = await getTranslations('AdminCategories');
+export const CategoriesTable = () => {
+  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState<TCategoryEntity[]>([]);
+  // const categories = await fetchCategories();
+  const tAdm = useTranslations('Admin');
+  const t = useTranslations('AdminCategories');
+
+  useEffect(() => {
+    fetchCategories()
+      .then(setCategories)
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <Table>
@@ -22,6 +43,7 @@ export const CategoriesTable = async () => {
         </TableRow>
       </TableHeader>
       <TableBody>
+        {loading && <TableSkeleton columns={4} />}
         {categories &&
           categories?.map(({ id, name, isActive }, index) => (
             <TableRow key={id}>
@@ -58,7 +80,7 @@ export const CategoriesTable = async () => {
               </TableCell>
             </TableRow>
           ))}
-        {!categories?.length && (
+        {!categories?.length && !loading && (
           <TableRow>
             <TableCell colSpan={4}>
               <p className='text-center text-2xl text-muted-foreground'>{tAdm('There are no items to display yet')}</p>

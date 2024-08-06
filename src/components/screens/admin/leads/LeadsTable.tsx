@@ -1,15 +1,26 @@
-import { DeleteForm, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components';
+'use client';
+
+import { DeleteForm, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableSkeleton } from '@/components';
 import { deleteLead, fetchLeads } from '@/server/actions/leads.actions';
 import { DateTime } from 'luxon';
-import { getTranslations } from 'next-intl/server';
+import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { TLeadEntity } from '@/types';
 
-export const LeadsTable = async () => {
-  const leads = await fetchLeads({
-    order: { createdAt: 'desc' },
-  });
+export const LeadsTable = () => {
+  const [loading, setLoading] = useState(true);
+  const [leads, setLeads] = useState<TLeadEntity[]>([]);
 
-  const tAdm = await getTranslations('Admin');
-  const t = await getTranslations('AdminLeads');
+  useEffect(() => {
+    fetchLeads({
+      order: { createdAt: 'desc' },
+    })
+      .then(setLeads)
+      .finally(() => setLoading(false));
+  }, []);
+
+  const tAdm = useTranslations('Admin');
+  const t = useTranslations('AdminLeads');
 
   return (
     <Table>
@@ -25,6 +36,7 @@ export const LeadsTable = async () => {
         </TableRow>
       </TableHeader>
       <TableBody>
+        {loading && <TableSkeleton columns={7} />}
         {leads &&
           leads.map(({ id, name, organisation, phone, email, createdAt }, index) => (
             <TableRow key={id}>
@@ -46,7 +58,7 @@ export const LeadsTable = async () => {
               </TableCell>
             </TableRow>
           ))}
-        {!leads.length && (
+        {!leads.length && !loading && (
           <TableRow>
             <TableCell colSpan={7}>
               <p className='text-center text-2xl text-muted-foreground'>{tAdm('There are no items to display yet')}</p>

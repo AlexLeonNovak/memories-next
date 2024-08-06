@@ -26,8 +26,8 @@ export default async function RootLayout({ children, params }: TChildrenProps & 
         {/*</NextIntlClientProvider>*/}
         <Intl locale={params.locale} messages={messages}>
           {children}
-          <Toaster richColors />
         </Intl>
+        <Toaster richColors />
       </body>
     </html>
   );

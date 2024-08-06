@@ -1,18 +1,40 @@
-import { Badge, Button, DeleteForm, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components';
+'use client';
+
+import {
+  Badge,
+  Button,
+  DeleteForm,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableSkeleton,
+} from '@/components';
 import { deletePost, fetchPostsWithCategories } from '@/server/actions/posts.actions';
 import { Pencil } from 'lucide-react';
 import { Link } from '@/navigation';
-import { getLocale, getTranslations } from 'next-intl/server';
 import { TLocale } from '@/i18n';
+import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { useLocale } from 'use-intl';
+import { TPostWithCategories } from '@/types';
 
-export const PostsTable = async () => {
-  const tAdm = await getTranslations('Admin');
-  const t = await getTranslations('AdminPosts');
-  const locale = (await getLocale()) as TLocale;
+export const PostsTable = () => {
+  const [loading, setLoading] = useState(true);
+  const [posts, setPosts] = useState<TPostWithCategories[]>([]);
+  const tAdm = useTranslations('Admin');
+  const t = useTranslations('AdminPosts');
+  const locale = useLocale() as TLocale;
 
-  const posts = await fetchPostsWithCategories({
-    order: { createdAt: 'desc' },
-  });
+  useEffect(() => {
+    fetchPostsWithCategories({
+      order: { createdAt: 'desc' },
+    })
+      .then(setPosts)
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <Table>
@@ -26,6 +48,7 @@ export const PostsTable = async () => {
         </TableRow>
       </TableHeader>
       <TableBody>
+        {loading && <TableSkeleton columns={5} />}
         {posts &&
           posts.map(({ id, name, categories, isActive }, index) => (
             <TableRow key={id}>
@@ -70,7 +93,7 @@ export const PostsTable = async () => {
             </TableRow>
           ))}
 
-        {!posts?.length && (
+        {!posts?.length && !loading && (
           <TableRow>
             <TableCell colSpan={5}>
               <p className='text-center text-2xl text-muted-foreground'>{tAdm('There are no items to display yet')}</p>
