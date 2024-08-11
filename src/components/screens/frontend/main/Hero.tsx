@@ -10,8 +10,11 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { generateSymbolsFromText } from '../jsx-utils/Symbols';
+import { useTranslations } from 'next-intl';
 
 export const Hero = () => {
+    const t = useTranslations('MainHero');
+    
     useEffect(() => {
         gsap.registerPlugin(ScrollTrigger, useGSAP);
     }, []);
@@ -68,9 +71,9 @@ export const Hero = () => {
         { scope: container }
     );
 
-    const title = 'MEMORY';
-    const subtitle = 'LIBRARY';
-    const text = 'PEOPLE. CITIES. EVENTS.';
+    const title = t('MEMORY');
+    const subtitle = t('LIBRARY');
+    const text = t('PEOPLE CITIES EVENTS');
     const className = 'hero-text-letter';
 
     const titleItems = generateSymbolsFromText(title, className);

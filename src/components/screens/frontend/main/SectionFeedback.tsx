@@ -7,8 +7,10 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { generateSymbolsFromText } from '../jsx-utils/Symbols';
+import { useTranslations } from 'next-intl';
 
 export const SectionFeedback = () => {
+    const t = useTranslations('SectionFeedback');
     useEffect(() => {
         gsap.registerPlugin(ScrollTrigger, useGSAP);
     }, []);
@@ -48,9 +50,9 @@ export const SectionFeedback = () => {
         { scope: container }
     );
 
-    const lineOne = "LET'S SAVE";
-    const lineTwo = 'THE PAST FOR';
-    const lineThree = 'THE FUTURE.';
+    const lineOne = t('LET US SAVE');
+    const lineTwo = t('THE PAST FOR');
+    const lineThree = t('THE FUTURE.');
     const className = 'feedback-letter';
 
     const lineOneItems = generateSymbolsFromText(lineOne, className);
@@ -62,10 +64,12 @@ export const SectionFeedback = () => {
             <div className="wrapper" ref={container}>
                 <div className="feedback__text">
                     <i>
-                        “Family faces are magic mirrors. Looking at people who
-                        belong to us, we see the past, present, and future.”
+                        “
+                        {t(`Family faces are magic mirrors. Looking at people who
+                        belong to us, we see the past, present, and future.`)}
+                        ”
                     </i>{' '}
-                    Gail Lumet Buckley
+                    {t('Gail Lumet Buckley')}
                 </div>
                 <div className="feedback__title">
                     <div className="feedback__line feedback__line--one">
