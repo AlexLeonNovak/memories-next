@@ -1,17 +1,18 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import './css/gallery.css';
 import { isMobile } from 'react-device-detect';
 import Image from 'next/image';
-import gsap from 'gsap';
+// import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(useGSAP);
-gsap.registerPlugin(ScrollTrigger);
+import { ScrollTrigger, gsap } from 'gsap/all';
 
 export const GalleryControlHelper = () => {
+    useLayoutEffect(() => {
+        gsap.registerPlugin(ScrollTrigger, useGSAP);
+    }, []);
+
     const container = React.useRef<HTMLDivElement>(null);
     useGSAP(
         () => {
@@ -28,14 +29,16 @@ export const GalleryControlHelper = () => {
             gsap.to('.gallery-icon-help', {
                 autoAlpha: 0.0,
                 duration: 0.9,
-                delay: 5,
+                delay: 2,
                 scrollTrigger: {
-                    trigger: '.galler-icon-help',
-                    start: 'top',
-                    end: 'bottom',
+                    trigger: '.gallery-icon-help',
+                    start: 'top bottom',
+                    end: '+=500',
+                    // start: 'top',
+                    // end: 'top',
                     // scrub: 1,
-                    toggleActions: 'play resume resume reset',
-                    once: true
+                    // toggleActions: 'play resume resume reset',
+                    once: true,
                 },
             });
         },

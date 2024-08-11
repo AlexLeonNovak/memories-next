@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FeedbackForm } from '@/components';
 import './css/feedback.css';
 import gsap from 'gsap';
@@ -8,10 +8,11 @@ import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { generateSymbolsFromText } from '../jsx-utils/Symbols';
 
-gsap.registerPlugin(useGSAP);
-gsap.registerPlugin(ScrollTrigger);
-
 export const SectionFeedback = () => {
+    useEffect(() => {
+        gsap.registerPlugin(ScrollTrigger, useGSAP);
+    }, []);
+
     const container = React.useRef<HTMLDivElement>(null);
     useGSAP(
         () => {
@@ -34,12 +35,12 @@ export const SectionFeedback = () => {
                         filter: 'blur(0px)',
                         stagger: { each: 0.025, from: 'random' },
                         scrollTrigger: {
-                          trigger: '.feedback__title',
-                          start: 'top bottom',
-                          end: '+=500',
-                          scrub: 1,
-                          toggleActions: 'play resume resume reset',
-                      },
+                            trigger: '.feedback__title',
+                            start: 'top bottom',
+                            end: '+=500',
+                            scrub: 1,
+                            toggleActions: 'play resume resume reset',
+                        },
                     }
                 );
             });

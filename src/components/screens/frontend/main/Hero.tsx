@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import './css/hero.css';
 import Image from 'next/image';
 import 'animate.css/animate.compat.css';
@@ -11,10 +11,11 @@ import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { generateSymbolsFromText } from '../jsx-utils/Symbols';
 
-gsap.registerPlugin(useGSAP);
-gsap.registerPlugin(ScrollTrigger);
-
 export const Hero = () => {
+    useEffect(() => {
+        gsap.registerPlugin(ScrollTrigger, useGSAP);
+    }, []);
+
     const container = React.useRef<HTMLDivElement>(null);
     useGSAP(
         () => {
