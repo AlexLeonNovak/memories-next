@@ -5,13 +5,12 @@ import { updateTranslationSchemaServer } from './validations';
 import { parseSchemaFormData } from '@/server/utils';
 import { createDocument, deleteDocument, updateDocument } from '@/server/mongodb';
 import { revalidatePathLocales } from '@/lib/utils';
-import { revalidatePath } from 'next/cache';
 
 export const createTranslation = async (translationData: TTranslation): Promise<TFormState<TTranslationEntity>> => {
   try {
     const data = await createDocument('translations', translationData);
     revalidatePathLocales('/admin/translations');
-    revalidatePath('/');
+    revalidatePathLocales('/');
     return { status: 'success', data };
   } catch (e) {
     return { status: 'fail', message: (e as Error).message };
@@ -28,7 +27,7 @@ export const updateTranslation = async (
       const { id, ...rest } = parsed.data;
       const data = await updateDocument<TTranslationEntity>('translations', id, rest);
       revalidatePathLocales('/admin/translations');
-      revalidatePath('/');
+      revalidatePathLocales('/');
       return { status: 'success', data };
     }
     return parsed;
@@ -42,7 +41,7 @@ export const deleteTranslation = async (prevState: any, formData: FormData): Pro
     const id = formData.get('id');
     id && (await deleteDocument('translations', id as string));
     revalidatePathLocales('/admin/translations');
-    revalidatePath('/');
+    revalidatePathLocales('/');
     return { success: true };
   } catch (error) {
     return {

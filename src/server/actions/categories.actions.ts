@@ -4,7 +4,6 @@ import { createCategorySchemaServer, updateCategorySchemaServer } from './valida
 import { TCategoryEntity, TDeleteFormState, TFormState, TPostEntity, TQueryOptions } from '@/types';
 import { revalidatePathLocales } from '@/lib/utils';
 import { parseSchemaFormData } from '@/server/utils';
-import { revalidatePath } from 'next/cache';
 import { createDocument, deleteDocument, updateDocument } from '@/server/mongodb';
 import { getPosts } from '@/server/swr';
 
@@ -19,7 +18,7 @@ export async function createCategory(prevState: any, formData: FormData): Promis
     if (parsed.status === 'success') {
       const data = await createDocument('categories', parsed.data);
       revalidatePathLocales('/admin/categories');
-      revalidatePath('/');
+      revalidatePathLocales('/');
       return { status: 'success', data };
     }
     return parsed;
@@ -35,7 +34,7 @@ export async function updateCategory(prevState: any, formData: FormData): Promis
       const { id, ...rest } = parsed.data;
       const data = await updateDocument('categories', id, rest);
       revalidatePathLocales('/admin/categories');
-      revalidatePath('/');
+      revalidatePathLocales('/');
       return { status: 'success', data };
     }
     return parsed;
@@ -53,7 +52,7 @@ export async function deleteCategory(prevState: any, formData: FormData): Promis
     }
     id && (await deleteDocument('categories', id as string));
     revalidatePathLocales('/admin/categories');
-    revalidatePath('/');
+    revalidatePathLocales('/');
     return {
       success: true,
     };

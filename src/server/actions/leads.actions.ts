@@ -5,7 +5,6 @@ import { parseSchemaFormData } from '@/server/utils';
 import { createLeadSchemaServer } from './validations';
 import { createDocument, deleteDocument } from '@/server/mongodb';
 import { revalidatePathLocales } from '@/lib/utils';
-import { revalidatePath } from 'next/cache';
 
 // export const fetchLeads = (queryOptions?: TQueryOptions<TLeadEntity>) => LeadRepository.getAll(queryOptions);
 

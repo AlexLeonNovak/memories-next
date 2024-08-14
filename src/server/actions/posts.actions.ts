@@ -6,22 +6,6 @@ import { TDeleteFormState, TFormState, TPost, TPostEntity } from '@/types';
 import { createDocument, deleteDocument, updateDocument } from '@/server/mongodb';
 import { deleteMediasByPostId } from '@/server/actions/medias.actions';
 import { revalidatePathLocales } from '@/lib/utils';
-import { revalidatePath } from 'next/cache';
-
-// export const fetchPosts = (queryOptions?: TQueryOptions<TPostEntity>) => PostRepository.getAll(queryOptions);
-// export const fetchPostById = (id: string) => PostRepository.getById(id);
-
-// export const fetchPostsWithCategories = async (query?: TQueryOptions<TBaseEntity & TPost>) => {
-//   const categories = await getCategories();
-//   const catIds = categories.data.map((category) => category.id);
-//   const posts = await fetchPosts(query);
-//   return posts.map((post) => ({
-//     ...post,
-//     categories: post.categories
-//       .filter((catId) => catIds.includes(catId))
-//       .map((categoryId) => categories.find(({ id }) => categoryId === id)!),
-//   }));
-// };
 
 export const createPost = async (prevState: any, formData: FormData): Promise<TFormState<TPostEntity>> => {
   try {
@@ -29,7 +13,7 @@ export const createPost = async (prevState: any, formData: FormData): Promise<TF
     if (parsed.status === 'success') {
       const data = await createDocument<TPost>('posts', parsed.data);
       revalidatePathLocales('/admin/posts');
-      revalidatePath('/');
+      revalidatePathLocales('/');
       return { status: 'success', data };
     }
     return parsed;
@@ -49,7 +33,7 @@ export const updatePost = async (prevState: any, formData: FormData): Promise<TF
       const data = await updateDocument('posts', id, rest);
 
       revalidatePathLocales('/admin/posts');
-      revalidatePath('/');
+      revalidatePathLocales('/');
       return { status: 'success', data };
     }
     return parsed;
@@ -66,7 +50,7 @@ export const deletePost = async (prevState: any, formData: FormData): Promise<TD
     // await deleteDocument('medias', id);
 
     revalidatePathLocales('/admin/posts');
-    revalidatePath('/');
+    revalidatePathLocales('/');
     return {
       success: true,
     };
