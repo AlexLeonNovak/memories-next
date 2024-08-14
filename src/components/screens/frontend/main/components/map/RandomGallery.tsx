@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocale } from 'use-intl';
 import { TLocale } from '@/config';
 import { useTranslations } from 'next-intl';
+import { GalleryControlHelper } from './GalleryControlHelper';
 import { useGetPosts, useGetMedias } from '@/hooks';
 
 export const RandomGallery = () => {
@@ -55,6 +56,7 @@ export const RandomGallery = () => {
       <Modal open={showModalInfo} setOpen={setShowModalInfo} title={(post?.name && post.name[locale]) || t('Loading')}>
         {post ? <ModalContent post={post} /> : <LoaderCircle className='animate-spin size-10' />}
       </Modal>
+      <GalleryControlHelper />
     </div>
   );
 };
