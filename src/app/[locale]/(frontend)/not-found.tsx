@@ -1,8 +1,8 @@
 import { Link } from '@/navigation';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
-export default function NotFoundPage() {
-  const t = useTranslations('Main404');
+export default async function NotFoundPage() {
+  const t = await getTranslations('Main404');
 
   return (
     <div>

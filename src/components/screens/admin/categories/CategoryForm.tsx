@@ -1,10 +1,10 @@
 'use client';
 
 import {
+  Button,
   Checkbox,
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -23,12 +23,15 @@ import { useFormState } from 'react-dom';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { cn, defineLocaleValues } from '@/lib/utils';
-import { i18n } from '@/i18n';
-import { getTranslations } from 'next-intl/server';
+import { i18n } from '@/config';
 import { useTranslations } from 'next-intl';
+import { mutate } from 'swr';
+import { COLLECTION_PATH } from '@/lib/constants';
+import { useRouter } from '@/navigation';
 
 type TCategoryFormProps = {
   category?: TCategoryEntity;
+  swrKey?: string;
   onFormSubmit?: (data: TCategory) => void;
   submitRequested?: boolean;
   isShowSubmitButton?: boolean;
@@ -36,12 +39,14 @@ type TCategoryFormProps = {
 
 export const CategoryForm = ({
   category,
+  swrKey,
   onFormSubmit,
   submitRequested,
   isShowSubmitButton = true,
 }: TCategoryFormProps) => {
   const tAdm = useTranslations('Admin');
   const t = useTranslations('AdminCategories');
+  const router = useRouter();
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -70,6 +75,7 @@ export const CategoryForm = ({
     onError: (state) => toast.error(tAdm('One or more fields have an error. Please check them and try again.')),
     onSuccess: (state) => {
       toast.success(t(`Category successfully ${category?.id ? 'updated' : 'created'}!`));
+      swrKey ? mutate(swrKey) : mutate(COLLECTION_PATH.CATEGORIES);
       onFormSubmit && onFormSubmit(state.data as TCategory);
     },
     onFail: (state) => toast.error(state.message),
@@ -107,22 +113,6 @@ export const CategoryForm = ({
             )}
           />
         ))}
-        {/*<FormField*/}
-        {/*  name='name'*/}
-        {/*  control={control}*/}
-        {/*  render={({ field }) => (*/}
-        {/*    <FormItem>*/}
-        {/*      <FormLabel>*/}
-        {/*        Name <span className='text-red-600'>*</span>*/}
-        {/*      </FormLabel>*/}
-        {/*      <FormControl>*/}
-        {/*        <Input placeholder='Name' {...field} />*/}
-        {/*      </FormControl>*/}
-        {/*      <FormDescription>Enter category name</FormDescription>*/}
-        {/*      <FormMessage />*/}
-        {/*    </FormItem>*/}
-        {/*  )}*/}
-        {/*/>*/}
 
         <FormField
           name='order'
@@ -155,8 +145,11 @@ export const CategoryForm = ({
         />
 
         {isShowSubmitButton && (
-          <div className='mt-10'>
+          <div className='mt-10 flex gap-2'>
             <SubmitButton label={t('Save category')} pendingLabel={tAdm('wait')} icon={<Save />} />
+            <Button variant='secondary' type='button' onClick={() => router.back()}>
+              {tAdm('Cancel')}
+            </Button>
           </div>
         )}
       </form>

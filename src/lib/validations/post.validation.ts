@@ -1,8 +1,7 @@
 import { Option } from '@/components';
 import { getFileType } from '@/lib/utils';
 import { z } from 'zod';
-import { zfd } from 'zod-form-data';
-import { buildLocaleShape } from '@/lib/validations/base.validation';
+import { buildLocaleShape } from '@/lib/utils';
 
 export const MAX_SIZE_IMAGE = Number(process.env.NEXT_PUBLIC_MAX_SIZE_IMAGE) || 10;
 export const MAX_SIZE_VIDEO = Number(process.env.NEXT_PUBLIC_MAX_SIZE_VIDEO) || 100;
@@ -42,34 +41,3 @@ export const createPostSchema = z.object({
     .max(5, 'Maximum 5 files are allowed'),
   isActive: z.coerce.boolean(),
 });
-
-const basePostSchema = z.object({
-  name: buildLocaleShape(zfd.text(z.string().min(1, 'Required'))),
-  description: buildLocaleShape(zfd.text(z.string().optional().default(''))),
-  categories: zfd.repeatable(
-    // z.preprocess(val => [val].flat(),
-    z
-      .array(zfd.text())
-
-      // .array()
-      .min(1, 'At least one category should be selected'),
-    // )
-  ),
-  // media: zfd.repeatable(
-  //   // z.preprocess(val => [val].flat(),
-  //   z.array(zfd.text())
-  //     .min(1)
-  //   // )
-  // ),
-  isActive: z.coerce.boolean(),
-});
-
-export const createPostSchemaFD = zfd.formData(basePostSchema);
-
-export const updatePostSchemaFD = zfd.formData(
-  basePostSchema.and(
-    z.object({
-      id: zfd.text(),
-    }),
-  ),
-);

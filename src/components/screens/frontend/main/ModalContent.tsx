@@ -1,23 +1,25 @@
 'use client';
 
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components';
-import { TPostWithMediaEntity } from '@/types';
+import { TPostEntity } from '@/types';
 import Image from 'next/image';
 import { useLocale } from 'use-intl';
-import { TLocale } from '@/i18n';
+import { TLocale } from '@/config';
+import { useGetMedias } from '@/hooks';
 
 type TModalContentProps = {
-  post: TPostWithMediaEntity;
+  post: TPostEntity;
 };
 export const ModalContent = ({ post }: TModalContentProps) => {
-  const { media, description, categories, name } = post;
+  const { description, name } = post;
+  const { data: media } = useGetMedias({ filter: { postId: post.id } });
   const locale = useLocale() as TLocale;
 
   return (
     <div>
       <Carousel className='py-4 relative'>
         <CarouselContent>
-          {media.map(({ mediaType, url }, index) => (
+          {media?.map(({ mediaType, url }, index) => (
             <CarouselItem key={index} className='flex aspect-video relative'>
               {mediaType === 'image' && <Image src={url} alt={`${name} (${index})`} fill className='object-contain' />}
               {mediaType === 'video' && (

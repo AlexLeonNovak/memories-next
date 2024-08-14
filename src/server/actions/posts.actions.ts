@@ -1,34 +1,33 @@
 'use server';
 
-import { CategoryRepository, MediaRepository, PostRepository } from '@/lib/repositories';
-import { createPostSchemaFD, updatePostSchemaFD } from '@/lib/validations';
-import { parseSchemaFormData } from '@/lib/validations';
-import { TBaseEntity, TDeleteFormState, TFormState, TPost, TPostEntity, TQueryOptions } from '@/types';
-import { revalidatePathLocales } from '@/lib/utils';
-import { revalidatePath } from 'next/cache';
+import { createPostSchemaServer, updatePostSchemaServer } from './validations';
+import { parseSchemaFormData } from '@/server/utils';
+import { TDeleteFormState, TFormState, TPost, TPostEntity } from '@/types';
+import { createDocument, deleteDocument, updateDocument } from '@/server/mongodb';
+import { deleteMediasByPostId } from '@/server/actions/medias.actions';
 
-export const fetchPosts = (queryOptions?: TQueryOptions<TPostEntity>) => PostRepository.getAll(queryOptions);
-export const fetchPostById = (id: string) => PostRepository.getById(id);
+// export const fetchPosts = (queryOptions?: TQueryOptions<TPostEntity>) => PostRepository.getAll(queryOptions);
+// export const fetchPostById = (id: string) => PostRepository.getById(id);
 
-export const fetchPostsWithCategories = async (query?: TQueryOptions<TBaseEntity & TPost>) => {
-  const categories = await CategoryRepository.getAll();
-  const catIds = categories.map((category) => category.id);
-  const posts = await fetchPosts(query);
-  return posts.map((post) => ({
-    ...post,
-    categories: post.categories
-      .filter((catId) => catIds.includes(catId))
-      .map((categoryId) => categories.find(({ id }) => categoryId === id)!),
-  }));
-};
+// export const fetchPostsWithCategories = async (query?: TQueryOptions<TBaseEntity & TPost>) => {
+//   const categories = await getCategories();
+//   const catIds = categories.data.map((category) => category.id);
+//   const posts = await fetchPosts(query);
+//   return posts.map((post) => ({
+//     ...post,
+//     categories: post.categories
+//       .filter((catId) => catIds.includes(catId))
+//       .map((categoryId) => categories.find(({ id }) => categoryId === id)!),
+//   }));
+// };
 
 export const createPost = async (prevState: any, formData: FormData): Promise<TFormState<TPostEntity>> => {
   try {
-    const parsed = await parseSchemaFormData(createPostSchemaFD, formData);
+    const parsed = await parseSchemaFormData(createPostSchemaServer, formData);
     if (parsed.status === 'success') {
-      const data = await PostRepository.create(parsed.data);
-      revalidatePathLocales('/admin/posts');
-      revalidatePath('/');
+      const data = await createDocument<TPost>('posts', parsed.data);
+      // revalidatePathLocales('/admin/posts');
+      // revalidatePath('/');
       return { status: 'success', data };
     }
     return parsed;
@@ -42,13 +41,13 @@ export const createPost = async (prevState: any, formData: FormData): Promise<TF
 
 export const updatePost = async (prevState: any, formData: FormData): Promise<TFormState<TPostEntity>> => {
   try {
-    const parsed = await parseSchemaFormData(updatePostSchemaFD, formData);
+    const parsed = await parseSchemaFormData(updatePostSchemaServer, formData);
     if (parsed.status === 'success') {
       const { id, ...rest } = parsed.data;
-      const data = await PostRepository.update(id, rest);
+      const data = await updateDocument('posts', id, rest);
 
-      revalidatePathLocales('/admin/posts');
-      revalidatePath('/');
+      // revalidatePathLocales('/admin/posts');
+      // revalidatePath('/');
       return { status: 'success', data };
     }
     return parsed;
@@ -60,10 +59,12 @@ export const updatePost = async (prevState: any, formData: FormData): Promise<TF
 export const deletePost = async (prevState: any, formData: FormData): Promise<TDeleteFormState> => {
   try {
     const id = formData.get('id') as string;
-    await PostRepository.delete(id);
-    await MediaRepository.deleteMedia(id);
-    revalidatePathLocales('/admin/posts');
-    revalidatePath('/');
+    await deleteDocument('posts', id);
+    await deleteMediasByPostId(id);
+    // await deleteDocument('medias', id);
+
+    // revalidatePathLocales('/admin/posts');
+    // revalidatePath('/');
     return {
       success: true,
     };

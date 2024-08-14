@@ -1,5 +1,5 @@
 import { revalidatePath } from 'next/cache';
-import { i18n } from '@/i18n';
+import { i18n } from '@/config';
 import { ltrim } from '@/lib/utils/string';
 
 export const revalidatePathLocales = (path: string) => {

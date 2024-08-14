@@ -1,4 +1,6 @@
 import { FieldPath, OrderByDirection, WhereFilterOp } from '@firebase/firestore';
+import { COLLECTION_PATH } from '@/lib/constants';
+import { ValueOf } from '@/types/base';
 
 export type TQueryOrder<T> = {
   [key in keyof T]?: OrderByDirection;
@@ -21,4 +23,4 @@ export type TQueryOptionsWhere<T> = {
 
 export type TQueryOptions<T> = TQueryOrderOption<T> & TQueryOptionsWhere<T>;
 
-export type TCollections = 'posts' | 'medias' | 'categories' | 'leads' | 'translations';
+export type TCollections = ValueOf<typeof COLLECTION_PATH>;

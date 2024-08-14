@@ -1,8 +1,6 @@
-import { fetchCategories } from '@/server/actions/categories.actions';
-import { TCategory } from '@/types';
 import { z } from 'zod';
 import { zfd } from 'zod-form-data';
-import { buildLocaleShape, localeShape } from './base.validation';
+import { buildLocaleShape } from '@/lib/utils';
 
 const baseCategorySchema = z.object({
   name: buildLocaleShape(zfd.text(z.string().optional()).default('')),
@@ -11,27 +9,6 @@ const baseCategorySchema = z.object({
 });
 
 export const createCategorySchema = zfd.formData(baseCategorySchema);
-export const createCategorySchemaServer = zfd.formData(
-  baseCategorySchema.refine(
-    async ({ name }) => {
-      // TODO: fix validation
-      console.log('Validation', name);
-      // const categories = await fetchCategories({
-      //   where: {
-      //     fieldPath: 'name',
-      //     opStr: '==',
-      //     value: name,
-      //   },
-      // });
-      return false;
-      // return !categories.length;
-    },
-    {
-      message: 'Name is already in use',
-      path: ['name'],
-    },
-  ),
-);
 
 export const updateCategorySchema = zfd.formData(
   baseCategorySchema.and(

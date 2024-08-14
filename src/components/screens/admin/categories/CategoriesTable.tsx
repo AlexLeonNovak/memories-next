@@ -12,24 +12,31 @@ import {
   TableRow,
   TableSkeleton,
 } from '@/components';
-import { deleteCategory, fetchCategories } from '@/server/actions/categories.actions';
+import { deleteCategory } from '@/server/actions/categories.actions';
 import { Pencil } from 'lucide-react';
 import { Link } from '@/navigation';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
-import { TCategoryEntity } from '@/types';
+import { useEffect } from 'react';
+import { useGetCategories } from '@/hooks';
+import { toast } from 'sonner';
+import { i18n } from '@/config';
+import { useStateStore } from '@/lib/store';
 
 export const CategoriesTable = () => {
-  const [loading, setLoading] = useState(true);
-  const [categories, setCategories] = useState<TCategoryEntity[]>([]);
-  // const categories = await fetchCategories();
+  const { getStateValue } = useStateStore();
+  const { data: categories, isLoading, error, mutate } = useGetCategories();
   const tAdm = useTranslations('Admin');
   const t = useTranslations('AdminCategories');
 
   useEffect(() => {
-    fetchCategories()
-      .then(setCategories)
-      .finally(() => setLoading(false));
+    error && 'message' in error && toast.error(error.message);
+    console.error(error);
+  }, [error]);
+
+  useEffect(() => {
+    const isRevalidate = getStateValue('revalidateCategories');
+    isRevalidate && mutate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -43,20 +50,19 @@ export const CategoriesTable = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {loading && <TableSkeleton columns={4} />}
-        {categories &&
+        {isLoading ? (
+          <TableSkeleton columns={4} />
+        ) : (
           categories?.map(({ id, name, isActive }, index) => (
             <TableRow key={id}>
               <TableCell>{++index}</TableCell>
               <TableCell>
-                {typeof name === 'object'
-                  ? Object.entries(name).map(([locale, value]) => (
-                      <p key={locale} className='space-x-1'>
-                        <span className='text-muted-foreground uppercase'>{tAdm(`[${locale}]`)}</span>
-                        <span>{value}</span>
-                      </p>
-                    ))
-                  : name}
+                {i18n.locales.map((locale) => (
+                  <p key={locale} className='space-x-1'>
+                    <span className='text-muted-foreground uppercase'>{tAdm(`[${locale}]`)}</span>
+                    <span>{name[locale]}</span>
+                  </p>
+                ))}
               </TableCell>
               <TableCell>
                 <Badge variant={isActive ? 'success' : 'destructive'}>
@@ -67,6 +73,7 @@ export const CategoriesTable = () => {
                 <div className='flex gap-2'>
                   <DeleteForm
                     id={id}
+                    onDeleted={() => mutate()}
                     deleteAction={deleteCategory}
                     title={t('Delete category?')}
                     description={t('Are you sure you want to delete this category?')}
@@ -79,8 +86,9 @@ export const CategoriesTable = () => {
                 </div>
               </TableCell>
             </TableRow>
-          ))}
-        {!categories?.length && !loading && (
+          ))
+        )}
+        {!categories?.length && !isLoading && (
           <TableRow>
             <TableCell colSpan={4}>
               <p className='text-center text-2xl text-muted-foreground'>{tAdm('There are no items to display yet')}</p>

@@ -1,4 +1,4 @@
-import { Button, LanguageSwitcher } from '@/components';
+import { LanguageSwitcher } from '@/components';
 import Image from 'next/image';
 import './css/header.css';
 import { Link } from '@/navigation';

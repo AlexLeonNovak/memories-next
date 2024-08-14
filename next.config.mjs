@@ -3,6 +3,12 @@ import createNextIntlPlugin from 'next-intl/plugin';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
+  // webpack: (config) => ({
+  //   ...config,
+  //   experiments: {
+  //     asyncWebAssembly: true,
+  //   },
+  // }),
   images: {
     remotePatterns: [
       {
@@ -12,6 +18,12 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
+  },
+  compiler: {
+    removeConsole: {
+      exclude: ['error'],
+    },
+    reactRemoveProperties: true,
   },
 };
 

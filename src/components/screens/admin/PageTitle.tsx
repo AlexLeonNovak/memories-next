@@ -1,15 +1,16 @@
-// import Head from 'next/head';
-// TODO: Fix metadata
+'use client';
+
 type TPageTitleProps = {
   title: string;
   description?: string;
 };
-export const PageTitle = ({ title, description }: TPageTitleProps) => (
+
+// export function generateMetadata({ title, description }: TPageTitleProps) {
+//   return { title, description };
+// }
+
+export const PageTitle = ({ title }: TPageTitleProps) => (
   <>
-    {/*<Head>*/}
-    {/*  <title>{title}</title>*/}
-    {/*  {description && <meta name='description' content={description} key='desc' />}*/}
-    {/*</Head>*/}
     <h1 className='text-3xl'>{title}</h1>
   </>
 );

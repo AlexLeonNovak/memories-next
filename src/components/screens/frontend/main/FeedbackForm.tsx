@@ -43,7 +43,7 @@ export const FeedbackForm = () => {
 
   return (
     <Form {...form}>
-      <form action={action}>
+      <form>
         <FormField
           name='organisation'
           control={control}

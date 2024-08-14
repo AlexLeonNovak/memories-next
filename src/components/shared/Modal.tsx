@@ -1,9 +1,12 @@
-import { Button, Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader } from '@/components/ui';
+'use client';
+
+import { Button, Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui';
 import { Ban, Plus, Save } from 'lucide-react';
 import { Dispatch, ReactNode, SetStateAction } from 'react';
 
 type TModalProps = {
   children: ReactNode;
+  className?: string;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   title?: string;
@@ -18,6 +21,7 @@ type TModalProps = {
 
 export const Modal = ({
   children,
+  className,
   open,
   setOpen,
   title,
@@ -26,8 +30,8 @@ export const Modal = ({
 }: TModalProps) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
-        {title && <DialogHeader>{title}</DialogHeader>}
+      <DialogContent className={className}>
+        {title && <DialogTitle>{title}</DialogTitle>}
         {children}
         <DialogFooter>
           {footer}

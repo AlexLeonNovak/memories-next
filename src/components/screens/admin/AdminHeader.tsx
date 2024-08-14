@@ -9,10 +9,11 @@ import { useRouter } from '@/navigation';
 import { useTranslations } from 'next-intl';
 
 export const AdminHeader = () => {
+  const tAdm = useTranslations('Admin');
   const router = useRouter();
   const [state, action] = useFormState(logout, null);
   useFormCheck({ state, onFinally: () => router.replace('/') });
-  const tAdm = useTranslations('Admin');
+
   return (
     <div className='flex h-[60px] border-b gap-4 bg-gray-50 items-center justify-end px-4'>
       <LanguageSwitcher />

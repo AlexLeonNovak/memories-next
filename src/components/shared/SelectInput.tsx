@@ -15,9 +15,9 @@ type TSelectInputProps = SelectProps & {
   placeholder: string;
   onValueChange?(value?: string): void;
 };
-export const SelectInput = ({ items, placeholder, onValueChange, ...props }: TSelectInputProps) => {
+export const SelectInput = ({ items, value: initValue, placeholder, onValueChange, ...props }: TSelectInputProps) => {
   const [key, setKey] = useState(+new Date());
-  const [value, setValue] = useState<string | undefined>(undefined);
+  const [value, setValue] = useState<string | undefined>(initValue || undefined);
   const tAdm = useTranslations('Admin');
 
   return (

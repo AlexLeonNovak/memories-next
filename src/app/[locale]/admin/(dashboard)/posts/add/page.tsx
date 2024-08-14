@@ -1,13 +1,13 @@
 import { PageTitle, PostForm } from '@/components';
-import { fetchCategories } from '@/server/actions/categories.actions';
+import { getTranslations } from 'next-intl/server';
 
 export default async function AddPostPage() {
-  const categories = await fetchCategories();
+  const t = await getTranslations('Admin');
 
   return (
     <>
-      <PageTitle title='Create new post' />
-      <PostForm categories={categories} />
+      <PageTitle title={t('Create new post')} />
+      <PostForm />
     </>
   );
 }

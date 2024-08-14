@@ -5,15 +5,17 @@ import { useRouter, usePathname } from '@/navigation';
 import { Button } from '@/components';
 import { Fragment, MouseEvent, useTransition } from 'react';
 import { cn } from '@/lib/utils';
-import { i18n } from '@/i18n';
+import { locales } from '@/config';
 import { useTranslations } from 'next-intl';
+import { useLocale } from 'use-intl';
 
 export const LanguageSwitcher = () => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const pathname = usePathname();
-  const params = useParams<{ locale: string }>();
+  // const params = useParams<{ locale: string }>();
   const t = useTranslations('LanguageSwitcher');
+  const currentLocale = useLocale();
 
   const onLanguageChange = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -25,19 +27,19 @@ export const LanguageSwitcher = () => {
 
   return (
     <div className='header-lang-switcher'>
-      {i18n.locales.map((locale, index) => (
+      {locales.map((locale, index) => (
         <Fragment key={locale}>
           <Button
             variant='link'
-            className={cn('px-0 uppercase', params.locale === locale && 'underline')}
-            disabled={params.locale === locale || isPending}
+            className={cn('px-0 uppercase', currentLocale === locale && 'underline')}
+            disabled={currentLocale === locale || isPending}
             value={locale}
             onClick={onLanguageChange}
           >
             {t(locale)}
           </Button>
           {/* eslint-disable-next-line react/jsx-no-literals */}
-          {index + 1 < i18n.locales.length && <span className='mx-[5px]'>/</span>}
+          {/*{index + 1 < locales.length && <span className='mx-[5px]'>/</span>}*/}
         </Fragment>
       ))}
     </div>

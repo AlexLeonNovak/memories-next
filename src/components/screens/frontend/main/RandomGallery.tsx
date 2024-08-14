@@ -1,39 +1,40 @@
 'use client';
 
 import { GalleryItem, Modal, ModalContent } from '@/components';
-import { MediaRepository } from '@/lib/repositories';
 import { TGalleryItemsWithLevel, createGallery } from '@/lib/utils';
-import { TMediaWithPostEntity, TPostWithMediaEntity } from '@/types';
+import { TMediaWithPostEntity, TPostEntity } from '@/types';
 import { LoaderCircle } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useLocale } from 'use-intl';
-import { TLocale } from '@/i18n';
+import { TLocale } from '@/config';
 import { useTranslations } from 'next-intl';
+import { useGetPosts, useGetMedias } from '@/hooks';
 
-type TRandomGalleryProps = {
-  medias: TMediaWithPostEntity[];
-};
-
-export const RandomGallery = ({ medias }: TRandomGalleryProps) => {
+export const RandomGallery = () => {
+  const { data: medias } = useGetMedias();
+  const { data: posts } = useGetPosts();
   const locale = useLocale() as TLocale;
   const t = useTranslations('Main');
 
   const [gallery, setGallery] = useState<TGalleryItemsWithLevel<TMediaWithPostEntity>[]>([]);
   const [showModalInfo, setShowModalInfo] = useState(false);
-  const [post, setPost] = useState<TPostWithMediaEntity>();
+  const [post, setPost] = useState<TPostEntity>();
   const containerRef = useRef<HTMLDivElement>(null);
 
   const onItemClick = async (item: TMediaWithPostEntity) => {
     setShowModalInfo(true);
-    const media = await MediaRepository.getMedias(item.postId);
-    setPost({ ...item.post, media });
+    // const media = await MediaRepository.getMedias(item.postId);
+    setPost(item.post);
   };
 
   useEffect(() => {
-    if (!containerRef.current) return;
-    const { itemsWithLevels, unplacedItems } = createGallery(containerRef.current, medias, 1);
+    if (!containerRef.current || !medias || !posts) {
+      return;
+    }
+    const mediaWithPosts = medias.map((m) => ({ ...m, post: posts.find((p) => p.id === m.postId)! }));
+    const { itemsWithLevels, unplacedItems } = createGallery(containerRef.current, mediaWithPosts, 1);
     setGallery(itemsWithLevels);
-  }, [medias]);
+  }, [medias, posts]);
 
   return (
     <div className='w-full h-full relative' ref={containerRef}>

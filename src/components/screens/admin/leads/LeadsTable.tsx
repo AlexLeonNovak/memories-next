@@ -1,23 +1,13 @@
 'use client';
 
 import { DeleteForm, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableSkeleton } from '@/components';
-import { deleteLead, fetchLeads } from '@/server/actions/leads.actions';
+import { deleteLead } from '@/server/actions/leads.actions';
 import { DateTime } from 'luxon';
-import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { TLeadEntity } from '@/types';
+import { useGetLeads } from '@/hooks';
 
 export const LeadsTable = () => {
-  const [loading, setLoading] = useState(true);
-  const [leads, setLeads] = useState<TLeadEntity[]>([]);
-
-  useEffect(() => {
-    fetchLeads({
-      order: { createdAt: 'desc' },
-    })
-      .then(setLeads)
-      .finally(() => setLoading(false));
-  }, []);
+  const { data, mutate, isLoading } = useGetLeads();
 
   const tAdm = useTranslations('Admin');
   const t = useTranslations('AdminLeads');
@@ -36,9 +26,9 @@ export const LeadsTable = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {loading && <TableSkeleton columns={7} />}
-        {leads &&
-          leads.map(({ id, name, organisation, phone, email, createdAt }, index) => (
+        {isLoading && <TableSkeleton columns={7} />}
+        {!isLoading &&
+          data?.map(({ id, name, organisation, phone, email, createdAt }, index) => (
             <TableRow key={id}>
               <TableCell>{++index}</TableCell>
               <TableCell>{name}</TableCell>
@@ -53,12 +43,13 @@ export const LeadsTable = () => {
                     deleteAction={deleteLead}
                     title={t('Delete lead?')}
                     description={t('Are you sure you want to delete this lead?')}
+                    onDeleted={() => mutate()}
                   />
                 </div>
               </TableCell>
             </TableRow>
           ))}
-        {!leads.length && !loading && (
+        {!data?.length && !isLoading && (
           <TableRow>
             <TableCell colSpan={7}>
               <p className='text-center text-2xl text-muted-foreground'>{tAdm('There are no items to display yet')}</p>

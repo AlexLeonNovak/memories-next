@@ -1,8 +1,8 @@
-import { i18n, TLocale } from '@/i18n';
 import { AbstractIntlMessages } from 'use-intl';
-import { TQueryFilter, TTranslationEntity } from '@/types';
-import { TranslationRepository } from '@/lib/repositories';
-import { getMessages } from 'next-intl/server';
+import { i18n, TLocale } from '@/config';
+import { createDocument } from '@/server/firebase';
+import { TCheckTranslations, TTranslation } from '@/types';
+import { useGetTranslations } from '@/hooks';
 
 export const defineLocaleValues = <T>(value: T) => {
   const values = {} as { [locale in TLocale]?: T };
@@ -12,37 +12,28 @@ export const defineLocaleValues = <T>(value: T) => {
   return values;
 };
 
-const checking: { [key: string]: boolean } = {};
-
-type TCheckTranslations = {
-  key: string;
-  namespace?: string;
-  messages: AbstractIntlMessages;
-};
-export const checkTranslation = async ({ key, namespace, messages }: TCheckTranslations) => {
-  let isValueIsset: boolean;
-  if (namespace && namespace in messages) {
-    isValueIsset = key in (messages[namespace] as AbstractIntlMessages);
-  } else {
-    isValueIsset = key in messages;
-  }
-  if (isValueIsset) {
-    return;
-  }
-  if (key in checking && checking[key]) {
-    return;
-  }
-  checking[key] = true;
-  const where: TQueryFilter<TTranslationEntity>[] = [{ fieldPath: 'key', opStr: '==', value: key }];
-  if (namespace) {
-    where.push({ fieldPath: 'namespace', opStr: '==', value: namespace });
-  }
-  const translations = await TranslationRepository.getAll({ where });
-  if (!translations.length) {
-    await TranslationRepository.create({
-      key,
-      namespace,
-    });
-  }
-  checking[key] = false;
-};
+// const checking: { [key: string]: boolean } = {};
+//
+//
+// export const checkTranslations = ({ key, namespace }: TCheckTranslations) => {
+//   const path = [namespace, key].filter((part) => part != null).join('.');
+//   if (path in checking && checking[path]) {
+//     return;
+//   }
+//   checking[path] = true;
+//   const { data: translations } = useGetTranslations();
+//   let isValueIsset: boolean;
+//   const data: Partial<TTranslation> = { key };
+//   if (namespace) {
+//     isValueIsset = translations?.some((t) => t.namespace === namespace && t.key === key);
+//     data.namespace = namespace;
+//   } else {
+//     isValueIsset = translations?.some((t) => t.key === key);
+//   }
+//   if (isValueIsset) {
+//     return;
+//   }
+//
+//   await createDocument('translations', data);
+//   checking[key] = false;
+// };

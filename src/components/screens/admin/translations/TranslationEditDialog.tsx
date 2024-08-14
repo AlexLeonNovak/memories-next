@@ -23,6 +23,7 @@ export const TranslationEditDialog = ({ translation, onUpdate }: TranslationEdit
         <Pencil />
       </Button>
       <Modal
+        className='sm:w-2/3'
         open={show}
         setOpen={setShow}
         title={t('Update translation')}

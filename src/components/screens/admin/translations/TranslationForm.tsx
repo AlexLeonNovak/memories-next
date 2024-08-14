@@ -1,8 +1,8 @@
 'use client';
 
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '@/components';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, Wysiwyg } from '@/components';
 import { TTranslation, TTranslationEntity } from '@/types';
-import { i18n } from '@/i18n';
+import { i18n } from '@/config';
 import { useForm } from 'react-hook-form';
 import { useFormState } from 'react-dom';
 import { updateTranslation } from '@/server/actions/translations.actions';
@@ -19,6 +19,7 @@ type TTranslationFormProps = {
 };
 export const TranslationForm = ({ translation, onFormSubmit, onFinally, submitRequested }: TTranslationFormProps) => {
   const { id, key, namespace } = translation;
+  const isHTML = key.startsWith('[html]');
   const tAdm = useTranslations('Admin');
   const t = useTranslations('AdminTranslations');
 
@@ -75,7 +76,14 @@ export const TranslationForm = ({ translation, onFormSubmit, onFinally, submitRe
               <FormItem>
                 <FormLabel className='uppercase'>{locale}</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  {isHTML ? (
+                    <>
+                      <Input type='hidden' name={field.name} value={field.value} />
+                      <Wysiwyg onChange={field.onChange} value={field.value} />
+                    </>
+                  ) : (
+                    <Input {...field} />
+                  )}
                 </FormControl>
                 <FormMessage />
               </FormItem>

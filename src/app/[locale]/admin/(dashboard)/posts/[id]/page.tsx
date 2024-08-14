@@ -1,7 +1,8 @@
 import { PageTitle, PostForm } from '@/components';
-import { fetchCategories } from '@/server/actions/categories.actions';
-import { fetchPostById } from '@/server/actions/posts.actions';
 import { notFound } from 'next/navigation';
+import { getMedias, getPostById } from '@/server/swr';
+import { getLocale, getTranslations } from 'next-intl/server';
+import { TLocale } from '@/config';
 
 type TEditCategoryPage = {
   params: {
@@ -10,18 +11,20 @@ type TEditCategoryPage = {
 };
 
 export default async function EditPostPage({ params: { id } }: TEditCategoryPage) {
-  const post = await fetchPostById(id);
+  const { data: post, key } = await getPostById(id);
 
   if (!post) {
     return notFound();
   }
 
-  const categories = await fetchCategories();
+  const { data: medias } = await getMedias({ filter: { postId: post.id } });
+  const locale = (await getLocale()) as TLocale;
+  const t = await getTranslations('Admin');
 
   return (
     <>
-      <PageTitle title={`Edit post: "${post.name}"`} />
-      <PostForm post={post} categories={categories} />
+      <PageTitle title={t('Edit post: "{name}"', { name: post.name[locale] })} />
+      <PostForm post={post} swrKey={key} medias={medias} />
     </>
   );
 }

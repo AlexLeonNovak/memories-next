@@ -1,5 +1,5 @@
 import { MiddlewareFactory } from './stackMiddlewares';
-import { i18n } from '@/i18n';
+import { i18n } from '@/config';
 import createMiddleware from 'next-intl/middleware';
 
 export const i18nMiddleware = createMiddleware(i18n);

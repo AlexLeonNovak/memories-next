@@ -1,24 +1,25 @@
 'use server';
 
-import { CategoryRepository, PostRepository } from '@/lib/repositories';
-import { createCategorySchemaServer, updateCategorySchema } from '@/lib/validations';
-import { parseSchemaFormData } from '@/lib/validations';
-import { TCategoryEntity, TDeleteFormState, TFormState, TQueryOptions } from '@/types';
+import { createCategorySchemaServer, updateCategorySchemaServer } from './validations';
+import { TCategoryEntity, TDeleteFormState, TFormState, TPostEntity, TQueryOptions } from '@/types';
 import { revalidatePathLocales } from '@/lib/utils';
+import { parseSchemaFormData } from '@/server/utils';
 import { revalidatePath } from 'next/cache';
+import { createDocument, deleteDocument, updateDocument } from '@/server/mongodb';
+import { getPosts } from '@/server/swr';
 
-export const fetchCategories = (queryOptions?: TQueryOptions<TCategoryEntity>) =>
-  CategoryRepository.getAll(queryOptions);
-
-export const fetchCategoryById = (id: string) => CategoryRepository.getById(id);
+// export const fetchCategories = (queryOptions?: TQueryOptions<TCategoryEntity>) =>
+//   CategoryRepository.getAll(queryOptions);
+//
+// export const fetchCategoryById = (id: string) => CategoryRepository.getById(id);
 
 export async function createCategory(prevState: any, formData: FormData): Promise<TFormState<TCategoryEntity>> {
   try {
     const parsed = await parseSchemaFormData(createCategorySchemaServer, formData);
     if (parsed.status === 'success') {
-      const data = await CategoryRepository.create(parsed.data);
-      revalidatePathLocales('/admin/categories');
-      revalidatePath('/');
+      const data = await createDocument('categories', parsed.data);
+      // revalidatePathLocales('/admin/categories');
+      // revalidatePath('/');
       return { status: 'success', data };
     }
     return parsed;
@@ -29,12 +30,12 @@ export async function createCategory(prevState: any, formData: FormData): Promis
 
 export async function updateCategory(prevState: any, formData: FormData): Promise<TFormState<TCategoryEntity>> {
   try {
-    const parsed = await parseSchemaFormData(updateCategorySchema, formData);
+    const parsed = await parseSchemaFormData(updateCategorySchemaServer, formData);
     if (parsed.status === 'success') {
       const { id, ...rest } = parsed.data;
-      const data = await CategoryRepository.update(id, rest);
-      revalidatePathLocales('/admin/categories');
-      revalidatePath('/');
+      const data = await updateDocument('categories', id, rest);
+      // revalidatePathLocales('/admin/categories');
+      // revalidatePath('/');
       return { status: 'success', data };
     }
     return parsed;
@@ -45,20 +46,14 @@ export async function updateCategory(prevState: any, formData: FormData): Promis
 
 export async function deleteCategory(prevState: any, formData: FormData): Promise<TDeleteFormState> {
   try {
-    const id = formData.get('id');
-    const posts = await PostRepository.getAll({
-      where: {
-        fieldPath: 'categories',
-        opStr: 'array-contains',
-        value: id,
-      },
-    });
-    if (posts.length) {
-      throw new Error('This category used in posts: ' + posts.map(({ name }) => name).join(', '));
+    const id = formData.get('id') as string;
+    const posts = await getPosts({ filter: { categories: id } });
+    if (posts.data.length) {
+      throw new Error('This category used in some posts');
     }
-    id && (await CategoryRepository.delete(id as string));
-    revalidatePathLocales('/admin/categories');
-    revalidatePath('/');
+    id && (await deleteDocument('categories', id as string));
+    // revalidatePathLocales('/admin/categories');
+    // revalidatePath('/');
     return {
       success: true,
     };

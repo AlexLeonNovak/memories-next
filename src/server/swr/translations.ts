@@ -1,13 +1,13 @@
-import { createCRUD } from '@/lib/services';
-import { TTranslation } from '@/types';
-import { TLocale } from '@/i18n';
+import { TGetAllDocuments, TTranslationEntity } from '@/types';
+import { getCollectionCached } from '@/server/swr/base';
+import { TLocale } from '@/config';
 import { AbstractIntlMessages } from 'use-intl';
-// import { doc, query, where, groupBy } from '@firebase/firestore';
 
-const crud = createCRUD<TTranslation>('translations');
+export const getTranslations = (params?: Omit<TGetAllDocuments<TTranslationEntity>, 'path'>) =>
+  getCollectionCached<TTranslationEntity>({ path: 'translations', ...params });
 
-const getMessages = async (locale: TLocale) => {
-  const allMessages = await crud.getAll();
+export const getTranslationMessages = async (locale: TLocale) => {
+  const { data: allMessages } = await getTranslations();
   const messages: AbstractIntlMessages = {};
   for (const message of allMessages) {
     const { namespace, key } = message;
@@ -26,4 +26,3 @@ const getMessages = async (locale: TLocale) => {
   }
   return messages;
 };
-export const TranslationRepository = { ...crud, getMessages };

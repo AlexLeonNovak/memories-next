@@ -12,28 +12,38 @@ import {
   TableRow,
   TableSkeleton,
 } from '@/components';
-import { deletePost, fetchPostsWithCategories } from '@/server/actions/posts.actions';
+import { deletePost } from '@/server/actions/posts.actions';
 import { Pencil } from 'lucide-react';
 import { Link } from '@/navigation';
-import { TLocale } from '@/i18n';
+import { i18n, TLocale } from '@/config';
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useLocale } from 'use-intl';
-import { TPostWithCategories } from '@/types';
+import { useGetCategories, useGetPosts } from '@/hooks';
+import { toast } from 'sonner';
+import { useSearchParams } from 'next/navigation';
+import { useStateStore } from '@/lib/store';
 
 export const PostsTable = () => {
-  const [loading, setLoading] = useState(true);
-  const [posts, setPosts] = useState<TPostWithCategories[]>([]);
+  const { getStateValue } = useStateStore();
+  const posts = useGetPosts();
+  const categories = useGetCategories();
+  const isLoading = posts.isLoading && categories.isLoading;
   const tAdm = useTranslations('Admin');
   const t = useTranslations('AdminPosts');
   const locale = useLocale() as TLocale;
 
   useEffect(() => {
-    fetchPostsWithCategories({
-      order: { createdAt: 'desc' },
-    })
-      .then(setPosts)
-      .finally(() => setLoading(false));
+    for (const error of [posts.error, categories.error]) {
+      error && 'message' in error && toast.error(error.message);
+      console.error(error);
+    }
+  }, [posts.error, categories.error]);
+
+  useEffect(() => {
+    const isRevalidate = getStateValue('revalidatePosts');
+    isRevalidate && posts.mutate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -48,52 +58,51 @@ export const PostsTable = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {loading && <TableSkeleton columns={5} />}
-        {posts &&
-          posts.map(({ id, name, categories, isActive }, index) => (
-            <TableRow key={id}>
-              <TableCell>{++index}</TableCell>
-              <TableCell>
-                {typeof name === 'object'
-                  ? Object.entries(name).map(([locale, value]) => (
-                      <p key={locale} className='space-x-1'>
-                        <span className='text-muted-foreground uppercase'>{tAdm(`[${locale}]`)}</span>
-                        <span>{value}</span>
-                      </p>
-                    ))
-                  : name}
-              </TableCell>
-              <TableCell>
-                <div className='flex flex-wrap gap-1'>
-                  {categories.map(({ id, name }) => (
-                    <Badge key={id}>{name[locale]}</Badge>
-                  ))}
-                </div>
-              </TableCell>
-              <TableCell>
-                <Badge variant={isActive ? 'success' : 'destructive'}>
-                  {isActive ? tAdm('Active') : tAdm('No active')}
-                </Badge>
-              </TableCell>
-              <TableCell>
-                <div className='flex gap-2'>
-                  <DeleteForm
-                    id={id}
-                    deleteAction={deletePost}
-                    title={t('Delete post?')}
-                    description={t('Are you sure you want to delete this post?')}
-                  />
-                  <Button asChild variant='ghost'>
-                    <Link href={`posts/${id}`}>
-                      <Pencil />
-                    </Link>
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
+        {isLoading && <TableSkeleton columns={5} />}
+        {posts.data?.map(({ id, name, categories: catIds, isActive }, index) => (
+          <TableRow key={id}>
+            <TableCell>{++index}</TableCell>
+            <TableCell>
+              {i18n.locales.map((locale) => (
+                <p key={locale} className='space-x-1'>
+                  <span className='text-muted-foreground uppercase'>{tAdm(`[${locale}]`)}</span>
+                  <span>{name[locale]}</span>
+                </p>
+              ))}
+            </TableCell>
+            <TableCell>
+              <div className='flex flex-wrap gap-1'>
+                {catIds?.length &&
+                  categories.data
+                    ?.filter((c) => catIds.includes(c.id))
+                    .map(({ id, name }) => <Badge key={id}>{name[locale]}</Badge>)}
+              </div>
+            </TableCell>
+            <TableCell>
+              <Badge variant={isActive ? 'success' : 'destructive'}>
+                {isActive ? tAdm('Active') : tAdm('No active')}
+              </Badge>
+            </TableCell>
+            <TableCell>
+              <div className='flex gap-2'>
+                <DeleteForm
+                  id={id}
+                  deleteAction={deletePost}
+                  onDeleted={() => posts.mutate()}
+                  title={t('Delete post?')}
+                  description={t('Are you sure you want to delete this post?')}
+                />
+                <Button asChild variant='ghost'>
+                  <Link href={`posts/${id}`}>
+                    <Pencil />
+                  </Link>
+                </Button>
+              </div>
+            </TableCell>
+          </TableRow>
+        ))}
 
-        {!posts?.length && !loading && (
+        {!posts.data?.length && !posts.isLoading && (
           <TableRow>
             <TableCell colSpan={5}>
               <p className='text-center text-2xl text-muted-foreground'>{tAdm('There are no items to display yet')}</p>

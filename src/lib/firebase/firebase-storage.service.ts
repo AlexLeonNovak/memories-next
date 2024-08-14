@@ -9,7 +9,7 @@ import {
   ref,
   uploadBytesResumable,
 } from '@firebase/storage';
-import { BUCKET_URL, getFirebaseApp } from '.';
+import { BUCKET_URL, getFirebaseApp } from './index';
 
 export const UPLOADS_PATH = 'uploads';
 

@@ -1,24 +1,36 @@
 'use server';
 
-import { parseSchemaFormData, loginSchema } from '@/lib/validations';
-import { getFirebaseAuth } from '@/lib/services';
+import { loginSchema } from '@/lib/validations';
+import { getFirebaseAuth } from '@/lib/firebase';
+import { firebaseAdminAuth } from '@/server/firebase';
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { TFormState } from '@/types';
 import { UserInfo } from '@firebase/auth-types';
 import { cookies } from 'next/headers';
 import { SESSION_COOKIE_NAME, SESSION_COOKIE_EXPIRES_IN } from '@/lib/constants';
+import { parseSchemaFormData } from '@/server/utils';
 
-export const createSession = async (value: string) =>
+export const createSession = async (tokenId: string) => {
+  const session = await firebaseAdminAuth.createSessionCookie(tokenId, { expiresIn: SESSION_COOKIE_EXPIRES_IN * 1000 });
   cookies().set({
     name: SESSION_COOKIE_NAME,
-    value,
+    value: session,
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     maxAge: SESSION_COOKIE_EXPIRES_IN,
     path: '/',
   });
+};
 
-export const clearSession = async () => cookies().delete(SESSION_COOKIE_NAME);
+export const clearSession = async () => {
+  const session = cookies().get(SESSION_COOKIE_NAME)?.value;
+  if (!session) {
+    return;
+  }
+  const user = await firebaseAdminAuth.verifySessionCookie(session, true);
+  user && (await firebaseAdminAuth.revokeRefreshTokens(user.uid));
+  cookies().delete(SESSION_COOKIE_NAME);
+};
 
 export const loginWithEmailAndPassword = async (prevState: any, formData: FormData): Promise<TFormState<UserInfo>> => {
   try {
@@ -46,4 +58,12 @@ export const logout = async () => {
   await signOut(auth);
   await clearSession();
   return null;
+};
+
+export const getUser = async () => {
+  const session = cookies().get(SESSION_COOKIE_NAME)?.value;
+  if (!session) {
+    return null;
+  }
+  return firebaseAdminAuth.verifySessionCookie(session, true);
 };

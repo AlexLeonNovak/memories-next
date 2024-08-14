@@ -1,3 +1,5 @@
+'use client';
+
 import { useGalleryStore } from '@/lib/store';
 import { cn, random } from '@/lib/utils';
 import { TMediaWithPostEntity } from '@/types';

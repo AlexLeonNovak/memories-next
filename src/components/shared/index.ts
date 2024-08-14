@@ -4,3 +4,4 @@ export * from './SubmitButton';
 export * from './ConfirmDialog';
 export * from './SelectInput';
 export * from './LanguageSwitcher';
+export * from './Wysiwyg';

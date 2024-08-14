@@ -1,3 +1,5 @@
+'use client';
+
 import { Skeleton, TableCell, TableRow } from '@/components';
 
 type TTableSkeletonProps = {

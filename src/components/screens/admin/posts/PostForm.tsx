@@ -2,6 +2,7 @@
 
 import {
   AspectRatio,
+  Button,
   CategoryDialog,
   Checkbox,
   FileInput,
@@ -10,7 +11,6 @@ import {
   FileUploaderItem,
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -21,13 +21,12 @@ import {
   SubmitButton,
   Textarea,
 } from '@/components';
-import { useFormCheck } from '@/hooks';
-import { MediaRepository, PostRepository } from '@/lib/repositories';
-import { getFileJs } from '@/lib/services';
+import { useFormCheck, useGetCategories } from '@/hooks';
+import { getFileJs } from '@/lib/firebase';
 import { cn, defineLocaleValues, getFileType } from '@/lib/utils';
 import { MAX_SIZE_IMAGE, MAX_SIZE_VIDEO, createPostSchema } from '@/lib/validations';
-import { createPost, updatePost } from '@/server/actions/posts.actions';
-import { TCategory, TPostEntity } from '@/types';
+import { createPost, deletePost, updatePost } from '@/server/actions/posts.actions';
+import { TMediaEntity, TPostEntity } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CloudUpload, FileVideo, LoaderCircle, Save } from 'lucide-react';
 import Image from 'next/image';
@@ -40,28 +39,38 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 import { useTranslations } from 'next-intl';
 import { useLocale } from 'use-intl';
-import { i18n, TLocale } from '@/i18n';
+import { i18n, TLocale } from '@/config';
+import { mutate } from 'swr';
+import { COLLECTION_PATH } from '@/lib/constants';
+import { uploadMediaFiles } from '@/lib/services';
+import { bulkCreateMedias } from '@/server/actions/medias.actions';
+import { useStateStore } from '@/lib/store';
 
 type TPostFormProps = {
-  categories: Array<TCategory & { id: string }>;
   post?: TPostEntity;
+  medias?: TMediaEntity[];
+  swrKey?: string;
+  onFormSubmit?: (data: TPostEntity) => void;
 };
 
 type TPostForm = z.infer<typeof createPostSchema>;
 
-export const PostForm = ({ post, categories = [] }: TPostFormProps) => {
+export const PostForm = ({ post, swrKey, medias, onFormSubmit }: TPostFormProps) => {
+  const { setStateValue } = useStateStore();
   const tAdm = useTranslations('Admin');
   const t = useTranslations('AdminPosts');
+  const categories = useGetCategories();
 
   const [isMediaLoading, setIsMediaLoading] = useState(false);
   const [pending, setPending] = useState(false);
   const router = useRouter();
   const locale = useLocale() as TLocale;
-  const categoryOptions: Option[] = categories.map(({ id, name, isActive }) => ({
-    label: name[locale] || '',
-    value: id,
-    disable: !isActive,
-  }));
+  const categoryOptions: Option[] =
+    categories?.data?.map(({ id, name, isActive }) => ({
+      label: name[locale] || '',
+      value: id,
+      disable: !isActive,
+    })) || [];
 
   if (post && typeof post?.name !== 'object') {
     post.name = defineLocaleValues(post.name);
@@ -106,14 +115,28 @@ export const PostForm = ({ post, categories = [] }: TPostFormProps) => {
       const { id } = state.data;
       try {
         const files = getValues('files');
-        await MediaRepository.saveMedia(id, files);
+        const medias = await uploadMediaFiles(id, files);
+        const result = await bulkCreateMedias(id, medias);
+        if (result.status === 'error') {
+          setError('files', { message: t('Save files error') });
+          throw new Error(result.errors.map(({ message }) => message).join('\n'));
+        }
+        if (result.status === 'fail') {
+          throw new Error(result.message);
+        }
         toast.success(t(`Post successfully ${post?.id ? 'updated' : 'created'}!`));
+        onFormSubmit && onFormSubmit(state.data);
+        setStateValue('revalidatePosts', true);
         router.push('/admin/posts');
       } catch (e) {
         toast.error(tAdm((e as Error).message));
-        await PostRepository.delete(id);
-        await MediaRepository.deleteMedia(id);
+        if (!post) {
+          const fd = new FormData();
+          fd.set('id', id);
+          await deletePost(null, fd);
+        }
       }
+      swrKey ? await mutate(swrKey) : await mutate(COLLECTION_PATH.POSTS);
     },
     onError: () => toast.error(tAdm('One or more fields have an error. Please check them and try again.')),
     onFail: (state) => toast.error(tAdm(state.message)),
@@ -121,17 +144,13 @@ export const PostForm = ({ post, categories = [] }: TPostFormProps) => {
   });
 
   useEffect(() => {
-    if (post?.id) {
+    if (medias?.length) {
       setIsMediaLoading(true);
-      const loadFiles = async (postId: string) => {
-        const medias = await MediaRepository.getMedias(postId);
-        return Promise.all(medias.map(({ url }) => getFileJs(url)));
-      };
-      loadFiles(post.id)
+      Promise.all(medias.map(({ url }) => getFileJs(url)))
         .then((files) => setValue('files', files))
         .finally(() => setIsMediaLoading(false));
     }
-  }, [post, setValue, setIsMediaLoading]);
+  }, [medias, setValue, setIsMediaLoading]);
 
   return (
     <Form {...form}>
@@ -287,13 +306,18 @@ export const PostForm = ({ post, categories = [] }: TPostFormProps) => {
           )}
         />
 
-        <SubmitButton
-          className='mt-10'
-          label={t('Save post')}
-          isPending={pending}
-          pendingLabel={tAdm('wait')}
-          icon={<Save />}
-        />
+        <div className='mt-10 flex gap-2'>
+          <SubmitButton
+            className='mt-10'
+            label={t('Save post')}
+            isPending={pending}
+            pendingLabel={tAdm('wait')}
+            icon={<Save />}
+          />
+          <Button variant='secondary' type='button' onClick={() => router.back()}>
+            {tAdm('Cancel')}
+          </Button>
+        </div>
       </form>
     </Form>
   );

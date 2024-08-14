@@ -1,8 +1,8 @@
 'use client';
 
-import './css/footer.css';
 import { Link } from '@/navigation';
 import { useTranslations } from 'next-intl';
+import './css/footer.css';
 
 export const Footer = () => {
   const t = useTranslations('MainFooter');

@@ -78,6 +78,7 @@ export const FileUploader = forwardRef<HTMLDivElement, FileUploaderProps & React
       if (dropzoneState.inputRef.current) {
         dropzoneState.inputRef.current.files = dataTransfer.files;
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const removeFileFromSet = useCallback(
@@ -132,6 +133,7 @@ export const FileUploader = forwardRef<HTMLDivElement, FileUploaderProps & React
           setActiveIndex(-1);
         }
       },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       [value, activeIndex, removeFileFromSet],
     );
 
@@ -172,6 +174,7 @@ export const FileUploader = forwardRef<HTMLDivElement, FileUploaderProps & React
           }
         }
       },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       [reSelectAll, value],
     );
 
@@ -182,6 +185,7 @@ export const FileUploader = forwardRef<HTMLDivElement, FileUploaderProps & React
       if (value.length) {
         setFilesToInput(value);
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value, maxFiles]);
 
     const opts = dropzoneOptions ? dropzoneOptions : { accept, maxFiles, maxSize, multiple };

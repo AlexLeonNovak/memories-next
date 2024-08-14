@@ -1,3 +1,4 @@
+import 'server-only';
 import { TBaseEntity, TCollections, TQueryFilter, TQueryOptions, TQueryOrder } from '@/types';
 import {
   OrderByDirection,
@@ -16,7 +17,7 @@ import {
   setDoc,
   where,
 } from '@firebase/firestore';
-import { getFirebaseApp } from '.';
+import { getFirebaseApp } from './index';
 import { removeEmpty } from '../utils/object';
 
 export const getFirestoreDatabase = () => {

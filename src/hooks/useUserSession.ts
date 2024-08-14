@@ -1,6 +1,6 @@
 'use client';
 
-import { getFirebaseAuth } from '@/lib/services';
+import { getFirebaseAuth } from '../lib/firebase';
 import { useEffect, useState } from 'react';
 import { Unsubscribe } from '@firebase/util';
 

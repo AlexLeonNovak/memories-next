@@ -48,5 +48,6 @@ export const useFormCheck = <T extends FieldValues, F extends FieldValues = T>({
       onFinally && (await Promise.resolve(onFinally()));
     };
     checkStatus(state);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 };

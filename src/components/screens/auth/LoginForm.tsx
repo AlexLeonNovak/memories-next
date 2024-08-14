@@ -1,35 +1,25 @@
 'use client';
 
-import {
-  Button,
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  Input,
-  Label,
-  SubmitButton,
-} from '@/components';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, SubmitButton } from '@/components';
 import { useFormCheck } from '@/hooks';
-import { getFirebaseAuth } from '@/lib/services';
-import { getRedirectResult } from 'firebase/auth';
 import { LogIn } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from '@/navigation';
-import { FormEvent, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { TCredentials, TTranslationEntity } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema } from '@/lib/validations';
 import { useFormState } from 'react-dom';
-import { createSession, loginWithEmailAndPassword } from '@/server/actions/auth.actions';
+import { loginWithEmailAndPassword } from '@/server/actions/auth.actions';
 import { toast } from 'sonner';
 import { UserInfo } from '@firebase/auth-types';
 import { useAuthStore } from '@/lib/store';
 import { useTranslations } from 'next-intl';
+
+const defaultValues: TCredentials = {
+  email: '',
+  password: '',
+};
 
 export const LoginForm = () => {
   const tAdm = useTranslations('Admin');
@@ -39,19 +29,19 @@ export const LoginForm = () => {
   const form = useForm<TCredentials>({
     mode: 'all',
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
+    defaultValues,
   });
 
-  const { control, setError } = form;
+  const { control, setError, reset } = form;
   const [state, action] = useFormState(loginWithEmailAndPassword, null);
 
   useFormCheck<UserInfo, TCredentials>({
     state,
     setError,
-    onError: () => toast.error(tAdm('One or more fields have an error. Please check them and try again.')),
+    onError: () => {
+      toast.error(tAdm('One or more fields have an error. Please check them and try again.'));
+      reset(defaultValues);
+    },
     onSuccess: (state) => {
       setUser(state.data);
       toast.success(t('You successfully logged in!'));

@@ -1,5 +1,5 @@
 import { createSharedPathnamesNavigation } from 'next-intl/navigation';
-import { i18n } from '@/i18n';
+import { i18n } from '@/config';
 import { LocalePrefix } from 'next-intl/routing';
 
 const { locales } = i18n;

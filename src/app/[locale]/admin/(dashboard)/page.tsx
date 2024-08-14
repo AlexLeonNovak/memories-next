@@ -1,3 +1,3 @@
-export default async function AdminPage() {
+export default function AdminPage() {
   return <div>{'Admin dashboard'}</div>;
 }

@@ -6,3 +6,9 @@ export type TTranslation = TTranslations & {
 };
 
 export type TTranslationEntity = TBaseEntity & TTranslation;
+
+export type TCheckTranslations = {
+  key: string;
+  namespace?: string;
+  // messages: AbstractIntlMessages;
+};

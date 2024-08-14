@@ -1,12 +1,10 @@
-'use client';
-
 import { Button, PageTitle, PostsTable } from '@/components';
 import { Plus } from 'lucide-react';
 import { Link } from '@/navigation';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
-export default function PostsPage() {
-  const t = useTranslations('Admin');
+export default async function PostsPage() {
+  const t = await getTranslations('Admin');
 
   return (
     <>
