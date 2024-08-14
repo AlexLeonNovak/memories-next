@@ -47,7 +47,7 @@ export const IntlProvider = ({ children, ...props }: TIntlProps) => {
         isValueIsset = translations?.some((t) => t.key === key);
       }
       if (!isValueIsset) {
-        createTranslation(data);
+        createTranslation(data).then((res) => console.log(res));
       }
       setChecking((state) => ({ ...state, [path]: false }));
     }

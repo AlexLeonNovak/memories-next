@@ -13,7 +13,7 @@ import 'animate.css/source/fading_entrances/fadeInDown.css';
 import './css/feedback.css';
 
 export const SectionFeedback = () => {
-  const t = useTranslations('SectionFeedback');
+  const t = useTranslations('MainFeedback');
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger, useGSAP);
   }, []);
