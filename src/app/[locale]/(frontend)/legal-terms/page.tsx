@@ -1,4 +1,4 @@
-import { LegalTerms } from '@/components';
+import { LegalTerms } from '@/components/screens';
 // import type { Metadata } from 'next';
 
 // export const metadata: Metadata = {

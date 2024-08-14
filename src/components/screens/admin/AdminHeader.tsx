@@ -1,6 +1,6 @@
 'use client';
 
-import { LanguageSwitcher, SubmitButton } from '@/components';
+import { LanguageSwitcher, SubmitButton } from '@/components/shared';
 import { LogOut } from 'lucide-react';
 import { useFormState } from 'react-dom';
 import { logout } from '@/server/actions/auth.actions';

@@ -1,9 +1,6 @@
-import { PageTitle } from '@/components';
 import { notFound } from 'next/navigation';
-import { CategoryFormWrapper } from './CategoryFormWrapper';
+import { CategoryEditWrapper } from './CategoryEditWrapper';
 import { getCategoryById } from '@/server/swr';
-import { getLocale } from 'next-intl/server';
-import { TLocale } from '@/config';
 
 type TEditCategoryPage = {
   params: {
@@ -18,12 +15,5 @@ export default async function EditCategoryPage({ params: { id } }: TEditCategory
     return notFound();
   }
 
-  const locale = (await getLocale()) as TLocale;
-
-  return (
-    <div>
-      <PageTitle title={`Edit category: "${data.name[locale]}"`} />
-      <CategoryFormWrapper category={data} swrKey={key} />
-    </div>
-  );
+  return <CategoryEditWrapper category={data} swrKey={key} />;
 }

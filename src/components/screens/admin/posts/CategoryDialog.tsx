@@ -1,9 +1,11 @@
 'use client';
 
-import { Button, CategoryForm, Modal, SubmitButton } from '@/components';
+import { Modal, SubmitButton } from '@/components/shared';
 import { Plus, Save } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui';
+import { CategoryForm } from '@/components/screens';
 
 export const CategoryDialog = () => {
   const [showCategoryDialog, setShowCategoryDialog] = useState(false);

@@ -1,2 +1,2 @@
 export * from './main';
-export * from '../../shared/LanguageSwitcher';
+export * from './legal-terms';

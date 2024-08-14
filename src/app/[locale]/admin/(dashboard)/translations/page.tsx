@@ -1,12 +1,4 @@
-import { PageTitle, TranslationsTable } from '@/components';
-// import { missingTranslations } from '@/lib/utils';
-
-export default function TranslationsPage() {
-  // console.log(missingTranslations);
-  return (
-    <>
-      <PageTitle title='Translations' />
-      <TranslationsTable />
-    </>
-  );
+import { TranslationsPageWrapper } from './TranslationsPageWrapper';
+export default async function TranslationsPage() {
+  return <TranslationsPageWrapper />;
 }

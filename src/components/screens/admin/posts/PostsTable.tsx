@@ -1,17 +1,6 @@
 'use client';
 
-import {
-  Badge,
-  Button,
-  DeleteForm,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-  TableSkeleton,
-} from '@/components';
+import { Badge, Button, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui';
 import { deletePost } from '@/server/actions/posts.actions';
 import { Pencil } from 'lucide-react';
 import { Link } from '@/navigation';
@@ -23,6 +12,8 @@ import { useGetCategories, useGetPosts } from '@/hooks';
 import { toast } from 'sonner';
 import { useSearchParams } from 'next/navigation';
 import { useStateStore } from '@/lib/store';
+import { TableSkeleton } from '@/components/shared';
+import { DeleteForm } from '@/components/screens';
 
 export const PostsTable = () => {
   const { getStateValue } = useStateStore();

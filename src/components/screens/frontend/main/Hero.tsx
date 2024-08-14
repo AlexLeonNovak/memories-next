@@ -1,12 +1,13 @@
 'use client';
 
 import React from 'react';
-import './css/hero.css';
 import Image from 'next/image';
 import ScrollAnimation from 'react-animate-on-scroll';
+import { useTranslations } from 'next-intl';
+
+import './css/hero.css';
 import 'animate.css/source/fading_entrances/fadeInDown.css';
 import 'animate.css/source/fading_exits/fadeOutRight.css';
-import { useTranslations } from 'next-intl';
 
 export const Hero = () => {
   const t = useTranslations('MainHero');

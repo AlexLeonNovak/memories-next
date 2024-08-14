@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/components';
+import { Button } from '@/components/ui';
 import { useRouter } from '@/navigation';
 import { useTranslations } from 'next-intl';
 

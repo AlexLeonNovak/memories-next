@@ -1,7 +1,6 @@
-import { Option } from '@/components';
-import { getFileType } from '@/lib/utils';
 import { z } from 'zod';
-import { buildLocaleShape } from '@/lib/utils';
+import { Option } from '@/components/ui';
+import { getFileType, buildLocaleShape } from '@/lib/utils';
 
 export const MAX_SIZE_IMAGE = Number(process.env.NEXT_PUBLIC_MAX_SIZE_IMAGE) || 10;
 export const MAX_SIZE_VIDEO = Number(process.env.NEXT_PUBLIC_MAX_SIZE_VIDEO) || 100;

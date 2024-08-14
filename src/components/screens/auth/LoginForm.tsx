@@ -1,6 +1,7 @@
 'use client';
 
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, SubmitButton } from '@/components';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '@/components/ui';
+import { SubmitButton } from '@/components/shared';
 import { useFormCheck } from '@/hooks';
 import { LogIn } from 'lucide-react';
 import Image from 'next/image';

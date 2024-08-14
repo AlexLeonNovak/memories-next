@@ -1,6 +1,8 @@
 'use client';
 
-import { GalleryItem, Modal, ModalContent } from '@/components';
+import { Modal } from '@/components/shared/Modal';
+import { ModalContent } from './ModalContent';
+import { GalleryItem } from './GalleryItem';
 import { TGalleryItemsWithLevel, createGallery } from '@/lib/utils';
 import { TMediaWithPostEntity, TPostEntity } from '@/types';
 import { LoaderCircle } from 'lucide-react';

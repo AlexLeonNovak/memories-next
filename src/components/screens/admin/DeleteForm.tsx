@@ -1,6 +1,7 @@
 'use client';
 
-import { ConfirmDialog, Input, SubmitButton } from '@/components';
+import { ConfirmDialog, SubmitButton } from '@/components/shared';
+import { Input } from '@/components/ui';
 import { TDeleteFormState } from '@/types';
 import { Trash } from 'lucide-react';
 import { MouseEvent, useEffect, useRef, useState } from 'react';

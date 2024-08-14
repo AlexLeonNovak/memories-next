@@ -1,12 +1,12 @@
-// import { Hero, SectionFeedback, SectionInfo, SectionMap } from '@/components';
+import { Hero, SectionFeedback, SectionInfo, SectionMap } from '@/components/screens';
 
-export default function Home() {
+export default async function Home() {
   return (
     <>
-      {/*<Hero />*/}
-      {/*<SectionInfo />*/}
-      {/*<SectionMap />*/}
-      {/*<SectionFeedback />*/}
+      <Hero />
+      <SectionInfo />
+      <SectionMap />
+      <SectionFeedback />
     </>
   );
 }

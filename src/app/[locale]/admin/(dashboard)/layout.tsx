@@ -1,4 +1,4 @@
-import { AdminHeader, PageContent, Sidebar } from '@/components';
+import { AdminHeader, PageContent, Sidebar } from '@/components/screens';
 import { LoaderCircle } from 'lucide-react';
 import { ReactNode, Suspense } from 'react';
 import { redirect } from '@/navigation';

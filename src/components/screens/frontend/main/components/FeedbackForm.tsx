@@ -1,6 +1,7 @@
 'use client';
 
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, SubmitButton } from '@/components';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '@/components/ui';
+import { SubmitButton } from '@/components/shared/SubmitButton';
 import { useFormCheck } from '@/hooks';
 import { createLeadSchema } from '@/lib/validations';
 import { createLead } from '@/server/actions/leads.actions';
@@ -43,7 +44,7 @@ export const FeedbackForm = () => {
 
   return (
     <Form {...form}>
-      <form>
+      <form action={action}>
         <FormField
           name='organisation'
           control={control}

@@ -10,8 +10,7 @@ import {
   FormLabel,
   FormMessage,
   Input,
-  SubmitButton,
-} from '@/components';
+} from '@/components/ui';
 import { useFormCheck } from '@/hooks';
 import { createCategorySchema } from '@/lib/validations';
 import { createCategory, updateCategory } from '@/server/actions/categories.actions';
@@ -28,6 +27,7 @@ import { useTranslations } from 'next-intl';
 import { mutate } from 'swr';
 import { COLLECTION_PATH } from '@/lib/constants';
 import { useRouter } from '@/navigation';
+import { SubmitButton } from '@/components/shared';
 
 type TCategoryFormProps = {
   category?: TCategoryEntity;

@@ -1,11 +1,13 @@
 'use client';
 
-import { Button, Modal, SubmitButton, TranslationForm } from '@/components';
 import { Pencil, Save } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { TTranslationEntity } from '@/types';
 import { useRouter } from '@/navigation';
+import { Button } from '@/components/ui';
+import { Modal, SubmitButton } from '@/components/shared';
+import { TranslationForm } from '@/components/screens';
 
 type TranslationEditDialogProps = {
   translation: TTranslationEntity;

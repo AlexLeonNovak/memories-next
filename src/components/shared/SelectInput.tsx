@@ -1,6 +1,14 @@
 'use client';
 
-import { Select, SelectContent, SelectItem, SelectSeparator, SelectTrigger, SelectValue, Button } from '@/components';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+  Button,
+} from '@/components/ui';
 import { SelectProps } from '@radix-ui/react-select';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';

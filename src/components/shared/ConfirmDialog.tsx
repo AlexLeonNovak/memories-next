@@ -9,7 +9,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components';
+} from '@/components/ui';
 import { Dispatch, SetStateAction } from 'react';
 import { useTranslations } from 'next-intl';
 

@@ -1,17 +1,6 @@
 'use client';
 
-import {
-  Badge,
-  Button,
-  DeleteForm,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-  TableSkeleton,
-} from '@/components';
+import { Badge, Button, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui';
 import { deleteCategory } from '@/server/actions/categories.actions';
 import { Pencil } from 'lucide-react';
 import { Link } from '@/navigation';
@@ -21,6 +10,8 @@ import { useGetCategories } from '@/hooks';
 import { toast } from 'sonner';
 import { i18n } from '@/config';
 import { useStateStore } from '@/lib/store';
+import { TableSkeleton } from '@/components/shared';
+import { DeleteForm } from '@/components/screens';
 
 export const CategoriesTable = () => {
   const { getStateValue } = useStateStore();

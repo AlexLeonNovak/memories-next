@@ -1,6 +1,6 @@
 'use client';
 
-import { Skeleton, TableCell, TableRow } from '@/components';
+import { Skeleton, TableCell, TableRow } from '@/components/ui';
 
 type TTableSkeletonProps = {
   rows?: number;

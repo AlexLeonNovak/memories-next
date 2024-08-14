@@ -1,6 +1,6 @@
 'use client';
 
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, Wysiwyg } from '@/components';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '@/components/ui';
 import { TTranslation, TTranslationEntity } from '@/types';
 import { i18n } from '@/config';
 import { useForm } from 'react-hook-form';
@@ -10,6 +10,7 @@ import { useFormCheck } from '@/hooks';
 import { toast } from 'sonner';
 import { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
+import { Wysiwyg } from '@/components/shared';
 
 type TTranslationFormProps = {
   translation: TTranslationEntity;

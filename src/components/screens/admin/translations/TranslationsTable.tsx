@@ -1,19 +1,6 @@
 'use client';
 
-import {
-  DeleteForm,
-  Input,
-  SelectInput,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-  TableSkeleton,
-  TranslationEditDialog,
-  TSelectInputItem,
-} from '@/components';
+import { Input, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui';
 import { i18n, TLocale } from '@/config';
 import { getArrayObjectValues } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
@@ -24,6 +11,8 @@ import { useDebounce } from 'use-debounce';
 import { deleteTranslation } from '@/server/actions/translations.actions';
 import { useSearchParams } from 'next/navigation';
 import { useGetTranslations } from '@/hooks/swr/translations';
+import { SelectInput, TableSkeleton, TSelectInputItem } from '@/components/shared';
+import { DeleteForm, TranslationEditDialog } from '@/components/screens';
 
 export const TranslationsTable = () => {
   const tAdm = useTranslations('Admin');

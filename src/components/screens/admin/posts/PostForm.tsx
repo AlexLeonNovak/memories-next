@@ -3,7 +3,6 @@
 import {
   AspectRatio,
   Button,
-  CategoryDialog,
   Checkbox,
   FileInput,
   FileUploader,
@@ -18,9 +17,10 @@ import {
   Input,
   MultipleSelector,
   Option,
-  SubmitButton,
   Textarea,
-} from '@/components';
+} from '@/components/ui';
+import { SubmitButton } from '@/components/shared';
+import { CategoryDialog } from '@/components/screens';
 import { useFormCheck, useGetCategories } from '@/hooks';
 import { getFileJs } from '@/lib/firebase';
 import { cn, defineLocaleValues, getFileType } from '@/lib/utils';

@@ -1,6 +1,6 @@
 'use client';
 
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui';
 import { TPostEntity } from '@/types';
 import Image from 'next/image';
 import { useLocale } from 'use-intl';

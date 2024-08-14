@@ -1,6 +1,7 @@
 'use client';
 
-import { MapNavigation, RandomGallery } from '@/components';
+import { MapNavigation } from './components/map/MapNavigation';
+import { RandomGallery } from './components/map/RandomGallery';
 import './css/map.css';
 
 export const SectionMap = () => {

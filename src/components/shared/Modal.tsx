@@ -1,7 +1,7 @@
 'use client';
 
-import { Button, Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui';
-import { Ban, Plus, Save } from 'lucide-react';
+import { Button, Dialog, DialogClose, DialogContent, DialogFooter, DialogTitle } from '@/components/ui';
+import { Ban } from 'lucide-react';
 import { Dispatch, ReactNode, SetStateAction } from 'react';
 
 type TModalProps = {

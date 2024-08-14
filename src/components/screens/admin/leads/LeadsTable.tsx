@@ -1,10 +1,12 @@
 'use client';
 
-import { DeleteForm, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableSkeleton } from '@/components';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui';
 import { deleteLead } from '@/server/actions/leads.actions';
 import { DateTime } from 'luxon';
 import { useTranslations } from 'next-intl';
 import { useGetLeads } from '@/hooks';
+import { TableSkeleton } from '@/components/shared';
+import { DeleteForm } from '@/components/screens';
 
 export const LeadsTable = () => {
   const { data, mutate, isLoading } = useGetLeads();

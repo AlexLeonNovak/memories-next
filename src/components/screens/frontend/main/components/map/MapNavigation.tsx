@@ -1,9 +1,8 @@
 'use client';
 
-import { Button } from '@/components';
+import { Button } from '@/components/ui';
 import { useGalleryStore } from '@/lib/store';
 import { cn } from '@/lib/utils';
-import { TCategoryEntity } from '@/types';
 import { Fragment } from 'react';
 import { useLocale } from 'use-intl';
 import { TLocale } from '@/config';
@@ -17,9 +16,6 @@ export const MapNavigation = () => {
   return (
     <div className='wrapper'>
       <div className='map__navigation'>
-        {/*<Button variant='link'*/}
-        {/*        className={cn('uppercase text-xl font-normal px-1', 'underline')}*/}
-        {/*>All</Button>*/}
         {categories?.map(({ id, name }, index) => (
           <Fragment key={id}>
             {/* eslint-disable-next-line react/jsx-no-literals */}

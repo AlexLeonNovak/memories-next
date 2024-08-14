@@ -2,7 +2,7 @@
 
 import { useParams } from 'next/navigation';
 import { useRouter, usePathname } from '@/navigation';
-import { Button } from '@/components';
+import { Button } from '@/components/ui';
 import { Fragment, MouseEvent, useTransition } from 'react';
 import { cn } from '@/lib/utils';
 import { locales } from '@/config';

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Footer, Header } from '@/components';
+import { Footer, Header } from '@/components/screens';
 import { TChildrenProps, TAppLayoutProps } from '@/types';
 import { getTranslations } from 'next-intl/server';
 

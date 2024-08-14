@@ -1,8 +1,9 @@
 'use client';
 
-import { Button, ButtonProps } from '@/components';
+import { Button, ButtonProps } from '@/components/ui/button';
 import { LoaderCircle } from 'lucide-react';
 import { useFormStatus } from 'react-dom';
+import React from 'react';
 
 type TSubmitButtonProps = ButtonProps & {
   label?: string;
