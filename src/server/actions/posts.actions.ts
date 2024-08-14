@@ -5,6 +5,8 @@ import { parseSchemaFormData } from '@/server/utils';
 import { TDeleteFormState, TFormState, TPost, TPostEntity } from '@/types';
 import { createDocument, deleteDocument, updateDocument } from '@/server/mongodb';
 import { deleteMediasByPostId } from '@/server/actions/medias.actions';
+import { revalidatePathLocales } from '@/lib/utils';
+import { revalidatePath } from 'next/cache';
 
 // export const fetchPosts = (queryOptions?: TQueryOptions<TPostEntity>) => PostRepository.getAll(queryOptions);
 // export const fetchPostById = (id: string) => PostRepository.getById(id);
@@ -26,8 +28,8 @@ export const createPost = async (prevState: any, formData: FormData): Promise<TF
     const parsed = await parseSchemaFormData(createPostSchemaServer, formData);
     if (parsed.status === 'success') {
       const data = await createDocument<TPost>('posts', parsed.data);
-      // revalidatePathLocales('/admin/posts');
-      // revalidatePath('/');
+      revalidatePathLocales('/admin/posts');
+      revalidatePath('/');
       return { status: 'success', data };
     }
     return parsed;
@@ -46,8 +48,8 @@ export const updatePost = async (prevState: any, formData: FormData): Promise<TF
       const { id, ...rest } = parsed.data;
       const data = await updateDocument('posts', id, rest);
 
-      // revalidatePathLocales('/admin/posts');
-      // revalidatePath('/');
+      revalidatePathLocales('/admin/posts');
+      revalidatePath('/');
       return { status: 'success', data };
     }
     return parsed;
@@ -63,8 +65,8 @@ export const deletePost = async (prevState: any, formData: FormData): Promise<TD
     await deleteMediasByPostId(id);
     // await deleteDocument('medias', id);
 
-    // revalidatePathLocales('/admin/posts');
-    // revalidatePath('/');
+    revalidatePathLocales('/admin/posts');
+    revalidatePath('/');
     return {
       success: true,
     };

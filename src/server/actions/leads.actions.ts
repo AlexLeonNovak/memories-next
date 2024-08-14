@@ -4,6 +4,8 @@ import { TDeleteFormState, TFormState, TLead, TLeadEntity, TQueryOptions } from 
 import { parseSchemaFormData } from '@/server/utils';
 import { createLeadSchemaServer } from './validations';
 import { createDocument, deleteDocument } from '@/server/mongodb';
+import { revalidatePathLocales } from '@/lib/utils';
+import { revalidatePath } from 'next/cache';
 
 // export const fetchLeads = (queryOptions?: TQueryOptions<TLeadEntity>) => LeadRepository.getAll(queryOptions);
 
@@ -11,6 +13,7 @@ export const deleteLead = async (prevState: any, formData: FormData): Promise<TD
   try {
     const id = formData.get('id') as string;
     id && (await deleteDocument('leads', id));
+    revalidatePathLocales('/admin/leads');
     return {
       success: true,
     };
@@ -24,6 +27,7 @@ export const createLead = async (prevState: any, formData: FormData): Promise<TF
     const parsed = await parseSchemaFormData(createLeadSchemaServer, formData);
     if (parsed.status === 'success') {
       const data = await createDocument<TLead>('leads', parsed.data);
+      revalidatePathLocales('/admin/leads');
       return { status: 'success', data };
     }
     return parsed;

@@ -4,13 +4,14 @@ import { TDeleteFormState, TFormState, TTranslation, TTranslationEntity } from '
 import { updateTranslationSchemaServer } from './validations';
 import { parseSchemaFormData } from '@/server/utils';
 import { createDocument, deleteDocument, updateDocument } from '@/server/mongodb';
-import { getTranslations } from '@/server/swr';
+import { revalidatePathLocales } from '@/lib/utils';
+import { revalidatePath } from 'next/cache';
 
 export const createTranslation = async (translationData: TTranslation): Promise<TFormState<TTranslationEntity>> => {
   try {
-    const { revalidate } = await getTranslations();
     const data = await createDocument('translations', translationData);
-    revalidate();
+    revalidatePathLocales('/admin/translations');
+    revalidatePath('/');
     return { status: 'success', data };
   } catch (e) {
     return { status: 'fail', message: (e as Error).message };
@@ -26,6 +27,8 @@ export const updateTranslation = async (
     if (parsed.status === 'success') {
       const { id, ...rest } = parsed.data;
       const data = await updateDocument<TTranslationEntity>('translations', id, rest);
+      revalidatePathLocales('/admin/translations');
+      revalidatePath('/');
       return { status: 'success', data };
     }
     return parsed;
@@ -38,6 +41,8 @@ export const deleteTranslation = async (prevState: any, formData: FormData): Pro
   try {
     const id = formData.get('id');
     id && (await deleteDocument('translations', id as string));
+    revalidatePathLocales('/admin/translations');
+    revalidatePath('/');
     return { success: true };
   } catch (error) {
     return {

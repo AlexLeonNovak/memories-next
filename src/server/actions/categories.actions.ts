@@ -18,8 +18,8 @@ export async function createCategory(prevState: any, formData: FormData): Promis
     const parsed = await parseSchemaFormData(createCategorySchemaServer, formData);
     if (parsed.status === 'success') {
       const data = await createDocument('categories', parsed.data);
-      // revalidatePathLocales('/admin/categories');
-      // revalidatePath('/');
+      revalidatePathLocales('/admin/categories');
+      revalidatePath('/');
       return { status: 'success', data };
     }
     return parsed;
@@ -34,8 +34,8 @@ export async function updateCategory(prevState: any, formData: FormData): Promis
     if (parsed.status === 'success') {
       const { id, ...rest } = parsed.data;
       const data = await updateDocument('categories', id, rest);
-      // revalidatePathLocales('/admin/categories');
-      // revalidatePath('/');
+      revalidatePathLocales('/admin/categories');
+      revalidatePath('/');
       return { status: 'success', data };
     }
     return parsed;
@@ -52,8 +52,8 @@ export async function deleteCategory(prevState: any, formData: FormData): Promis
       throw new Error('This category used in some posts');
     }
     id && (await deleteDocument('categories', id as string));
-    // revalidatePathLocales('/admin/categories');
-    // revalidatePath('/');
+    revalidatePathLocales('/admin/categories');
+    revalidatePath('/');
     return {
       success: true,
     };
