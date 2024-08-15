@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { getMessages, unstable_setRequestLocale } from 'next-intl/server';
 import { Inter } from 'next/font/google';
 import { Toaster } from 'sonner';
-import { locales, TLocale } from '@/config';
+import { locales } from '@/config';
 import { IntlProvider, SWRProvider } from '@/providers';
 import { getCategories, getMedias, getPosts, getTranslations } from '@/server/swr';
 import { TAppLayoutProps, TChildrenProps } from '@/types';

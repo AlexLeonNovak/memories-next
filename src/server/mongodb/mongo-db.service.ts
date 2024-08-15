@@ -1,9 +1,9 @@
+import 'server-only';
 import { Document } from 'bson';
 import { Filter, FindOptions, ObjectId, WithId } from 'mongodb';
 import { removeEmpty } from '@/lib/utils';
 import getMongoDB from '@/server/mongodb/config';
 import { TBaseEntity, TCollections, TGetAllDocuments } from '@/types';
-import 'server-only';
 
 const getCollection = async <T extends Document>(path: TCollections) => {
   const db = await getMongoDB();
@@ -14,7 +14,7 @@ export const getAllDocuments = async <T extends Document>({ path, filter, option
   try {
     const collection = await getCollection<T>(path);
     const docs = await collection.find(filter ?? {}, options).toArray();
-    return docs.map(doc => {
+    return docs.map((doc) => {
       const { _id, ...rest } = doc;
       return { ...rest, id: _id.toString() } as unknown as TBaseEntity & T;
     });
