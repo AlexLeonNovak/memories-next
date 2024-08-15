@@ -14,8 +14,8 @@ import { Link } from '@/navigation';
 import { deleteCategory } from '@/server/actions/categories.actions';
 
 export const CategoriesTable = () => {
-  const { getStateValue } = useStateStore();
-  const { data: categories, isLoading, error, mutate } = useGetCategories();
+  const { getStateValue, deleteStateValue } = useStateStore();
+  const { data: categories, isLoading, error, mutate, revalidate } = useGetCategories();
   const tAdm = useTranslations('Admin');
   const t = useTranslations('AdminCategories');
 
@@ -26,7 +26,11 @@ export const CategoriesTable = () => {
 
   useEffect(() => {
     const isRevalidate = getStateValue('revalidateCategories');
-    isRevalidate && mutate();
+    if (isRevalidate) {
+      mutate();
+      revalidate();
+      deleteStateValue('revalidateCategories');
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -48,9 +52,9 @@ export const CategoriesTable = () => {
             <TableRow key={id}>
               <TableCell>{++index}</TableCell>
               <TableCell>
-                {i18n.locales.map(locale => (
-                  <p key={locale} className="space-x-1">
-                    <span className="text-muted-foreground uppercase">{tAdm(`[${locale}]`)}</span>
+                {i18n.locales.map((locale) => (
+                  <p key={locale} className='space-x-1'>
+                    <span className='text-muted-foreground uppercase'>{tAdm(`[${locale}]`)}</span>
                     <span>{name[locale]}</span>
                   </p>
                 ))}
@@ -61,7 +65,7 @@ export const CategoriesTable = () => {
                 </Badge>
               </TableCell>
               <TableCell>
-                <div className="flex gap-2">
+                <div className='flex gap-2'>
                   <DeleteForm
                     id={id}
                     onDeleted={() => mutate()}
@@ -69,7 +73,7 @@ export const CategoriesTable = () => {
                     title={t('Delete category?')}
                     description={t('Are you sure you want to delete this category?')}
                   />
-                  <Button asChild variant="ghost">
+                  <Button asChild variant='ghost'>
                     <Link href={`categories/${id}`}>
                       <Pencil />
                     </Link>
@@ -82,7 +86,7 @@ export const CategoriesTable = () => {
         {!categories?.length && !isLoading && (
           <TableRow>
             <TableCell colSpan={4}>
-              <p className="text-center text-2xl text-muted-foreground">{tAdm('There are no items to display yet')}</p>
+              <p className='text-center text-2xl text-muted-foreground'>{tAdm('There are no items to display yet')}</p>
             </TableCell>
           </TableRow>
         )}

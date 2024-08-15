@@ -1,4 +1,5 @@
-import useSWR from 'swr';
+import useSWR, { unstable_serialize } from 'swr';
+import { revalidateTag } from 'next/cache';
 import { getAllAction, getByIdAction, revalidateAction } from '@/server/actions/base.actions';
 import { TDocParams, TGetAllDocuments } from '@/types';
 

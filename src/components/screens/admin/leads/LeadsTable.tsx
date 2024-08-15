@@ -9,7 +9,7 @@ import { useGetLeads } from '@/hooks';
 import { deleteLead } from '@/server/actions/leads.actions';
 
 export const LeadsTable = () => {
-  const { data, mutate, isLoading } = useGetLeads();
+  const { data, mutate, isLoading, revalidate } = useGetLeads();
 
   const tAdm = useTranslations('Admin');
   const t = useTranslations('AdminLeads');
@@ -39,13 +39,16 @@ export const LeadsTable = () => {
               <TableCell>{email}</TableCell>
               <TableCell>{DateTime.fromISO(createdAt).toFormat('yyyy-LL-dd HH:mm')}</TableCell>
               <TableCell>
-                <div className="flex gap-2">
+                <div className='flex gap-2'>
                   <DeleteForm
                     id={id}
                     deleteAction={deleteLead}
                     title={t('Delete lead?')}
                     description={t('Are you sure you want to delete this lead?')}
-                    onDeleted={() => mutate()}
+                    onDeleted={() => {
+                      mutate();
+                      revalidate();
+                    }}
                   />
                 </div>
               </TableCell>
@@ -54,7 +57,7 @@ export const LeadsTable = () => {
         {!data?.length && !isLoading && (
           <TableRow>
             <TableCell colSpan={7}>
-              <p className="text-center text-2xl text-muted-foreground">{tAdm('There are no items to display yet')}</p>
+              <p className='text-center text-2xl text-muted-foreground'>{tAdm('There are no items to display yet')}</p>
             </TableCell>
           </TableRow>
         )}

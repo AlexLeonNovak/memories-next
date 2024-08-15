@@ -16,7 +16,7 @@ import { Link } from '@/navigation';
 import { deletePost } from '@/server/actions/posts.actions';
 
 export const PostsTable = () => {
-  const { getStateValue } = useStateStore();
+  const { getStateValue, deleteStateValue } = useStateStore();
   const posts = useGetPosts();
   const categories = useGetCategories();
   const isLoading = posts.isLoading && categories.isLoading;
@@ -33,7 +33,11 @@ export const PostsTable = () => {
 
   useEffect(() => {
     const isRevalidate = getStateValue('revalidatePosts');
-    isRevalidate && posts.mutate();
+    if (isRevalidate) {
+      posts.mutate();
+      posts.revalidate();
+      deleteStateValue('revalidatePosts');
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -54,18 +58,18 @@ export const PostsTable = () => {
           <TableRow key={id}>
             <TableCell>{++index}</TableCell>
             <TableCell>
-              {i18n.locales.map(locale => (
-                <p key={locale} className="space-x-1">
-                  <span className="text-muted-foreground uppercase">{tAdm(`[${locale}]`)}</span>
+              {i18n.locales.map((locale) => (
+                <p key={locale} className='space-x-1'>
+                  <span className='text-muted-foreground uppercase'>{tAdm(`[${locale}]`)}</span>
                   <span>{name[locale]}</span>
                 </p>
               ))}
             </TableCell>
             <TableCell>
-              <div className="flex flex-wrap gap-1">
+              <div className='flex flex-wrap gap-1'>
                 {catIds?.length &&
                   categories.data
-                    ?.filter(c => catIds.includes(c.id))
+                    ?.filter((c) => catIds.includes(c.id))
                     .map(({ id, name }) => <Badge key={id}>{name[locale]}</Badge>)}
               </div>
             </TableCell>
@@ -75,7 +79,7 @@ export const PostsTable = () => {
               </Badge>
             </TableCell>
             <TableCell>
-              <div className="flex gap-2">
+              <div className='flex gap-2'>
                 <DeleteForm
                   id={id}
                   deleteAction={deletePost}
@@ -83,7 +87,7 @@ export const PostsTable = () => {
                   title={t('Delete post?')}
                   description={t('Are you sure you want to delete this post?')}
                 />
-                <Button asChild variant="ghost">
+                <Button asChild variant='ghost'>
                   <Link href={`posts/${id}`}>
                     <Pencil />
                   </Link>
@@ -96,7 +100,7 @@ export const PostsTable = () => {
         {!posts.data?.length && !posts.isLoading && (
           <TableRow>
             <TableCell colSpan={5}>
-              <p className="text-center text-2xl text-muted-foreground">{tAdm('There are no items to display yet')}</p>
+              <p className='text-center text-2xl text-muted-foreground'>{tAdm('There are no items to display yet')}</p>
             </TableCell>
           </TableRow>
         )}
