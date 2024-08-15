@@ -58,7 +58,7 @@ export const RandomGallery = () => {
         open={showModalInfo}
         setOpen={setShowModalInfo}
         title={mediaItem?.post?.name[locale] || t('Loading')}
-        className='max-h-full max-w-full m-10'
+        // className='max-h-full max-w-full'
       >
         {mediaItem ? <ModalContent media={mediaItem} /> : <LoaderCircle className='animate-spin size-10' />}
       </Modal>
