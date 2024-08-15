@@ -1,5 +1,5 @@
-import { TGetAllDocuments, TPostEntity } from '@/types';
 import { getCollectionCached, getDocCached } from '@/server/swr/base';
+import { TGetAllDocuments, TPostEntity } from '@/types';
 
 export const getPosts = async (params?: Omit<TGetAllDocuments<TPostEntity>, 'path'>) =>
   getCollectionCached<TPostEntity>({ path: 'posts', ...params });

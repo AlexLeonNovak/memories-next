@@ -1,4 +1,3 @@
-import path from 'path';
 import {
   deleteObject,
   getBlob,
@@ -9,6 +8,8 @@ import {
   ref,
   uploadBytesResumable,
 } from '@firebase/storage';
+import path from 'path';
+
 import { BUCKET_URL, getFirebaseApp } from './index';
 
 export const UPLOADS_PATH = 'uploads';

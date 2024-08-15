@@ -1,10 +1,11 @@
 'use client';
 
 import { IntlConfig, IntlError, IntlErrorCode, NextIntlClientProvider } from 'next-intl';
-import { TChildrenProps, TTranslation } from '@/types';
 import { useEffect, useState } from 'react';
+
 import { useGetTranslations } from '@/hooks';
 import { createTranslation } from '@/server/actions/translations.actions';
+import { TChildrenProps, TTranslation } from '@/types';
 
 type TIntlProps = TChildrenProps & IntlConfig;
 
@@ -15,11 +16,9 @@ export const IntlProvider = ({ children, ...props }: TIntlProps) => {
   const getMessageFallback = ({ namespace, key, error }: { error: IntlError; key: string; namespace?: string }) => {
     const path = [namespace, key].filter((part) => part != null).join('.');
     if (error.code === IntlErrorCode.MISSING_MESSAGE) {
-      setTimeout(() => {
-        if (!(path in checking)) {
-          setChecking((state) => ({ ...state, [path]: true }));
-        }
-      });
+      if (!(path in checking)) {
+        setChecking((state) => ({ ...state, [path]: true }));
+      }
       return key;
     }
     return 'Dear developer, please fix this message: ' + path + 'Error code: ' + error.code;
@@ -33,6 +32,7 @@ export const IntlProvider = ({ children, ...props }: TIntlProps) => {
       if (!checking[path]) {
         continue;
       }
+      setChecking((state) => ({ ...state, [path]: false }));
       let [namespace, key] = path.split('.');
       if (!key) {
         key = namespace;
@@ -47,9 +47,8 @@ export const IntlProvider = ({ children, ...props }: TIntlProps) => {
         isValueIsset = translations?.some((t) => t.key === key);
       }
       if (!isValueIsset) {
-        createTranslation(data).then((res) => console.log(res));
+        createTranslation(data);
       }
-      setChecking((state) => ({ ...state, [path]: false }));
     }
   }, [translations, checking, isLoading]);
 

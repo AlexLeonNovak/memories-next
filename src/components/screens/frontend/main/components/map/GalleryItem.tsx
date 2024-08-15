@@ -1,12 +1,12 @@
 'use client';
 
-import { useGalleryStore } from '@/lib/store';
-import { cn, random } from '@/lib/utils';
-import { TMediaWithPostEntity } from '@/types';
 import { Play } from 'lucide-react';
 import Image from 'next/image';
 import { HTMLAttributes } from 'react';
 import { MouseParallax } from 'react-just-parallax';
+import { TMediaWithPostEntity } from '@/types';
+import { cn, random } from '@/lib/utils';
+import { useGalleryStore } from '@/lib/store';
 
 type TGalleryItemProps = HTMLAttributes<HTMLDivElement> & {
   item: TMediaWithPostEntity;
@@ -27,7 +27,7 @@ export const GalleryItem = ({ item, onItemClick, className, ...props }: TGallery
         <div
           className={cn(
             'opacity-50 hover:opacity-100 ease-in-out duration-300 cursor-pointer',
-            (hoveredCategories.some((cat) => item.post.categories.includes(cat)) ||
+            (hoveredCategories.some(cat => item.post.categories.includes(cat)) ||
               (categorySelected && item.post.categories.includes(categorySelected))) &&
               'opacity-100',
           )}
@@ -40,25 +40,25 @@ export const GalleryItem = ({ item, onItemClick, className, ...props }: TGallery
               src={item.url}
               alt={item.url}
               fill
-              className='object-contain hover:scale-125 ease-in-out duration-300'
+              className="object-contain hover:scale-125 ease-in-out duration-300"
             />
           )}
           {item.mediaType === 'video' && (
-            <div className='relative hover:scale-125 ease-in-out duration-300'>
+            <div className="relative hover:scale-125 ease-in-out duration-300">
               <video
                 controls={false}
-                preload='metadata'
-                onMouseEnter={(e) => {
+                preload="metadata"
+                onMouseEnter={e => {
                   e.currentTarget.volume = 0;
                   e.currentTarget.play();
                 }}
-                onMouseLeave={(e) => e.currentTarget.pause()}
+                onMouseLeave={e => e.currentTarget.pause()}
               >
                 {/* eslint-disable-next-line react/jsx-no-literals */}
                 <source src={item.url} />
                 Your browser does not support the video tag.
               </video>
-              <Play className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 size-1/3 text-primary-foreground' />
+              <Play className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 size-1/3 text-primary-foreground" />
             </div>
           )}
         </div>

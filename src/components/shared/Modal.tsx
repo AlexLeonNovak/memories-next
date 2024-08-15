@@ -1,8 +1,8 @@
 'use client';
 
-import { Button, Dialog, DialogClose, DialogContent, DialogFooter, DialogTitle } from '@/components/ui';
 import { Ban } from 'lucide-react';
 import { Dispatch, ReactNode, SetStateAction } from 'react';
+import { Button, Dialog, DialogClose, DialogContent, DialogFooter, DialogTitle } from '@/components/ui';
 
 type TModalProps = {
   children: ReactNode;
@@ -37,7 +37,7 @@ export const Modal = ({
           {footer}
           {closeButton && (
             <DialogClose asChild>
-              <Button type='button' variant='secondary'>
+              <Button type="button" variant="secondary">
                 {closeButton.icon}
                 {closeButton.label && <span>{closeButton.label}</span>}
               </Button>

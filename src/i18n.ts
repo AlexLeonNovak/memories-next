@@ -15,7 +15,7 @@ export default getRequestConfig(async ({ locale }) => {
   return {
     messages,
     getMessageFallback: ({ key, namespace, error }) => {
-      const path = [namespace, key].filter((part) => part != null).join('.');
+      const path = [namespace, key].filter(part => part != null).join('.');
       if (error.code === 'MISSING_MESSAGE') {
         checkTranslationsServer({ key, namespace });
         return key;

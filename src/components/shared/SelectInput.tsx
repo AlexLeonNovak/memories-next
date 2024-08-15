@@ -1,17 +1,17 @@
 'use client';
 
+import { SelectProps } from '@radix-ui/react-select';
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 import {
+  Button,
   Select,
   SelectContent,
   SelectItem,
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-  Button,
 } from '@/components/ui';
-import { SelectProps } from '@radix-ui/react-select';
-import { useState } from 'react';
-import { useTranslations } from 'next-intl';
 
 export type TSelectInputItem = {
   value: string;
@@ -35,10 +35,10 @@ export const SelectInput = ({ items, value: initValue, placeholder, onValueChang
       </SelectTrigger>
       <SelectContent>
         <Button
-          className='w-full px-2'
-          variant='secondary'
-          size='sm'
-          onClick={(e) => {
+          className="w-full px-2"
+          variant="secondary"
+          size="sm"
+          onClick={e => {
             e.stopPropagation();
             setValue(undefined);
             setKey(+new Date());

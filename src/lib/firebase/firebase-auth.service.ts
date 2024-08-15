@@ -1,4 +1,5 @@
-import { inMemoryPersistence, getAuth, setPersistence } from 'firebase/auth';
+import { getAuth, inMemoryPersistence, setPersistence } from 'firebase/auth';
+
 import { getFirebaseApp } from './index';
 
 export const getFirebaseAuth = async () => {

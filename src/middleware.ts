@@ -1,6 +1,6 @@
-import { i18nMiddleware } from '@/middlewares';
 import { NextRequest, NextResponse } from 'next/server';
 import { SESSION_COOKIE_NAME } from '@/lib/constants';
+import { i18nMiddleware } from '@/middlewares';
 
 // export default stackMiddlewares([withI18n, withFirebaseAuth]);
 export async function middleware(request: NextRequest) {

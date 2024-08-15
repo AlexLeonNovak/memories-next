@@ -1,6 +1,6 @@
+import { z } from 'zod';
 import { zfd } from 'zod-form-data';
 import { EMediaType } from '@/types';
-import { z } from 'zod';
 
 // const createMediaSchemaBase = z.object({
 //   postId: zfd.text(),

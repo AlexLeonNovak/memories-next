@@ -1,7 +1,7 @@
-import { TGetAllDocuments, TTranslationEntity } from '@/types';
-import { getCollectionCached } from '@/server/swr/base';
-import { TLocale } from '@/config';
 import { AbstractIntlMessages } from 'use-intl';
+import { TLocale } from '@/config';
+import { getCollectionCached } from '@/server/swr/base';
+import { TGetAllDocuments, TTranslationEntity } from '@/types';
 
 export const getTranslations = (params?: Omit<TGetAllDocuments<TTranslationEntity>, 'path'>) =>
   getCollectionCached<TTranslationEntity>({ path: 'translations', ...params });

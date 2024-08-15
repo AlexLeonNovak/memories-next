@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import { TLocale } from '@/config';
 import { SWRConfiguration } from 'swr';
+import { TLocale } from '@/config';
 
 export type TChildrenProps = {
   children: ReactNode;

@@ -1,83 +1,82 @@
 .header {
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 28px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 28px;
 }
 .header .wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 69px;
-    max-width: 1385px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 69px;
+  max-width: 1385px;
 }
 .header-logo {
-
 }
 .header-right {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .header-lang-switcher {
-    margin-right: 30px;
-    font-weight: 400;
-    font-size: 15px;
-    line-height: 130%;
-    text-transform: uppercase;
-    color: rgba(0, 0, 0, 0.5);
+  margin-right: 30px;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 130%;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.5);
 }
 .header-lang-switcher__item {
-    color: rgba(0, 0, 0, 0.5);
-    margin-left: 5px;
+  color: rgba(0, 0, 0, 0.5);
+  margin-left: 5px;
 }
 .header-lang-switcher__item:hover {
-    color: rgba(0, 0, 0, 1);
+  color: rgba(0, 0, 0, 1);
 }
 .header-lang-switcher__item_active {
-    color: rgba(0, 0, 0, 1);
+  color: rgba(0, 0, 0, 1);
 }
 .header-lang-switcher__separator {
-    color: rgba(0, 0, 0, 1);
-    margin-left: 5px;
+  color: rgba(0, 0, 0, 1);
+  margin-left: 5px;
 }
 .header-help {
-    width: 192px;
-    height: 44px;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 75%;
-    text-transform: uppercase;
-    background: #1c1b1b;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
+  width: 192px;
+  height: 44px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 75%;
+  text-transform: uppercase;
+  background: #1c1b1b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
 }
 
 @media screen and (max-width: 980px) {
-    .header {
-        margin-bottom: 35.897vw;
-    }
-    .header .wrapper {
-        position: relative;
-        height: 12.821vw;
-    }
-    .header-left {
-        flex: none;
-    }
-    .header-logo {
-        width: 36.41vw;
-        height: auto;
-    }
-    .header-lang-switcher {
-        position: absolute;
-        top: 100%;
-        left: 20px;
-        margin-top: 2.564vw;
-    }
-    .header-help {
-        width: 32.821vw;
-        height: 8.462vw;
-        font-size: 3.59vw;
-        line-height: 71%;
-    }
+  .header {
+    margin-bottom: 35.897vw;
+  }
+  .header .wrapper {
+    position: relative;
+    height: 12.821vw;
+  }
+  .header-left {
+    flex: none;
+  }
+  .header-logo {
+    width: 36.41vw;
+    height: auto;
+  }
+  .header-lang-switcher {
+    position: absolute;
+    top: 100%;
+    left: 20px;
+    margin-top: 2.564vw;
+  }
+  .header-help {
+    width: 32.821vw;
+    height: 8.462vw;
+    font-size: 3.59vw;
+    line-height: 71%;
+  }
 }

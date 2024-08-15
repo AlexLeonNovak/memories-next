@@ -1,10 +1,10 @@
 'use client';
 
+import { Plus } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { CategoriesTable, PageTitle } from '@/components/screens';
 import { Button } from '@/components/ui';
 import { Link } from '@/navigation';
-import { Plus } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 
 export const CategoriesPageWrapper = () => {
   const tAdm = useTranslations('Admin');
@@ -12,9 +12,9 @@ export const CategoriesPageWrapper = () => {
   return (
     <div>
       <PageTitle title={tAdm('Categories')} />
-      <div className='row'>
+      <div className="row">
         <Button asChild>
-          <Link href='categories/add'>
+          <Link href="categories/add">
             <Plus />
             <span>{tAdm('Add new category')}</span>
           </Link>

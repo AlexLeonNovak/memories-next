@@ -1,16 +1,16 @@
 'use client';
 
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '@/components/ui';
-import { TTranslation, TTranslationEntity } from '@/types';
-import { i18n } from '@/config';
-import { useForm } from 'react-hook-form';
-import { useFormState } from 'react-dom';
-import { updateTranslation } from '@/server/actions/translations.actions';
-import { useFormCheck } from '@/hooks';
-import { toast } from 'sonner';
-import { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
+import { useEffect, useRef } from 'react';
+import { useFormState } from 'react-dom';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { Wysiwyg } from '@/components/shared';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '@/components/ui';
+import { i18n } from '@/config';
+import { useFormCheck } from '@/hooks';
+import { updateTranslation } from '@/server/actions/translations.actions';
+import { TTranslation, TTranslationEntity } from '@/types';
 
 type TTranslationFormProps = {
   translation: TTranslationEntity;
@@ -37,11 +37,11 @@ export const TranslationForm = ({ translation, onFormSubmit, onFinally, submitRe
     state,
     setError,
     onError: () => toast.error(tAdm('One or more fields have an error. Please check them and try again.')),
-    onSuccess: (state) => {
+    onSuccess: state => {
       toast.success(t('Translation successfully updated!'));
       onFormSubmit && onFormSubmit(state.data);
     },
-    onFail: (state) => toast.error(tAdm(state.message)),
+    onFail: state => toast.error(tAdm(state.message)),
     onFinally,
   });
 
@@ -53,33 +53,33 @@ export const TranslationForm = ({ translation, onFormSubmit, onFinally, submitRe
 
   return (
     <Form {...form}>
-      <form action={action} ref={formRef} className='space-y-3'>
-        <Input type='hidden' name='id' value={id} />
-        <div className='space-y-2'>
+      <form action={action} ref={formRef} className="space-y-3">
+        <Input type="hidden" name="id" value={id} />
+        <div className="space-y-2">
           {namespace && (
-            <p className='space-x-2'>
+            <p className="space-x-2">
               <strong>{tAdm('Namespace:')}</strong>
               <span>{namespace}</span>
             </p>
           )}
-          <p className='space-x-2'>
+          <p className="space-x-2">
             <strong>{tAdm('Key:')}</strong>
             <span>{key}</span>
           </p>
         </div>
 
-        {i18n.locales.map((locale) => (
+        {i18n.locales.map(locale => (
           <FormField
             key={locale}
             name={locale}
             control={control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel className='uppercase'>{locale}</FormLabel>
+                <FormLabel className="uppercase">{locale}</FormLabel>
                 <FormControl>
                   {isHTML ? (
                     <>
-                      <Input type='hidden' name={field.name} value={field.value} />
+                      <Input type="hidden" name={field.name} value={field.value} />
                       <Wysiwyg onChange={field.onChange} value={field.value} />
                     </>
                   ) : (

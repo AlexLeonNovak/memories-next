@@ -1,5 +1,19 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import { CloudUpload, FileVideo, LoaderCircle, Save } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { useFormState } from 'react-dom';
+import { DropzoneOptions } from 'react-dropzone';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { mutate } from 'swr';
+import { useLocale } from 'use-intl';
+import { z } from 'zod';
+import { CategoryDialog } from '@/components/screens';
+import { SubmitButton } from '@/components/shared';
 import {
   AspectRatio,
   Button,
@@ -19,32 +33,18 @@ import {
   Option,
   Textarea,
 } from '@/components/ui';
-import { SubmitButton } from '@/components/shared';
-import { CategoryDialog } from '@/components/screens';
+import { i18n, TLocale } from '@/config';
 import { useFormCheck, useGetCategories } from '@/hooks';
+import { COLLECTION_PATH } from '@/lib/constants';
 import { getFileJs } from '@/lib/firebase';
+import { uploadMediaFiles } from '@/lib/services';
+import { useStateStore } from '@/lib/store';
 import { cn, defineLocaleValues, getFileType } from '@/lib/utils';
-import { MAX_SIZE_IMAGE, MAX_SIZE_VIDEO, createPostSchema } from '@/lib/validations';
+import { createPostSchema, MAX_SIZE_IMAGE, MAX_SIZE_VIDEO } from '@/lib/validations';
+import { useRouter } from '@/navigation';
+import { bulkCreateMedias } from '@/server/actions/medias.actions';
 import { createPost, deletePost, updatePost } from '@/server/actions/posts.actions';
 import { TMediaEntity, TPostEntity } from '@/types';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { CloudUpload, FileVideo, LoaderCircle, Save } from 'lucide-react';
-import Image from 'next/image';
-import { useRouter } from '@/navigation';
-import { useEffect, useState } from 'react';
-import { useFormState } from 'react-dom';
-import { DropzoneOptions } from 'react-dropzone';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
-import { useTranslations } from 'next-intl';
-import { useLocale } from 'use-intl';
-import { i18n, TLocale } from '@/config';
-import { mutate } from 'swr';
-import { COLLECTION_PATH } from '@/lib/constants';
-import { uploadMediaFiles } from '@/lib/services';
-import { bulkCreateMedias } from '@/server/actions/medias.actions';
-import { useStateStore } from '@/lib/store';
 
 type TPostFormProps = {
   post?: TPostEntity;
@@ -111,7 +111,7 @@ export const PostForm = ({ post, swrKey, medias, onFormSubmit }: TPostFormProps)
   useFormCheck({
     state,
     setError,
-    onSuccess: async (state) => {
+    onSuccess: async state => {
       const { id } = state.data;
       try {
         const files = getValues('files');
@@ -139,7 +139,7 @@ export const PostForm = ({ post, swrKey, medias, onFormSubmit }: TPostFormProps)
       swrKey ? await mutate(swrKey) : await mutate(COLLECTION_PATH.POSTS);
     },
     onError: () => toast.error(tAdm('One or more fields have an error. Please check them and try again.')),
-    onFail: (state) => toast.error(tAdm(state.message)),
+    onFail: state => toast.error(tAdm(state.message)),
     onFinally: () => setPending(false),
   });
 
@@ -147,7 +147,7 @@ export const PostForm = ({ post, swrKey, medias, onFormSubmit }: TPostFormProps)
     if (medias?.length) {
       setIsMediaLoading(true);
       Promise.all(medias.map(({ url }) => getFileJs(url)))
-        .then((files) => setValue('files', files))
+        .then(files => setValue('files', files))
         .finally(() => setIsMediaLoading(false));
     }
   }, [medias, setValue, setIsMediaLoading]);
@@ -155,7 +155,7 @@ export const PostForm = ({ post, swrKey, medias, onFormSubmit }: TPostFormProps)
   return (
     <Form {...form}>
       <form action={action} onSubmit={() => setPending(true)}>
-        {post?.id && <Input type='hidden' name='id' value={post.id} />}
+        {post?.id && <Input type="hidden" name="id" value={post.id} />}
 
         {i18n.locales.map((locale, index) => (
           <FormField
@@ -164,11 +164,11 @@ export const PostForm = ({ post, swrKey, medias, onFormSubmit }: TPostFormProps)
             control={control}
             render={({ field }) => (
               <FormItem className={cn(!!index && 'mt-2')}>
-                <FormLabel className='space-x-1'>
-                  <span className='text-muted-foreground uppercase'>{tAdm(`[${locale}]`)}</span>
+                <FormLabel className="space-x-1">
+                  <span className="text-muted-foreground uppercase">{tAdm(`[${locale}]`)}</span>
                   <span>{t('Name')}</span>
                   {/* eslint-disable-next-line react/jsx-no-literals */}
-                  <span className='text-red-600'>*</span>
+                  <span className="text-red-600">*</span>
                 </FormLabel>
                 <FormControl>
                   <Input placeholder={t('Post name')} {...field} />
@@ -186,8 +186,8 @@ export const PostForm = ({ post, swrKey, medias, onFormSubmit }: TPostFormProps)
             control={control}
             render={({ field }) => (
               <FormItem className={cn(!!index && 'mt-2')}>
-                <FormLabel className='space-x-1'>
-                  <span className='text-muted-foreground uppercase'>{tAdm(`[${locale}]`)}</span>
+                <FormLabel className="space-x-1">
+                  <span className="text-muted-foreground uppercase">{tAdm(`[${locale}]`)}</span>
                   <span>{t('Description')}</span>
                 </FormLabel>
                 <FormControl>
@@ -200,16 +200,16 @@ export const PostForm = ({ post, swrKey, medias, onFormSubmit }: TPostFormProps)
         ))}
 
         <FormField
-          name='categories'
+          name="categories"
           control={control}
           render={({ field }) => (
-            <FormItem className='w-full'>
+            <FormItem className="w-full">
               <FormLabel>
                 {/* eslint-disable-next-line react/jsx-no-literals */}
-                {tAdm('Categories')} <span className='text-red-600'>*</span>
+                {tAdm('Categories')} <span className="text-red-600">*</span>
               </FormLabel>
-              <div className='flex items-center'>
-                <FormControl className='flex items-center'>
+              <div className="flex items-center">
+                <FormControl className="flex items-center">
                   <MultipleSelector
                     {...field}
                     options={categoryOptions}
@@ -225,7 +225,7 @@ export const PostForm = ({ post, swrKey, medias, onFormSubmit }: TPostFormProps)
         />
 
         <FormField
-          name='files'
+          name="files"
           control={control}
           render={({ field }) => (
             <FormItem>
@@ -235,49 +235,49 @@ export const PostForm = ({ post, swrKey, medias, onFormSubmit }: TPostFormProps)
                   value={field.value}
                   onValueChange={field.onChange}
                   dropzoneOptions={dropzone}
-                  orientation='horizontal'
-                  className='relative bg-background border border-input p-2'
+                  orientation="horizontal"
+                  className="relative bg-background border border-input p-2"
                 >
-                  <FileInput className='outline-dashed outline-1 outline-white'>
-                    <div className='flex items-center justify-center flex-col pt-3 pb-4 w-full '>
+                  <FileInput className="outline-dashed outline-1 outline-white">
+                    <div className="flex items-center justify-center flex-col pt-3 pb-4 w-full ">
                       <CloudUpload size={45} />
-                      <p className='mb-1 text-sm text-gray-500 dark:text-gray-400'>
+                      <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
                         {/* eslint-disable-next-line react/jsx-no-literals */}
-                        <span className='font-semibold'>Click to upload</span>
+                        <span className="font-semibold">Click to upload</span>
                         &nbsp; or drag and drop
                       </p>
-                      <p className='text-xs text-gray-500 dark:text-gray-400'>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
                         {/* eslint-disable-next-line react/jsx-no-literals */}
                         <strong>Images: </strong>SVG, PNG, JPG or GIF&nbsp;
                         {/* eslint-disable-next-line react/jsx-no-literals */}
-                        <span className='text-muted-foreground'>(Max {MAX_SIZE_IMAGE}MB)</span>
+                        <span className="text-muted-foreground">(Max {MAX_SIZE_IMAGE}MB)</span>
                       </p>
-                      <p className='text-xs text-gray-500 dark:text-gray-400'>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
                         {/* eslint-disable-next-line react/jsx-no-literals */}
                         <strong>Videos: </strong>MP4, MKV, MOV&nbsp;
                         {/* eslint-disable-next-line react/jsx-no-literals */}
-                        <span className='text-muted-foreground'>(Max {MAX_SIZE_VIDEO}MB)</span>
+                        <span className="text-muted-foreground">(Max {MAX_SIZE_VIDEO}MB)</span>
                       </p>
                     </div>
                   </FileInput>
                   <FileUploaderContent>
-                    {isMediaLoading && <LoaderCircle className='animate-spin size-10' />}
+                    {isMediaLoading && <LoaderCircle className="animate-spin size-10" />}
                     {!isMediaLoading &&
                       field.value &&
                       field.value.length > 0 &&
                       field.value.map((file, i) => (
-                        <FileUploaderItem key={i} index={i} className='size-20'>
-                          <AspectRatio className='size-full'>
+                        <FileUploaderItem key={i} index={i} className="size-20">
+                          <AspectRatio className="size-full">
                             {getFileType(file) === 'image' ? (
                               <Image
                                 src={URL.createObjectURL(file)}
                                 alt={file.name}
-                                className='object-cover'
-                                loading='eager'
+                                className="object-cover"
+                                loading="eager"
                                 fill
                               />
                             ) : (
-                              <FileVideo className='size-full' />
+                              <FileVideo className="size-full" />
                             )}
                           </AspectRatio>
                         </FileUploaderItem>
@@ -291,14 +291,14 @@ export const PostForm = ({ post, swrKey, medias, onFormSubmit }: TPostFormProps)
         />
 
         <FormField
-          name='isActive'
+          name="isActive"
           control={control}
           render={({ field: { name, value, onChange } }) => (
-            <FormItem className='flex flex-row items-start space-x-3 space-y-0'>
+            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
               <FormControl>
                 <Checkbox name={name} checked={value} onCheckedChange={onChange} />
               </FormControl>
-              <div className='space-y-1 leading-none'>
+              <div className="space-y-1 leading-none">
                 <FormLabel>{tAdm('Is active')}</FormLabel>
               </div>
               <FormMessage />
@@ -306,15 +306,15 @@ export const PostForm = ({ post, swrKey, medias, onFormSubmit }: TPostFormProps)
           )}
         />
 
-        <div className='mt-10 flex gap-2'>
+        <div className="mt-10 flex gap-2">
           <SubmitButton
-            className='mt-10'
+            className="mt-10"
             label={t('Save post')}
             isPending={pending}
             pendingLabel={tAdm('wait')}
             icon={<Save />}
           />
-          <Button variant='secondary' type='button' onClick={() => router.back()}>
+          <Button variant="secondary" type="button" onClick={() => router.back()}>
             {tAdm('Cancel')}
           </Button>
         </div>

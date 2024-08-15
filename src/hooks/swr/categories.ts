@@ -1,5 +1,5 @@
-import { TCategoryEntity, TGetAllDocuments } from '@/types';
 import { useGetDocs } from '@/hooks';
+import { TCategoryEntity, TGetAllDocuments } from '@/types';
 
 export const useGetCategories = (params?: Omit<TGetAllDocuments<TCategoryEntity>, 'path'>) =>
   useGetDocs<TCategoryEntity>({ path: 'categories', ...params });

@@ -1,16 +1,17 @@
 'use server';
 
+import { revalidatePathLocales } from '@/lib/utils';
+import { createDocument, deleteDocument, updateDocument } from '@/server/mongodb';
+import { parseSchemaFormData } from '@/server/utils';
 import { TDeleteFormState, TFormState, TTranslation, TTranslationEntity } from '@/types';
 import { updateTranslationSchemaServer } from './validations';
-import { parseSchemaFormData } from '@/server/utils';
-import { createDocument, deleteDocument, updateDocument } from '@/server/mongodb';
-import { revalidatePathLocales } from '@/lib/utils';
+
 
 export const createTranslation = async (translationData: TTranslation): Promise<TFormState<TTranslationEntity>> => {
   try {
     const data = await createDocument('translations', translationData);
-    revalidatePathLocales('/admin/translations');
-    revalidatePathLocales('/');
+    // revalidatePathLocales('/admin/translations');
+    // revalidatePathLocales('/');
     return { status: 'success', data };
   } catch (e) {
     return { status: 'fail', message: (e as Error).message };

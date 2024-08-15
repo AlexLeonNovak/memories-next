@@ -1,16 +1,16 @@
 'use client';
 
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '@/components/ui';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
+import { useFormState } from 'react-dom';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { SubmitButton } from '@/components/shared/SubmitButton';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '@/components/ui';
 import { useFormCheck } from '@/hooks';
 import { createLeadSchema } from '@/lib/validations';
 import { createLead } from '@/server/actions/leads.actions';
 import { TLead } from '@/types';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useFormState } from 'react-dom';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { useTranslations } from 'next-intl';
 
 const defaultValues: TLead = {
   organisation: '',
@@ -39,20 +39,20 @@ export const FeedbackForm = () => {
       toast.success(t('Feedback was successfully sent!'));
       reset(defaultValues);
     },
-    onFail: (state) => toast.error(tAdm(state.message)),
+    onFail: state => toast.error(tAdm(state.message)),
   });
 
   return (
     <Form {...form}>
       <form action={action}>
         <FormField
-          name='organisation'
+          name="organisation"
           control={control}
           render={({ field }) => (
             <FormItem>
               <FormLabel>
                 {/* eslint-disable-next-line react/jsx-no-literals */}
-                {t('Organisation')} <span className='text-red-600'>*</span>
+                {t('Organisation')} <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
                 <Input placeholder={t('Enter your organisation')} {...field} />
@@ -63,13 +63,13 @@ export const FeedbackForm = () => {
         />
 
         <FormField
-          name='name'
+          name="name"
           control={control}
           render={({ field }) => (
             <FormItem>
               <FormLabel>
                 {/* eslint-disable-next-line react/jsx-no-literals */}
-                {t('Name')} <span className='text-red-600'>*</span>
+                {t('Name')} <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
                 <Input placeholder={t('Enter your name')} {...field} />
@@ -80,13 +80,13 @@ export const FeedbackForm = () => {
         />
 
         <FormField
-          name='email'
+          name="email"
           control={control}
           render={({ field }) => (
             <FormItem>
               <FormLabel>
                 {/* eslint-disable-next-line react/jsx-no-literals */}
-                {t('E-mail')} <span className='text-red-600'>*</span>
+                {t('E-mail')} <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
                 <Input placeholder={t('Enter your e-mail')} {...field} />
@@ -97,13 +97,13 @@ export const FeedbackForm = () => {
         />
 
         <FormField
-          name='phone'
+          name="phone"
           control={control}
           render={({ field }) => (
             <FormItem>
               <FormLabel>
                 {/* eslint-disable-next-line react/jsx-no-literals */}
-                {t('Phone')} <span className='text-red-600'>*</span>
+                {t('Phone')} <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
                 <Input placeholder={t('Enter your phone')} {...field} />
@@ -112,8 +112,9 @@ export const FeedbackForm = () => {
             </FormItem>
           )}
         />
-
-        <SubmitButton label={t('I want to help')} pendingLabel={t('Sending feedback')} />
+        <div>
+          <SubmitButton label={t('I want to help')} pendingLabel={t('Sending feedback')} />
+        </div>
       </form>
     </Form>
   );

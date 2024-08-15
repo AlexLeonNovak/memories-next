@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { buildLocaleShape } from '@/lib/utils';
 import { zfd } from 'zod-form-data';
+import { buildLocaleShape } from '@/lib/utils';
 
 const basePostSchema = z.object({
   name: buildLocaleShape(zfd.text(z.string().min(1, 'Required'))),

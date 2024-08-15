@@ -1,9 +1,9 @@
 'use client';
 
-import { CategoryForm, PageTitle } from '@/components/screens';
-import { useRouter } from '@/navigation';
-import { useStateStore } from '@/lib/store';
 import { useTranslations } from 'next-intl';
+import { CategoryForm, PageTitle } from '@/components/screens';
+import { useStateStore } from '@/lib/store';
+import { useRouter } from '@/navigation';
 
 export const CategoryAddWrapper = () => {
   const tAdm = useTranslations('Admin');

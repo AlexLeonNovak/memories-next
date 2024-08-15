@@ -1,9 +1,9 @@
-import 'server-only';
 import { getFirestore } from 'firebase-admin/firestore';
+import path from 'path';
+import { removeEmpty } from '@/lib/utils';
 import { firebaseAdminApp } from '@/server/firebase/config';
 import { TBaseEntity, TCollections } from '@/types';
-import { removeEmpty } from '@/lib/utils';
-import path from 'path';
+import 'server-only';
 
 export const firestoreAdmin = getFirestore(firebaseAdminApp);
 

@@ -1,8 +1,8 @@
 import { AbstractIntlMessages } from 'use-intl';
 import { i18n, TLocale } from '@/config';
+import { useGetTranslations } from '@/hooks';
 import { createDocument } from '@/server/firebase';
 import { TCheckTranslations, TTranslation } from '@/types';
-import { useGetTranslations } from '@/hooks';
 
 export const defineLocaleValues = <T>(value: T) => {
   const values = {} as { [locale in TLocale]?: T };

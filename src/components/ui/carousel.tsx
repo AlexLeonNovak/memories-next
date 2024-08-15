@@ -2,11 +2,10 @@
 
 import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons';
 import useEmblaCarousel, { type UseEmblaCarouselType } from 'embla-carousel-react';
-import * as React from 'react';
-
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
+import * as React from 'react';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
@@ -122,8 +121,8 @@ const Carousel = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEl
           ref={ref}
           onKeyDownCapture={handleKeyDown}
           className={cn('relative', className)}
-          role='region'
-          aria-roledescription='carousel'
+          role="region"
+          aria-roledescription="carousel"
           {...props}
         >
           {children}
@@ -139,7 +138,7 @@ const CarouselContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HT
     const { carouselRef, orientation } = useCarousel();
 
     return (
-      <div ref={carouselRef} className='overflow-hidden'>
+      <div ref={carouselRef} className="overflow-hidden">
         <div
           ref={ref}
           className={cn('flex', orientation === 'horizontal' ? '-ml-4' : '-mt-4 flex-col', className)}
@@ -158,8 +157,8 @@ const CarouselItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLD
     return (
       <div
         ref={ref}
-        role='group'
-        aria-roledescription='slide'
+        role="group"
+        aria-roledescription="slide"
         className={cn('min-w-0 shrink-0 grow-0 basis-full', orientation === 'horizontal' ? 'pl-4' : 'pt-4', className)}
         {...props}
       />
@@ -188,8 +187,8 @@ const CarouselPrevious = React.forwardRef<HTMLButtonElement, React.ComponentProp
         onClick={scrollPrev}
         {...props}
       >
-        <ArrowLeftIcon className='h-4 w-4' />
-        <span className='sr-only'>{t('Previous slide')}</span>
+        <ArrowLeftIcon className="h-4 w-4" />
+        <span className="sr-only">{t('Previous slide')}</span>
       </Button>
     );
   },
@@ -216,8 +215,8 @@ const CarouselNext = React.forwardRef<HTMLButtonElement, React.ComponentProps<ty
         onClick={scrollNext}
         {...props}
       >
-        <ArrowRightIcon className='h-4 w-4' />
-        <span className='sr-only'>{t('Next slide')}</span>
+        <ArrowRightIcon className="h-4 w-4" />
+        <span className="sr-only">{t('Next slide')}</span>
       </Button>
     );
   },

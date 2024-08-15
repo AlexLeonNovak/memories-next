@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import { Footer, Header } from '@/components/screens';
-import { TChildrenProps, TAppLayoutProps } from '@/types';
 import { getTranslations } from 'next-intl/server';
+import { Footer, Header } from '@/components/screens';
+import { TAppLayoutProps, TChildrenProps } from '@/types';
 
 export const generateMetadata = async ({ params: { locale } }: TAppLayoutProps): Promise<Metadata> => {
   const t = await getTranslations({ locale, namespace: 'Metadata' });

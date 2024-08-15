@@ -1,13 +1,13 @@
 'use client';
 
-import { useParams } from 'next/navigation';
-import { useRouter, usePathname } from '@/navigation';
-import { Button } from '@/components/ui';
-import { Fragment, MouseEvent, useTransition } from 'react';
-import { cn } from '@/lib/utils';
-import { locales } from '@/config';
 import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
+import { Fragment, MouseEvent, useTransition } from 'react';
 import { useLocale } from 'use-intl';
+import { Button } from '@/components/ui';
+import { locales } from '@/config';
+import { cn } from '@/lib/utils';
+import { usePathname, useRouter } from '@/navigation';
 
 export const LanguageSwitcher = () => {
   const [isPending, startTransition] = useTransition();
@@ -26,11 +26,11 @@ export const LanguageSwitcher = () => {
   };
 
   return (
-    <div className='header-lang-switcher'>
+    <div className="header-lang-switcher">
       {locales.map((locale, index) => (
         <Fragment key={locale}>
           <Button
-            variant='link'
+            variant="link"
             className={cn('px-0 uppercase', currentLocale === locale && 'underline')}
             disabled={currentLocale === locale || isPending}
             value={locale}
@@ -39,7 +39,7 @@ export const LanguageSwitcher = () => {
             {t(locale)}
           </Button>
           {/* eslint-disable-next-line react/jsx-no-literals */}
-          {index + 1 < locales.length && <span className='mx-[5px]'>/</span>}
+          {index + 1 < locales.length && <span className="mx-[5px]">/</span>}
         </Fragment>
       ))}
     </div>

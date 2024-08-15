@@ -1,7 +1,7 @@
-import { SWRConfiguration } from 'swr';
 import { Document } from 'bson';
-import { TCollections } from '@/types/firestore';
 import { Filter, FindOptions } from 'mongodb';
+import { SWRConfiguration } from 'swr';
+import { TCollections } from '@/types/firestore';
 import { TBaseEntity } from '@/types/base';
 
 export type TUseSWRArgs<F extends (...args: any[]) => any, K extends keyof any> = (

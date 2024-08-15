@@ -1,11 +1,12 @@
 'use server';
 
-import { createPostSchemaServer, updatePostSchemaServer } from './validations';
+import { revalidatePathLocales } from '@/lib/utils';
+import { deleteMediasByPostId } from '@/server/actions/medias.actions';
+import { createDocument, deleteDocument, updateDocument } from '@/server/mongodb';
 import { parseSchemaFormData } from '@/server/utils';
 import { TDeleteFormState, TFormState, TPost, TPostEntity } from '@/types';
-import { createDocument, deleteDocument, updateDocument } from '@/server/mongodb';
-import { deleteMediasByPostId } from '@/server/actions/medias.actions';
-import { revalidatePathLocales } from '@/lib/utils';
+import { createPostSchemaServer, updatePostSchemaServer } from './validations';
+
 
 export const createPost = async (prevState: any, formData: FormData): Promise<TFormState<TPostEntity>> => {
   try {

@@ -1,14 +1,23 @@
 import createNextIntlPlugin from 'next-intl/plugin';
+import path from 'path';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-  // webpack: (config) => ({
-  //   ...config,
-  //   experiments: {
-  //     asyncWebAssembly: true,
-  //   },
-  // }),
+  webpack: (config) => ({
+    ...config,
+    resolve: {
+      ...config.resolve,
+      alias: {
+        ...config.resolve.alias,
+        '@': path.resolve(import.meta.url, './src'),
+      },
+    },
+    optimization: {
+      ...config.optimization,
+      providedExports: true,
+    },
+  }),
   images: {
     remotePatterns: [
       {

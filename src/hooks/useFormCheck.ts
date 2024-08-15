@@ -1,8 +1,8 @@
 'use client';
 
-import { TFormState, TFormStateError, TFormStateFail, TFormStateSuccess } from '@/types';
 import { useEffect } from 'react';
 import { FieldPath, FieldValues, UseFormSetError } from 'react-hook-form';
+import { TFormState, TFormStateError, TFormStateFail, TFormStateSuccess } from '@/types';
 
 type TFormCheckArgs<T extends FieldValues, F extends FieldValues = T> = {
   state: TFormState<T> | null;
@@ -32,7 +32,7 @@ export const useFormCheck = <T extends FieldValues, F extends FieldValues = T>({
           break;
         case 'error':
           setError &&
-            state.errors?.forEach((error) => {
+            state.errors?.forEach(error => {
               setError(error.path as FieldPath<F>, {
                 message: error.message,
               });

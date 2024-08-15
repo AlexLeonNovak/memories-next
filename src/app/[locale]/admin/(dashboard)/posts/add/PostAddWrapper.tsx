@@ -1,7 +1,7 @@
 'use client';
 
-import { PageTitle, PostForm } from '@/components/screens';
 import { useTranslations } from 'next-intl';
+import { PageTitle, PostForm } from '@/components/screens';
 
 export const PostAddWrapper = () => {
   const tAdm = useTranslations('Admin');

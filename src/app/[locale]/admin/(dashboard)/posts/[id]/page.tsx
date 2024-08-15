@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+
 import { getMedias, getPostById } from '@/server/swr';
 import { PostEditWrapper } from './PostEditWrapper';
 

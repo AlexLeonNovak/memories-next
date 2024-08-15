@@ -1,12 +1,12 @@
 'use server';
 
 // import { MediaRepository, PostRepository } from '@/lib/repositories';
-import { TFormState, TMedia, TMediaEntity, TQueryOptions } from '@/types';
-import { parseSchemaFormData } from '@/server/utils';
+import { deleteFile } from '@/lib/firebase';
 import { bulkCreateMediasSchemaServer } from '@/server/actions/validations';
 import { createDocument, deleteDocument } from '@/server/mongodb';
 import { getMediasByPostId } from '@/server/swr';
-import { deleteFile } from '@/lib/firebase';
+import { parseSchemaFormData } from '@/server/utils';
+import { TFormState, TMedia, TMediaEntity, TQueryOptions } from '@/types';
 
 // export const fetchMedias = (queryOptions?: TQueryOptions<TMediaEntity>) => MediaRepository.getAll(queryOptions);
 //
@@ -31,7 +31,7 @@ export const bulkCreateMedias = async (postId: string, medias: TMedia[]): Promis
       if (medias?.data?.length) {
         for (const [idx, media] of medias.data.entries()) {
           const { name, size } = media;
-          const fileIndex = parsed.data.findIndex((file) => file.name === name && file.size === size);
+          const fileIndex = parsed.data.findIndex(file => file.name === name && file.size === size);
           if (fileIndex !== -1) {
             parsed.data.splice(fileIndex, 1);
             medias.data.splice(idx, 1);

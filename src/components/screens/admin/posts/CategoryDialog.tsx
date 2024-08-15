@@ -1,11 +1,11 @@
 'use client';
 
-import { Modal, SubmitButton } from '@/components/shared';
 import { Plus, Save } from 'lucide-react';
-import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Button } from '@/components/ui';
+import { useState } from 'react';
 import { CategoryForm } from '@/components/screens';
+import { Modal, SubmitButton } from '@/components/shared';
+import { Button } from '@/components/ui';
 
 export const CategoryDialog = () => {
   const [showCategoryDialog, setShowCategoryDialog] = useState(false);
@@ -15,7 +15,7 @@ export const CategoryDialog = () => {
 
   return (
     <>
-      <Button className='ml-auto' type='button' variant='link' onClick={() => setShowCategoryDialog(true)}>
+      <Button className="ml-auto" type="button" variant="link" onClick={() => setShowCategoryDialog(true)}>
         <Plus />
         <span>{t('Add new category')}</span>
       </Button>

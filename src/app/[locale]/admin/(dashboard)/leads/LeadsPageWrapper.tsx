@@ -1,7 +1,7 @@
 'use client';
 
-import { LeadsTable, PageTitle } from '@/components/screens';
 import { useTranslations } from 'next-intl';
+import { LeadsTable, PageTitle } from '@/components/screens';
 
 export const LeadsPageWrapper = () => {
   const tAdm = useTranslations('Admin');

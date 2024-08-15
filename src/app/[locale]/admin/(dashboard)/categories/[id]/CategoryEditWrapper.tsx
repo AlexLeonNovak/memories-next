@@ -1,12 +1,12 @@
 'use client';
 
-import { CategoryForm, PageTitle } from '@/components/screens';
-import { TCategoryEntity } from '@/types';
-import { useRouter } from '@/navigation';
-import { useStateStore } from '@/lib/store';
 import { useTranslations } from 'next-intl';
 import { useLocale } from 'use-intl';
+import { CategoryForm, PageTitle } from '@/components/screens';
 import { TLocale } from '@/config';
+import { useStateStore } from '@/lib/store';
+import { useRouter } from '@/navigation';
+import { TCategoryEntity } from '@/types';
 
 type TCategoryFormWrapperProps = {
   category: TCategoryEntity;

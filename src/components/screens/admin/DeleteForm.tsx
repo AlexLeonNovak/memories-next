@@ -1,13 +1,13 @@
 'use client';
 
-import { ConfirmDialog, SubmitButton } from '@/components/shared';
-import { Input } from '@/components/ui';
-import { TDeleteFormState } from '@/types';
 import { Trash } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { MouseEvent, useEffect, useRef, useState } from 'react';
 import { useFormState } from 'react-dom';
 import { toast } from 'sonner';
-import { useTranslations } from 'next-intl';
+import { TDeleteFormState } from '@/types';
+import { Input } from '@/components/ui';
+import { ConfirmDialog, SubmitButton } from '@/components/shared';
 
 type TDeleteCategoryForProps = {
   id: string;
@@ -45,8 +45,8 @@ export const DeleteForm = ({ id, title, description, onDeleted, deleteAction }: 
 
   return (
     <form action={action} ref={formRef}>
-      <Input type='hidden' name='id' value={id} />
-      <SubmitButton variant='destructive-ghost' title={tAdm('Delete')} icon={<Trash />} onClick={onSubmit} />
+      <Input type="hidden" name="id" value={id} />
+      <SubmitButton variant="destructive-ghost" title={tAdm('Delete')} icon={<Trash />} onClick={onSubmit} />
       <ConfirmDialog
         open={open}
         setOpen={setOpen}

@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useLayoutEffect } from 'react';
-import Image from 'next/image';
 import { useGSAP } from '@gsap/react';
-import { ScrollTrigger, gsap } from 'gsap/all';
+import { gsap, ScrollTrigger } from 'gsap/all';
+import Image from 'next/image';
+import React, { useLayoutEffect } from 'react';
 
 export const GalleryControlHelper = () => {
   useLayoutEffect(() => {
@@ -43,11 +43,11 @@ export const GalleryControlHelper = () => {
   );
 
   return (
-    <div className='gallery-helper-container' ref={container}>
-      <div className='gallery-helper'>
-        <div className='galler-text-help'>Click on item to read more</div>
-        <div className='gallery-icon-help'>
-          <Image width={50} height={50} src='/tap-white.svg' alt='Zberezhemo logo' priority className='gallery-icon' />
+    <div className="gallery-helper-container" ref={container}>
+      <div className="gallery-helper">
+        <div className="galler-text-help">Click on item to read more</div>
+        <div className="gallery-icon-help">
+          <Image width={50} height={50} src="/tap-white.svg" alt="Zberezhemo logo" priority className="gallery-icon" />
         </div>
       </div>
     </div>

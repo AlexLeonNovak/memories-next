@@ -1,5 +1,5 @@
 {
-  "extends": "next/core-web-vitals",
+  "extends": ["next/core-web-vitals"],
   "rules": {
     "import/no-anonymous-default-export": [
       2,
@@ -18,13 +18,24 @@
         "importNames": ["redirect", "permanentRedirect", "useRouter", "usePathname"],
         "message": "Please import from `@/navigation` instead."
       }
+    ],
+    "import/order": [1, { "groups": ["external", "builtin", "internal", "sibling", "parent", "index"] }],
+    "sort-imports": [
+      "error",
+      {
+        "ignoreCase": true,
+        "ignoreDeclarationSort": true
+      }
     ]
   },
   "settings": {
     "import/resolver": {
+      "typescript": true,
+      "node": true,
       "alias": {
         "map": [["@", "./src"]]
-      }
+      },
+      "extensions": [".ts", ".tsx"]
     }
   }
 }

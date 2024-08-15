@@ -1,5 +1,5 @@
-import { TGetAllDocuments, TLeadEntity } from '@/types';
 import { useGetDocs } from '@/hooks';
+import { TGetAllDocuments, TLeadEntity } from '@/types';
 
 export const useGetLeads = (params?: Omit<TGetAllDocuments<TLeadEntity>, 'path'>) =>
   useGetDocs<TLeadEntity>({ path: 'leads', ...params });

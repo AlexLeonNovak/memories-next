@@ -1,5 +1,5 @@
-import { TGetAllDocuments, TMediaEntity } from '@/types';
 import { getCollectionCached } from '@/server/swr/base';
+import { TGetAllDocuments, TMediaEntity } from '@/types';
 
 export const getMedias = (params?: Omit<TGetAllDocuments<TMediaEntity>, 'path'>) =>
   getCollectionCached<TMediaEntity>({ path: 'medias', ...params });

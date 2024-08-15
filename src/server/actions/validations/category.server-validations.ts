@@ -1,8 +1,8 @@
+import { z } from 'zod';
 import { zfd } from 'zod-form-data';
 import { i18n } from '@/config';
-import { getCategories } from '@/server/swr';
-import { z } from 'zod';
 import { buildLocaleShape } from '@/lib/utils';
+import { getCategories } from '@/server/swr';
 
 const baseCategorySchema = z.object({
   name: buildLocaleShape(zfd.text(z.string()).default('')),

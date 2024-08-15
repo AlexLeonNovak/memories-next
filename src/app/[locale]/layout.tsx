@@ -1,12 +1,14 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import { getMessages, unstable_setRequestLocale } from 'next-intl/server';
+import { Inter } from 'next/font/google';
 import { Toaster } from 'sonner';
-import { TChildrenProps, TAppLayoutProps } from '@/types';
 import { locales, TLocale } from '@/config';
-import './globals.css';
 import { IntlProvider, SWRProvider } from '@/providers';
 import { getCategories, getMedias, getPosts, getTranslations } from '@/server/swr';
+import { TAppLayoutProps, TChildrenProps } from '@/types';
+
+import './globals.css';
+import { cn } from '@/lib/utils';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -35,7 +37,7 @@ export default async function RootLayout({ children, params }: TRootLayoutProps)
 
   return (
     <html lang={params.locale}>
-      <body className={inter.className}>
+      <body className={cn('flex flex-col min-h-screen h-auto', inter.className)}>
         <SWRProvider fallback={fallback}>
           <IntlProvider locale={params.locale} messages={messages}>
             {children}

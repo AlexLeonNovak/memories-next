@@ -1,10 +1,10 @@
 'use client';
 
-import { PageTitle, PostForm } from '@/components/screens';
-import { TMediaEntity, TPostEntity } from '@/types';
 import { useTranslations } from 'next-intl';
 import { useLocale } from 'use-intl';
+import { PageTitle, PostForm } from '@/components/screens';
 import { TLocale } from '@/config';
+import { TMediaEntity, TPostEntity } from '@/types';
 
 type TPostFormWrapperProps = {
   post: TPostEntity;

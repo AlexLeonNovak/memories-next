@@ -1,53 +1,53 @@
 .gallery-helper-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
 }
 
 .gallery-helper {
-    position: relative;
-    width: 300px;
-    margin: 0 auto;
-    padding: 20px;
-    z-index: 10;
-    border-radius: 10px;
+  position: relative;
+  width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  z-index: 10;
+  border-radius: 10px;
 }
 
 .galler-text-help {
-    background-image: url('/tap-black.png');
-    padding-bottom: 80px;
-    background-repeat: no-repeat;
-    padding-left: 30px;
-    margin: 0 auto;
-    width: 250px;
-    display: none;
+  background-image: url('/tap-black.png');
+  padding-bottom: 80px;
+  background-repeat: no-repeat;
+  padding-left: 30px;
+  margin: 0 auto;
+  width: 250px;
+  display: none;
 }
 
 .gallery-icon-help {
-    height: 50px;
-    width: 50px;
-    margin: 0 auto;
+  height: 50px;
+  width: 50px;
+  margin: 0 auto;
 }
 
 .gallery-icon {
-    filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .2));
-    z-index: 1000;
+  filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.2));
+  z-index: 1000;
 }
 
 @media screen and (max-width: 980px) {
-    .galler-text-help {
-        display: block;
-    }
+  .galler-text-help {
+    display: block;
+  }
 
-    .gallery-helper-container {
-        position: relative;
-        top: -11.5vh;
-        left: 0;
-        right: 0;
-    }
+  .gallery-helper-container {
+    position: relative;
+    top: -11.5vh;
+    left: 0;
+    right: 0;
+  }
 
-    .gallery-helper {
-        margin: 13vw;
-    }
+  .gallery-helper {
+    margin: 13vw;
+  }
 }

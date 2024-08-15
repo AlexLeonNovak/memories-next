@@ -1,14 +1,14 @@
 'use server';
 
-import { loginSchema } from '@/lib/validations';
-import { getFirebaseAuth } from '@/lib/firebase';
-import { firebaseAdminAuth } from '@/server/firebase';
-import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import { TFormState } from '@/types';
 import { UserInfo } from '@firebase/auth-types';
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { cookies } from 'next/headers';
-import { SESSION_COOKIE_NAME, SESSION_COOKIE_EXPIRES_IN } from '@/lib/constants';
+import { SESSION_COOKIE_EXPIRES_IN, SESSION_COOKIE_NAME } from '@/lib/constants';
+import { getFirebaseAuth } from '@/lib/firebase';
+import { loginSchema } from '@/lib/validations';
+import { firebaseAdminAuth } from '@/server/firebase';
 import { parseSchemaFormData } from '@/server/utils';
+import { TFormState } from '@/types';
 
 export const createSession = async (tokenId: string) => {
   const session = await firebaseAdminAuth.createSessionCookie(tokenId, { expiresIn: SESSION_COOKIE_EXPIRES_IN * 1000 });

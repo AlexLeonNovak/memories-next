@@ -1,8 +1,4 @@
-import 'server-only';
-import { TBaseEntity, TCollections, TQueryFilter, TQueryOptions, TQueryOrder } from '@/types';
 import {
-  OrderByDirection,
-  QueryDocumentSnapshot,
   addDoc,
   and,
   collection,
@@ -13,12 +9,17 @@ import {
   getFirestore,
   or,
   orderBy,
+  OrderByDirection,
   query,
+  QueryDocumentSnapshot,
   setDoc,
   where,
 } from '@firebase/firestore';
-import { getFirebaseApp } from './index';
+import { TBaseEntity, TCollections, TQueryFilter, TQueryOptions, TQueryOrder } from '@/types';
+import 'server-only';
+
 import { removeEmpty } from '../utils/object';
+import { getFirebaseApp } from './index';
 
 export const getFirestoreDatabase = () => {
   return getFirestore(getFirebaseApp());
@@ -77,7 +78,7 @@ export const createCRUD = <T extends object>(path: TCollections) => {
         }
       }
       if (queryOptions?.order) {
-        const orders = [queryOptions.order].flat().map((value) => {
+        const orders = [queryOptions.order].flat().map(value => {
           if (typeof value === 'string') {
             return orderBy(value);
           } else {
@@ -92,7 +93,7 @@ export const createCRUD = <T extends object>(path: TCollections) => {
       // @ts-ignore
       const q = queryParams.length ? query(_collection, ...queryParams) : _collection;
       const snapshot = await getDocs(q);
-      return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as TBaseEntity & T);
+      return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }) as TBaseEntity & T);
     } catch (error) {
       console.error(error);
       throw error;

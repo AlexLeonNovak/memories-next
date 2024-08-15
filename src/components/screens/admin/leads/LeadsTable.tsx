@@ -1,12 +1,12 @@
 'use client';
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui';
-import { deleteLead } from '@/server/actions/leads.actions';
 import { DateTime } from 'luxon';
 import { useTranslations } from 'next-intl';
-import { useGetLeads } from '@/hooks';
-import { TableSkeleton } from '@/components/shared';
 import { DeleteForm } from '@/components/screens';
+import { TableSkeleton } from '@/components/shared';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui';
+import { useGetLeads } from '@/hooks';
+import { deleteLead } from '@/server/actions/leads.actions';
 
 export const LeadsTable = () => {
   const { data, mutate, isLoading } = useGetLeads();
@@ -39,7 +39,7 @@ export const LeadsTable = () => {
               <TableCell>{email}</TableCell>
               <TableCell>{DateTime.fromISO(createdAt).toFormat('yyyy-LL-dd HH:mm')}</TableCell>
               <TableCell>
-                <div className='flex gap-2'>
+                <div className="flex gap-2">
                   <DeleteForm
                     id={id}
                     deleteAction={deleteLead}
@@ -54,7 +54,7 @@ export const LeadsTable = () => {
         {!data?.length && !isLoading && (
           <TableRow>
             <TableCell colSpan={7}>
-              <p className='text-center text-2xl text-muted-foreground'>{tAdm('There are no items to display yet')}</p>
+              <p className="text-center text-2xl text-muted-foreground">{tAdm('There are no items to display yet')}</p>
             </TableCell>
           </TableRow>
         )}

@@ -11,7 +11,7 @@ type TStateStore = {
 };
 
 export const useStateStore = create<TStateStore>((set, get) => ({
-  setStateValue: (key, value) => set((prevState) => ({ ...prevState, [key]: value })),
+  setStateValue: (key, value) => set(prevState => ({ ...prevState, [key]: value })),
   getStateValue: (key: string) => {
     const state = get() as { [key: string]: any };
     let value;

@@ -1,15 +1,14 @@
 'use client';
 
+import { useGSAP } from '@gsap/react';
+import 'animate.css/source/fading_entrances/fadeInDown.css';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useTranslations } from 'next-intl';
 import React, { useEffect } from 'react';
-import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-import { FeedbackForm } from './components/FeedbackForm';
 import { generateSymbolsFromText } from '@/lib/jsx-utils';
-
-import 'animate.css/source/fading_entrances/fadeInDown.css';
+import { FeedbackForm } from './components/FeedbackForm';
 import './css/feedback.css';
 
 export const SectionFeedback = () => {
@@ -54,6 +53,7 @@ export const SectionFeedback = () => {
   );
 
   const lineOne = t('LET US SAVE');
+  console.log(lineOne);
   const lineTwo = t('THE PAST FOR');
   const lineThree = t('THE FUTURE');
   const className = 'feedback-letter';

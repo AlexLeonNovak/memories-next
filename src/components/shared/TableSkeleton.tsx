@@ -13,7 +13,7 @@ export const TableSkeleton = ({ rows = 3, columns = 4 }: TTableSkeletonProps) =>
         <TableRow key={`row-${i}`}>
           {[...Array(columns)].map((_, j) => (
             <TableCell key={`col-${i}-${j}`}>
-              <Skeleton className='h-7 w-full' />
+              <Skeleton className="h-7 w-full" />
             </TableCell>
           ))}
         </TableRow>

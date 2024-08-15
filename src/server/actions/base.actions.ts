@@ -1,7 +1,7 @@
 'use server';
 
-import { TCollections, TGetAllDocuments } from '@/types';
 import { getAllDocuments, getDocumentById } from '@/server/mongodb';
+import { TCollections, TGetAllDocuments } from '@/types';
 
 export const getAllAction = async <T extends Document>(params: TGetAllDocuments<T>) => getAllDocuments<T>(params);
 

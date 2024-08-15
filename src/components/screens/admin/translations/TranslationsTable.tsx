@@ -1,18 +1,18 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+import { useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
+import { useDebounce } from 'use-debounce';
+import { DeleteForm, TranslationEditDialog } from '@/components/screens';
+import { SelectInput, TableSkeleton, TSelectInputItem } from '@/components/shared';
 import { Input, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui';
 import { i18n, TLocale } from '@/config';
-import { getArrayObjectValues } from '@/lib/utils';
-import { useTranslations } from 'next-intl';
-import { usePathname, useRouter } from '@/navigation';
-import { useCallback, useEffect, useState } from 'react';
-import { TQueryFilter, TTranslationEntity } from '@/types';
-import { useDebounce } from 'use-debounce';
-import { deleteTranslation } from '@/server/actions/translations.actions';
-import { useSearchParams } from 'next/navigation';
 import { useGetTranslations } from '@/hooks/swr/translations';
-import { SelectInput, TableSkeleton, TSelectInputItem } from '@/components/shared';
-import { DeleteForm, TranslationEditDialog } from '@/components/screens';
+import { getArrayObjectValues } from '@/lib/utils';
+import { usePathname, useRouter } from '@/navigation';
+import { deleteTranslation } from '@/server/actions/translations.actions';
+import { TQueryFilter, TTranslationEntity } from '@/types';
 
 export const TranslationsTable = () => {
   const tAdm = useTranslations('Admin');
@@ -32,9 +32,9 @@ export const TranslationsTable = () => {
       return;
     }
     const _namespaces = getArrayObjectValues(translations, 'namespace');
-    setNamespaces(_namespaces.map((n) => ({ label: n, value: n })));
+    setNamespaces(_namespaces.map(n => ({ label: n, value: n })));
     const _keys = getArrayObjectValues(translations, 'key');
-    setKeys(_keys.map((k) => ({ label: k, value: k })));
+    setKeys(_keys.map(k => ({ label: k, value: k })));
   }, [translations]);
 
   const createQueryString = useCallback(
@@ -72,7 +72,7 @@ export const TranslationsTable = () => {
     for (const searchKey of searchKeys) {
       const value = (searchParams.get(searchKey) as string)?.toLowerCase();
       if (value) {
-        filtered = filtered.filter((t) => (t as any)[searchKey]?.toLowerCase() === value);
+        filtered = filtered.filter(t => (t as any)[searchKey]?.toLowerCase() === value);
       }
     }
     setFilteredTranslations(filtered);
@@ -92,8 +92,8 @@ export const TranslationsTable = () => {
           <TableHead>{tAdm('#')}</TableHead>
           <TableHead>{tAdm('Namespace')}</TableHead>
           <TableHead>{tAdm('Key')}</TableHead>
-          {i18n.locales.map((locale) => (
-            <TableHead key={locale} className='uppercase'>
+          {i18n.locales.map(locale => (
+            <TableHead key={locale} className="uppercase">
               {tAdm(locale)}
             </TableHead>
           ))}
@@ -108,7 +108,7 @@ export const TranslationsTable = () => {
                   items={namespaces}
                   value={searchParams.get('namespace') as string}
                   placeholder={tAdm('Select namespace')}
-                  onValueChange={(value) => handleSearch('namespace', value)}
+                  onValueChange={value => handleSearch('namespace', value)}
                 />
               )}
             </TableHead>
@@ -118,16 +118,16 @@ export const TranslationsTable = () => {
                   items={keys}
                   value={searchParams.get('key') as string}
                   placeholder={tAdm('Select key')}
-                  onValueChange={(value) => handleSearch('key', value)}
+                  onValueChange={value => handleSearch('key', value)}
                 />
               )}
             </TableHead>
-            {i18n.locales.map((locale) => (
-              <TableHead key={locale} className='uppercase'>
+            {i18n.locales.map(locale => (
+              <TableHead key={locale} className="uppercase">
                 <Input
                   name={locale}
                   value={localeSearch && localeSearch[locale as TLocale]}
-                  onChange={(e) => setLocaleSearch((state) => ({ ...state, [locale]: e.target.value }))}
+                  onChange={e => setLocaleSearch(state => ({ ...state, [locale]: e.target.value }))}
                 />
               </TableHead>
             ))}
@@ -145,10 +145,10 @@ export const TranslationsTable = () => {
                 <TableCell>{++index}</TableCell>
                 <TableCell>{namespace}</TableCell>
                 <TableCell>{key}</TableCell>
-                {i18n.locales.map((locale) => {
+                {i18n.locales.map(locale => {
                   let content;
                   if (typeof translation[locale] === 'undefined') {
-                    content = <span className='text-destructive'>{tAdm('No translation')}</span>;
+                    content = <span className="text-destructive">{tAdm('No translation')}</span>;
                   } else if (key.startsWith('[html]')) {
                     content = <span dangerouslySetInnerHTML={{ __html: translation[locale]! }} />;
                   } else {
@@ -158,7 +158,7 @@ export const TranslationsTable = () => {
                   return <TableCell key={locale}>{content}</TableCell>;
                 })}
                 <TableCell>
-                  <div className='flex gap-2'>
+                  <div className="flex gap-2">
                     <TranslationEditDialog translation={translation} onUpdate={() => mutate()} />
                     <DeleteForm
                       id={id}

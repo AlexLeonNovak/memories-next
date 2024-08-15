@@ -1,6 +1,6 @@
-import 'server-only';
+import { AppOptions, cert, getApp, getApps, initializeApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
-import { AppOptions, initializeApp, cert, getApp, getApps } from 'firebase-admin/app';
+import 'server-only';
 
 const {
   NEXT_PUBLIC_FIREBASE_DATABASE_URL,

@@ -1,8 +1,8 @@
 'use client';
 
-import { TChildrenProps } from '@/types';
 import { SWRConfig, SWRConfiguration } from 'swr';
 import { getFirebaseApp } from '@/lib/firebase';
+import { TChildrenProps } from '@/types';
 
 type TSWRProviderProps = TChildrenProps & {
   fallback: SWRConfiguration;

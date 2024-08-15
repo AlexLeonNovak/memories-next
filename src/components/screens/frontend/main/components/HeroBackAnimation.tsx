@@ -23,11 +23,11 @@ export const HeroBackAnimation = () => {
       );
     }
     rows.push(
-      <div key={rowCounter.toString()} className='hero-square-line'>
+      <div key={rowCounter.toString()} className="hero-square-line">
         {cells}
       </div>,
     );
   }
 
-  return <div className='hero-square-lines'>{rows}</div>;
+  return <div className="hero-square-lines">{rows}</div>;
 };

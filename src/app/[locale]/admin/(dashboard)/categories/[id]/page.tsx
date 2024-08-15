@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
-import { CategoryEditWrapper } from './CategoryEditWrapper';
+
 import { getCategoryById } from '@/server/swr';
+import { CategoryEditWrapper } from './CategoryEditWrapper';
 
 type TEditCategoryPage = {
   params: {

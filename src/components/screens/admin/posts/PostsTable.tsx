@@ -1,19 +1,19 @@
 'use client';
 
-import { Badge, Button, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui';
-import { deletePost } from '@/server/actions/posts.actions';
 import { Pencil } from 'lucide-react';
-import { Link } from '@/navigation';
-import { i18n, TLocale } from '@/config';
-import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { useLocale } from 'use-intl';
-import { useGetCategories, useGetPosts } from '@/hooks';
-import { toast } from 'sonner';
 import { useSearchParams } from 'next/navigation';
-import { useStateStore } from '@/lib/store';
-import { TableSkeleton } from '@/components/shared';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
+import { useLocale } from 'use-intl';
 import { DeleteForm } from '@/components/screens';
+import { TableSkeleton } from '@/components/shared';
+import { Badge, Button, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui';
+import { i18n, TLocale } from '@/config';
+import { useGetCategories, useGetPosts } from '@/hooks';
+import { useStateStore } from '@/lib/store';
+import { Link } from '@/navigation';
+import { deletePost } from '@/server/actions/posts.actions';
 
 export const PostsTable = () => {
   const { getStateValue } = useStateStore();
@@ -54,18 +54,18 @@ export const PostsTable = () => {
           <TableRow key={id}>
             <TableCell>{++index}</TableCell>
             <TableCell>
-              {i18n.locales.map((locale) => (
-                <p key={locale} className='space-x-1'>
-                  <span className='text-muted-foreground uppercase'>{tAdm(`[${locale}]`)}</span>
+              {i18n.locales.map(locale => (
+                <p key={locale} className="space-x-1">
+                  <span className="text-muted-foreground uppercase">{tAdm(`[${locale}]`)}</span>
                   <span>{name[locale]}</span>
                 </p>
               ))}
             </TableCell>
             <TableCell>
-              <div className='flex flex-wrap gap-1'>
+              <div className="flex flex-wrap gap-1">
                 {catIds?.length &&
                   categories.data
-                    ?.filter((c) => catIds.includes(c.id))
+                    ?.filter(c => catIds.includes(c.id))
                     .map(({ id, name }) => <Badge key={id}>{name[locale]}</Badge>)}
               </div>
             </TableCell>
@@ -75,7 +75,7 @@ export const PostsTable = () => {
               </Badge>
             </TableCell>
             <TableCell>
-              <div className='flex gap-2'>
+              <div className="flex gap-2">
                 <DeleteForm
                   id={id}
                   deleteAction={deletePost}
@@ -83,7 +83,7 @@ export const PostsTable = () => {
                   title={t('Delete post?')}
                   description={t('Are you sure you want to delete this post?')}
                 />
-                <Button asChild variant='ghost'>
+                <Button asChild variant="ghost">
                   <Link href={`posts/${id}`}>
                     <Pencil />
                   </Link>
@@ -96,7 +96,7 @@ export const PostsTable = () => {
         {!posts.data?.length && !posts.isLoading && (
           <TableRow>
             <TableCell colSpan={5}>
-              <p className='text-center text-2xl text-muted-foreground'>{tAdm('There are no items to display yet')}</p>
+              <p className="text-center text-2xl text-muted-foreground">{tAdm('There are no items to display yet')}</p>
             </TableCell>
           </TableRow>
         )}

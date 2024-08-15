@@ -1,5 +1,6 @@
 import { useGetDocs } from '@/hooks';
 import { TGetAllDocuments, TPostEntity } from '@/types';
+
 export const useGetPosts = (params?: Omit<TGetAllDocuments<TPostEntity>, 'path'>) =>
   useGetDocs<TPostEntity>({ path: 'posts', ...params });
 

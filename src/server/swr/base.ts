@@ -1,7 +1,7 @@
-import { revalidateTag, unstable_cache as cache } from 'next/cache';
+import { unstable_cache as cache, revalidateTag } from 'next/cache';
+import { unstable_serialize } from 'swr';
 import { getAllDocuments, getDocumentById } from '@/server/mongodb';
 import { TDocParams, TGetAllDocuments } from '@/types';
-import { unstable_serialize } from 'swr';
 
 export const getCollectionCached = async <T extends Document>(params: TGetAllDocuments<T>) => {
   const key = unstable_serialize(JSON.parse(JSON.stringify(params)));

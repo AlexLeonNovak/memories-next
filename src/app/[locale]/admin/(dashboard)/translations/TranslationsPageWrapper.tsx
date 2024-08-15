@@ -1,7 +1,7 @@
 'use client';
 
-import { PageTitle, TranslationsTable } from '@/components/screens';
 import { useTranslations } from 'next-intl';
+import { PageTitle, TranslationsTable } from '@/components/screens';
 
 export const TranslationsPageWrapper = () => {
   const tAdm = useTranslations('Admin');

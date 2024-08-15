@@ -1,6 +1,6 @@
-import { TDocParams, TGetAllDocuments } from '@/types';
-import { getAllAction, getByIdAction } from '@/server/actions/base.actions';
 import useSWR from 'swr';
+import { getAllAction, getByIdAction } from '@/server/actions/base.actions';
+import { TDocParams, TGetAllDocuments } from '@/types';
 
 export const useGetDocs = <T extends Document>(params: TGetAllDocuments<T>) => {
   const key = JSON.parse(JSON.stringify(params));

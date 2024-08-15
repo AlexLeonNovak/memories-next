@@ -1,6 +1,7 @@
-.ck-editor__editable, .ck-source-editing-area {
-    height: 200px;
+.ck-editor__editable,
+.ck-source-editing-area {
+  height: 200px;
 }
 .ck-source-editing-area textarea {
-    overflow: auto;
+  overflow: auto;
 }

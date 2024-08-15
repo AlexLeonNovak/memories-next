@@ -1,16 +1,16 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { useTranslations } from 'next-intl';
-import { HeroBackAnimation } from './components/HeroBackAnimation';
-import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { generateSymbolsFromText } from '@/lib/jsx-utils';
-
-import './css/hero.css';
 import 'animate.css/source/fading_entrances/fadeInDown.css';
 import 'animate.css/source/fading_exits/fadeOutRight.css';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useTranslations } from 'next-intl';
+import { useEffect, useRef } from 'react';
+
+import { generateSymbolsFromText } from '@/lib/jsx-utils';
+import { HeroBackAnimation } from './components/HeroBackAnimation';
+import './css/hero.css';
 
 export const Hero = () => {
   const t = useTranslations('MainHero');

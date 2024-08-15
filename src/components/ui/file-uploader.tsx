@@ -1,16 +1,15 @@
 'use client';
+
 /**
  * @link https://shadcn-extension.vercel.app/docs/file-upload
  */
-
-import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
 import { Trash2 as RemoveIcon } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import {
-  Dispatch,
-  SetStateAction,
   createContext,
+  Dispatch,
   forwardRef,
+  SetStateAction,
   useCallback,
   useContext,
   useEffect,
@@ -19,7 +18,8 @@ import {
 } from 'react';
 import { DropzoneOptions, DropzoneState, FileRejection, useDropzone } from 'react-dropzone';
 import { toast } from 'sonner';
-import { useTranslations } from 'next-intl';
+import { cn } from '@/lib/utils';
+import { Input } from '@/components/ui/input';
 
 type DirectionOptions = 'rtl' | 'ltr' | undefined;
 
@@ -74,7 +74,7 @@ export const FileUploader = forwardRef<HTMLDivElement, FileUploaderProps & React
 
     const setFilesToInput = useCallback((files: File[]) => {
       const dataTransfer = new DataTransfer();
-      files.forEach((file) => dataTransfer.items.add(file));
+      files.forEach(file => dataTransfer.items.add(file));
       if (dropzoneState.inputRef.current) {
         dropzoneState.inputRef.current.files = dataTransfer.files;
       }
@@ -152,7 +152,7 @@ export const FileUploader = forwardRef<HTMLDivElement, FileUploaderProps & React
           newValues.splice(0, newValues.length);
         }
 
-        files.forEach((file) => {
+        files.forEach(file => {
           if (newValues.length < maxFiles) {
             newValues.push(file);
           }
@@ -235,7 +235,7 @@ export const FileUploaderContent = forwardRef<HTMLDivElement, React.HTMLAttribut
     const containerRef = useRef<HTMLDivElement>(null);
 
     return (
-      <div className={cn('w-full px-1')} ref={containerRef} aria-description='content file holder'>
+      <div className={cn('w-full px-1')} ref={containerRef} aria-description="content file holder">
         <div
           {...props}
           ref={ref}
@@ -271,19 +271,19 @@ export const FileUploaderItem = forwardRef<HTMLDivElement, { index: number } & R
         )}
         {...props}
       >
-        <div className='font-medium leading-none tracking-tight flex items-center gap-1.5 h-full w-full'>
+        <div className="font-medium leading-none tracking-tight flex items-center gap-1.5 h-full w-full">
           {children}
         </div>
         <button
-          type='button'
+          type="button"
           className={cn(
             'absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center opacity-0 hover:bg-white/80 hover:stroke-destructive hover:opacity-100 ease-in-out duration-300',
             // direction === 'rtl' ? 'top-1 left-1' : 'top-1 right-1',
           )}
           onClick={() => removeFileFromSet(index)}
         >
-          <span className='sr-only'>{t('remove item {index}', { index })}</span>
-          <RemoveIcon className='w-10 h-10 stroke-destructive ease-in-out duration-300' />
+          <span className="sr-only">{t('remove item {index}', { index })}</span>
+          <RemoveIcon className="w-10 h-10 stroke-destructive ease-in-out duration-300" />
         </button>
       </div>
     );
@@ -321,7 +321,7 @@ export const FileInput = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
         </div>
         <Input
           ref={dropzoneState.inputRef}
-          type='file'
+          type="file"
           readOnly={isLOF}
           {...dropzoneState.getInputProps({ name })}
           className={`${isLOF ? 'cursor-not-allowed' : ''}`}

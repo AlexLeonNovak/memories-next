@@ -1,7 +1,7 @@
-import { TMedia } from '@/types';
-import { getFileType } from '@/lib/utils';
 import path from 'path';
 import { uploadFile } from '@/lib/firebase';
+import { getFileType } from '@/lib/utils';
+import { TMedia } from '@/types';
 
 export const uploadMediaFiles = async (postId: string, files: File[]) => {
   // const medias = await getMedias(postId);

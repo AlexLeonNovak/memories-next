@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+import { Dispatch, SetStateAction } from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,8 +12,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui';
-import { Dispatch, SetStateAction } from 'react';
-import { useTranslations } from 'next-intl';
 
 type TConfirmDialogProps = {
   open: boolean;

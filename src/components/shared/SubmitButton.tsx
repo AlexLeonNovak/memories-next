@@ -1,9 +1,9 @@
 'use client';
 
-import { Button, ButtonProps } from '@/components/ui/button';
 import { LoaderCircle } from 'lucide-react';
-import { useFormStatus } from 'react-dom';
 import React from 'react';
+import { useFormStatus } from 'react-dom';
+import { Button, ButtonProps } from '@/components/ui/button';
 
 type TSubmitButtonProps = ButtonProps & {
   label?: string;
@@ -17,10 +17,10 @@ export const SubmitButton = ({ label, pendingLabel, icon, isPending, ...props }:
   const formPending = pending || isPending;
 
   return (
-    <Button type='submit' disabled={formPending} {...props}>
+    <Button type="submit" disabled={formPending} {...props}>
       {formPending ? (
         <>
-          <LoaderCircle className='animate-spin' />
+          <LoaderCircle className="animate-spin" />
           {pendingLabel && <span>{pendingLabel}</span>}
         </>
       ) : (
