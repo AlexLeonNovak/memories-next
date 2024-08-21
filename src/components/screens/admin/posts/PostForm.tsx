@@ -42,7 +42,7 @@ import { useStateStore } from '@/lib/store';
 import { cn, defineLocaleValues, getFileType } from '@/lib/utils';
 import { createPostSchema, MAX_SIZE_IMAGE, MAX_SIZE_VIDEO } from '@/lib/validations';
 import { useRouter } from '@/navigation';
-import { bulkCreateMedias } from '@/server/actions/medias.actions';
+import { bulkCreateMedias, bulkDeleteMedias } from '@/server/actions/medias.actions';
 import { createPost, deletePost, updatePost } from '@/server/actions/posts.actions';
 import { TMediaEntity, TPostEntity } from '@/types';
 
@@ -115,8 +115,9 @@ export const PostForm = ({ post, swrKey, medias, onFormSubmit }: TPostFormProps)
       const { id } = state.data;
       try {
         const files = getValues('files');
-        const medias = await uploadMediaFiles(id, files);
-        const result = await bulkCreateMedias(id, medias);
+        const { mediasToCreate, mediasToDelete } = await uploadMediaFiles(id, files, medias);
+        await bulkDeleteMedias(mediasToDelete);
+        const result = await bulkCreateMedias(mediasToCreate);
         if (result.status === 'error') {
           setError('files', { message: t('Save files error') });
           throw new Error(result.errors.map(({ message }) => message).join('\n'));

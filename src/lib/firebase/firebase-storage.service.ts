@@ -35,6 +35,16 @@ export const deleteFile = async (url: string): Promise<void> => {
   }
 };
 
+export const isFileExist = async (url: string): Promise<boolean> => {
+  const imgRef = ref(getFirebaseStorage(), url);
+  try {
+    await getDownloadURL(imgRef);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
 export const getFileJs = async (url: string): Promise<File> => {
   const imgRef = ref(getFirebaseStorage(), url);
   const { name, contentType, updated } = await getMetadata(imgRef);
