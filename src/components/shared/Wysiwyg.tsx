@@ -54,6 +54,55 @@ export const Wysiwyg = ({ value, onChange, onBlur }: TWysiwygProps) => {
     return () => setIsLayoutReady(false);
   }, []);
 
+  useEffect(() => {
+    let observer: MutationObserver;
+    if (isLayoutReady) {
+      // setTimeout(() => {
+      //   const wrapper = document.querySelector('.ck-body-wrapper');
+      //   wrapper?.addEventListener('change', (e) => {
+      //     debugger;
+      //     e.stopPropagation();
+      //   });
+      // }, 1000);
+
+      const dialog = document.querySelector('[role="dialog"]');
+      if (!dialog) {
+        return;
+      }
+      let wrapper = document.querySelector('.ck-body-wrapper');
+      if (wrapper) {
+        return;
+      }
+      wrapper = document.createElement('div');
+      wrapper.classList.add('ck-body-wrapper');
+      dialog.appendChild(wrapper);
+
+      const moCb = (mutationsList: MutationRecord[]) => {
+        for (let mutation of mutationsList) {
+          if (mutation.type === 'childList') {
+            const dropLine = wrapper.querySelector('.ck-clipboard-drop-target-line') as HTMLDivElement;
+            if (dropLine) {
+              dropLine.style.zIndex = '100';
+              const div = document.createElement('div');
+              div.setAttribute('dir', 'ltr');
+              div.appendChild(dropLine);
+              document.body.appendChild(div);
+            }
+          }
+        }
+      };
+
+      observer = new MutationObserver(moCb);
+      observer.observe(wrapper, {
+        childList: true,
+        subtree: true,
+      });
+    }
+    return () => {
+      observer?.disconnect();
+    };
+  }, [isLayoutReady]);
+
   const config: EditorConfig = {
     toolbar: {
       items: [

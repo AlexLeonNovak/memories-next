@@ -28,12 +28,12 @@ const nextConfig = {
       },
     ],
   },
-  compiler: {
-    removeConsole: {
-      exclude: ['error'],
-    },
-    reactRemoveProperties: true,
-  },
+  // compiler: {
+  //   removeConsole: {
+  //     exclude: ['error'],
+  //   },
+  //   reactRemoveProperties: true,
+  // },
 };
 
 const withNextIntl = createNextIntlPlugin();
