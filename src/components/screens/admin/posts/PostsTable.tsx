@@ -1,6 +1,6 @@
 'use client';
 
-import { Pencil } from 'lucide-react';
+import { Images, Pencil } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -10,7 +10,7 @@ import { DeleteForm } from '@/components/screens';
 import { TableSkeleton } from '@/components/shared';
 import { Badge, Button, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui';
 import { i18n, TLocale } from '@/config';
-import { useGetCategories, useGetPosts } from '@/hooks';
+import { useGetCategories, useGetMedias, useGetPosts } from '@/hooks';
 import { useStateStore } from '@/lib/store';
 import { Link } from '@/navigation';
 import { deletePost } from '@/server/actions/posts.actions';
@@ -19,7 +19,8 @@ export const PostsTable = () => {
   const { getStateValue, deleteStateValue } = useStateStore();
   const posts = useGetPosts();
   const categories = useGetCategories();
-  const isLoading = posts.isLoading && categories.isLoading;
+  const medias = useGetMedias();
+  const isLoading = posts.isLoading && categories.isLoading && medias.isLoading;
   const tAdm = useTranslations('Admin');
   const t = useTranslations('AdminPosts');
   const locale = useLocale() as TLocale;
@@ -36,6 +37,8 @@ export const PostsTable = () => {
     if (isRevalidate) {
       posts.mutate();
       posts.revalidate();
+      medias.mutate();
+      medias.revalidate();
       deleteStateValue('revalidatePosts');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -48,12 +51,13 @@ export const PostsTable = () => {
           <TableHead>{tAdm('#')}</TableHead>
           <TableHead>{tAdm('Name')}</TableHead>
           <TableHead>{tAdm('Categories')}</TableHead>
+          <TableHead>{tAdm('Medias')}</TableHead>
           <TableHead>{tAdm('Is active')}</TableHead>
           <TableHead>{tAdm('Actions')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {isLoading && <TableSkeleton columns={5} />}
+        {isLoading && <TableSkeleton columns={6} />}
         {posts.data?.map(({ id, name, categories: catIds, isActive }, index) => (
           <TableRow key={id}>
             <TableCell>{++index}</TableCell>
@@ -71,6 +75,12 @@ export const PostsTable = () => {
                   categories.data
                     ?.filter((c) => catIds.includes(c.id))
                     .map(({ id, name }) => <Badge key={id}>{name[locale]}</Badge>)}
+              </div>
+            </TableCell>
+            <TableCell>
+              <div className='flex gap-2'>
+                <Images />
+                {medias.data?.filter((m) => m.postId === id).length}
               </div>
             </TableCell>
             <TableCell>

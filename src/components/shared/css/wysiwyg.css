@@ -5,7 +5,3 @@
 .ck-source-editing-area textarea {
   overflow: auto;
 }
-
-.ck-body-wrapper {
-  pointer-events: auto;
-}
