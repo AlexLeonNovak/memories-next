@@ -1,10 +1,10 @@
 'use client';
 
 import { Ban } from 'lucide-react';
-import { Dispatch, ReactNode, SetStateAction } from 'react';
+import { Dispatch, HTMLAttributes, ReactNode, SetStateAction } from 'react';
 import { Button, Dialog, DialogClose, DialogContent, DialogFooter, DialogTitle } from '@/components/ui';
 
-type TModalProps = {
+type TModalProps = HTMLAttributes<HTMLDivElement> & {
   children: ReactNode;
   className?: string;
   open: boolean;
@@ -27,17 +27,18 @@ export const Modal = ({
   title,
   footer,
   closeButton = { icon: <Ban />, label: 'Close' },
+  ...props
 }: TModalProps) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className={className}>
+      <DialogContent className={className} {...props}>
         {title && <DialogTitle>{title}</DialogTitle>}
         {children}
         <DialogFooter>
           {footer}
           {closeButton && (
             <DialogClose asChild>
-              <Button type="button" variant="secondary">
+              <Button type='button' variant='secondary'>
                 {closeButton.icon}
                 {closeButton.label && <span>{closeButton.label}</span>}
               </Button>

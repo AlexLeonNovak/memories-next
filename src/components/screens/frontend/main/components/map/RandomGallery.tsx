@@ -23,6 +23,7 @@ export const RandomGallery = () => {
   const [gallery, setGallery] = useState<TGalleryItemsWithLevel<TMediaWithPostEntity>[]>([]);
   const [showModalInfo, setShowModalInfo] = useState(false);
   const [mediaItem, setMediaItem] = useState<TMediaWithPostEntity>();
+  const [modalWidth, setModalWidth] = useState<'auto' | number>('auto');
   const containerRef = useRef<HTMLDivElement>(null);
 
   const onItemClick = async (item: TMediaWithPostEntity) => {
@@ -49,6 +50,7 @@ export const RandomGallery = () => {
               key={`${i}_${item.id}`}
               style={{ ...position }}
               className='absolute'
+              data-id={item.id}
               item={item}
               onItemClick={onItemClick}
             />
@@ -58,9 +60,15 @@ export const RandomGallery = () => {
         open={showModalInfo}
         setOpen={setShowModalInfo}
         title={mediaItem?.post?.name[locale] || t('Loading')}
-        // className='max-h-full max-w-full'
+        closeButton={false}
+        className='max-h-full max-w-full overflow-auto'
+        style={{ width: modalWidth }}
       >
-        {mediaItem ? <ModalContent media={mediaItem} /> : <LoaderCircle className='animate-spin size-10' />}
+        {mediaItem ? (
+          <ModalContent media={mediaItem} onWidthChange={(width) => setModalWidth(width + 50)} />
+        ) : (
+          <LoaderCircle className='animate-spin size-10' />
+        )}
       </Modal>
       <GalleryControlHelper />
     </div>

@@ -25,9 +25,14 @@ export const uploadFile = async (file: File, pathDir: string = '') => {
   return getDownloadURL(imgPath.ref);
 };
 
-export const deleteFile = (url: string): Promise<void> => {
+export const deleteFile = async (url: string): Promise<void> => {
   const imgRef = ref(getFirebaseStorage(), url);
-  return deleteObject(imgRef);
+  try {
+    await getDownloadURL(imgRef);
+    await deleteObject(imgRef);
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 export const getFileJs = async (url: string): Promise<File> => {
