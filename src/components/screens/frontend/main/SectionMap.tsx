@@ -7,10 +7,10 @@ import './css/map.css';
 
 export const SectionMap = () => {
   return (
-    <section className="map map-section w-full">
+    <section className='map map-section w-full'>
       <MapNavigation />
-      <div className="map__container map__container_temp py-8 overflow-x-scroll overflow-y-hidden lg:overflow-x-hidden">
-        <div className="w-full min-w-[800px] h-[870px] relative">
+      <div className='map__container map__container_temp py-8 overflow-x-scroll overflow-y-hidden lg:overflow-x-hidden'>
+        <div className='w-full min-w-[1000px] h-[870px] relative'>
           <RandomGallery />
         </div>
       </div>

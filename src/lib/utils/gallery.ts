@@ -84,7 +84,7 @@ export const checkPlacement = ({
 
   // if (isOffCanvas(coordinates1, galleryWidth, galleryHeight)) return false
 
-  return !placedItems.some(placedItem => {
+  return !placedItems.some((placedItem) => {
     const coordinates2 = getCoordinates(placedItem.getBoundingClientRect());
 
     return contains(coordinates1, coordinates2) || overlaps(coordinates1, coordinates2, offset);
@@ -131,11 +131,12 @@ const getPlacement = <T>(el: HTMLDivElement, items: T[] = []) => {
     }
     element.remove();
     if (tries === maxTries) {
-      break;
+      el.style.width = `${el.getBoundingClientRect().width + 100}px`;
+      tries = 0;
     }
   }
 
-  placedDivs.forEach(placedDiv => placedDiv.remove());
+  placedDivs.forEach((placedDiv) => placedDiv.remove());
 
   return {
     placedItems,
