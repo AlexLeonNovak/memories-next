@@ -4,18 +4,13 @@ import { getFileType } from '@/lib/utils';
 import { TMedia, TMediaEntity } from '@/types';
 
 export const uploadMediaFiles = async (postId: string, files: File[], medias: TMediaEntity[] = []) => {
-  // const medias = await getMedias(postId);
-  if (medias.length) {
-    for (const [idx, media] of medias.entries()) {
-      const { name, size } = media;
-      const fileIndex = files.findIndex((file) => file.name === name && file.size === size);
-      if (fileIndex !== -1) {
-        files.splice(fileIndex, 1);
-        medias.splice(idx, 1);
-      }
-    }
-    await Promise.all(medias.map(({ url }) => [deleteFile(url)]).flat());
-  }
+  const mediasToDelete = medias.filter(({ name, size }) => {
+    const isIn = files.some((file) => file.name === name && file.size === size);
+    files = files.filter((file) => file.name !== name && file.size !== size);
+    return !isIn;
+  });
+
+  await Promise.all(mediasToDelete.map(({ url }) => deleteFile(url)));
   const mediasToCreate: TMedia[] = [];
   for (const file of files) {
     const { name, type, size, lastModified } = file;
@@ -31,8 +26,6 @@ export const uploadMediaFiles = async (postId: string, files: File[], medias: TM
       extension: path.extname(name),
       url,
     });
-    // const newMedia = await crud.create(media);
-    // medias.push(newMedia);
   }
-  return { mediasToCreate, mediasToDelete: medias };
+  return { mediasToCreate, mediasToDelete };
 };

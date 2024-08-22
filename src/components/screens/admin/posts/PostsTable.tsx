@@ -25,6 +25,13 @@ export const PostsTable = () => {
   const t = useTranslations('AdminPosts');
   const locale = useLocale() as TLocale;
 
+  const revalidate = () => {
+    posts.mutate();
+    posts.revalidate();
+    medias.mutate();
+    medias.revalidate();
+  };
+
   useEffect(() => {
     for (const error of [posts.error, categories.error]) {
       error && 'message' in error && toast.error(error.message);
@@ -35,10 +42,7 @@ export const PostsTable = () => {
   useEffect(() => {
     const isRevalidate = getStateValue('revalidatePosts');
     if (isRevalidate) {
-      posts.mutate();
-      posts.revalidate();
-      medias.mutate();
-      medias.revalidate();
+      revalidate();
       deleteStateValue('revalidatePosts');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -93,7 +97,7 @@ export const PostsTable = () => {
                 <DeleteForm
                   id={id}
                   deleteAction={deletePost}
-                  onDeleted={() => posts.mutate()}
+                  onDeleted={() => revalidate()}
                   title={t('Delete post?')}
                   description={t('Are you sure you want to delete this post?')}
                 />

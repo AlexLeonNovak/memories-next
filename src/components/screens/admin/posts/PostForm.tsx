@@ -84,7 +84,7 @@ export const PostForm = ({ post, swrKey, medias, onFormSubmit }: TPostFormProps)
     name: post?.name || defineLocaleValues(''),
     description: post?.description || defineLocaleValues(''),
     categories: post?.categories ? categoryOptions.filter(({ value }) => post.categories.includes(value)) : [],
-    isActive: post?.isActive || true,
+    isActive: post ? post.isActive : true,
     files: [],
   };
 
@@ -145,6 +145,7 @@ export const PostForm = ({ post, swrKey, medias, onFormSubmit }: TPostFormProps)
   });
 
   useEffect(() => {
+    console.log(medias);
     if (medias?.length) {
       setIsMediaLoading(true);
       Promise.all(medias.map(({ url }) => getFileJs(url)))
