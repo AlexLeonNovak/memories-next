@@ -145,7 +145,6 @@ export const PostForm = ({ post, swrKey, medias, onFormSubmit }: TPostFormProps)
   });
 
   useEffect(() => {
-    console.log(medias);
     if (medias?.length) {
       setIsMediaLoading(true);
       Promise.all(medias.map(({ url }) => getFileJs(url)))

@@ -53,7 +53,6 @@ export const SectionFeedback = () => {
   );
 
   const lineOne = t('LET US SAVE');
-  console.log(lineOne);
   const lineTwo = t('THE PAST FOR');
   const lineThree = t('THE FUTURE');
   const className = 'feedback-letter';
