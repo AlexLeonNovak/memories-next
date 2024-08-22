@@ -9,8 +9,8 @@ export const uploadMediaFiles = async (postId: string, files: File[], medias: TM
     files = files.filter((file) => file.name !== name && file.size !== size);
     return !isIn;
   });
-
   await Promise.all(mediasToDelete.map(({ url }) => deleteFile(url)));
+
   const mediasToCreate: TMedia[] = [];
   for (const file of files) {
     const { name, type, size, lastModified } = file;

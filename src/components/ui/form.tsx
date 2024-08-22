@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import * as React from 'react';
 import { Controller, ControllerProps, FieldPath, FieldValues, FormProvider, useFormContext } from 'react-hook-form';
 import { cn } from '@/lib/utils';
-import { Label } from '@/components/ui';
+import { FloatingLabel, Label } from '@/components/ui';
 
 const Form = FormProvider;
 
@@ -67,7 +67,7 @@ const FormItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEl
 
     return (
       <FormItemContext.Provider value={{ id }}>
-        <div ref={ref} className={cn('space-y-1 mt-8', className)} {...props} />
+        <div ref={ref} className={cn('space-y-1 mt-5', className)} {...props} />
       </FormItemContext.Provider>
     );
   },
@@ -83,6 +83,18 @@ const FormLabel = React.forwardRef<
   return <Label ref={ref} className={cn(error && 'text-destructive', className)} htmlFor={formItemId} {...props} />;
 });
 FormLabel.displayName = 'FormLabel';
+
+const FloatingFormLabel = React.forwardRef<
+  React.ElementRef<typeof LabelPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
+>(({ className, ...props }, ref) => {
+  const { error, formItemId } = useFormField();
+
+  return (
+    <FloatingLabel ref={ref} className={cn(error && 'text-destructive', className)} htmlFor={formItemId} {...props} />
+  );
+});
+FloatingFormLabel.displayName = 'FloatingFormLabel';
 
 const FormControl = React.forwardRef<React.ElementRef<typeof Slot>, React.ComponentPropsWithoutRef<typeof Slot>>(
   ({ ...props }, ref) => {
@@ -136,4 +148,14 @@ const FormMessage = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<
 );
 FormMessage.displayName = 'FormMessage';
 
-export { useFormField, Form, FormItem, FormLabel, FormControl, FormDescription, FormMessage, FormField };
+export {
+  useFormField,
+  Form,
+  FormItem,
+  FormLabel,
+  FloatingFormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+  FormField,
+};

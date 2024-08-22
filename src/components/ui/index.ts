@@ -15,3 +15,4 @@ export * from './aspect-ratio';
 export * from './alert-dialog';
 export * from './carousel';
 export * from './select';
+export * from './floating-label-input';

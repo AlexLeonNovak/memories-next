@@ -89,3 +89,8 @@
     }
   }
 }
+
+label.required:after {
+  content:" *";
+  color: hsl(var(--destructive));
+}

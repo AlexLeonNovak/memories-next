@@ -6,11 +6,22 @@ import { useFormState } from 'react-dom';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { SubmitButton } from '@/components/shared/SubmitButton';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '@/components/ui';
+import {
+  FloatingFormLabel,
+  FloatingInput,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+} from '@/components/ui';
 import { useFormCheck } from '@/hooks';
 import { createLeadSchema } from '@/lib/validations';
 import { createLead } from '@/server/actions/leads.actions';
 import { TLead } from '@/types';
+import { cn } from '@/lib/utils';
 
 const defaultValues: TLead = {
   organisation: '',
@@ -39,80 +50,84 @@ export const FeedbackForm = () => {
       toast.success(t('Feedback was successfully sent!'));
       reset(defaultValues);
     },
-    onFail: state => toast.error(tAdm(state.message)),
+    onFail: (state) => toast.error(tAdm(state.message)),
   });
 
   return (
     <Form {...form}>
       <form action={action}>
         <FormField
-          name="organisation"
+          name='organisation'
           control={control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
-                {/* eslint-disable-next-line react/jsx-no-literals */}
-                {t('Organisation')} <span className="text-red-600">*</span>
-              </FormLabel>
-              <FormControl>
-                <Input placeholder={t('Enter your organisation')} {...field} />
-              </FormControl>
+              <div className='relative'>
+                <FormControl>
+                  <FloatingInput {...field} className='aria-invalid:border-destructive aria-invalid:ring-destructive' />
+                </FormControl>
+                <FloatingFormLabel className='required text-base uppercase' {...field}>
+                  {t('Organisation')}
+                </FloatingFormLabel>
+              </div>
               <FormMessage />
             </FormItem>
           )}
         />
 
         <FormField
-          name="name"
+          name='name'
           control={control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
-                {/* eslint-disable-next-line react/jsx-no-literals */}
-                {t('Name')} <span className="text-red-600">*</span>
-              </FormLabel>
-              <FormControl>
-                <Input placeholder={t('Enter your name')} {...field} />
-              </FormControl>
+              <div className='relative'>
+                <FormControl>
+                  <FloatingInput {...field} className='aria-invalid:border-destructive aria-invalid:ring-destructive' />
+                </FormControl>
+                <FloatingFormLabel className='required text-base uppercase' {...field}>
+                  {t('Name')}
+                </FloatingFormLabel>
+              </div>
               <FormMessage />
             </FormItem>
           )}
         />
 
         <FormField
-          name="email"
+          name='email'
           control={control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
-                {/* eslint-disable-next-line react/jsx-no-literals */}
-                {t('E-mail')} <span className="text-red-600">*</span>
-              </FormLabel>
-              <FormControl>
-                <Input placeholder={t('Enter your e-mail')} {...field} />
-              </FormControl>
+              <div className='relative'>
+                <FormControl>
+                  <FloatingInput {...field} className='aria-invalid:border-destructive aria-invalid:ring-destructive' />
+                </FormControl>
+                <FloatingFormLabel className='required text-base uppercase' {...field}>
+                  {t('E-mail')}
+                </FloatingFormLabel>
+              </div>
               <FormMessage />
             </FormItem>
           )}
         />
 
         <FormField
-          name="phone"
+          name='phone'
           control={control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
-                {/* eslint-disable-next-line react/jsx-no-literals */}
-                {t('Phone')} <span className="text-red-600">*</span>
-              </FormLabel>
-              <FormControl>
-                <Input placeholder={t('Enter your phone')} {...field} />
-              </FormControl>
+              <div className='relative'>
+                <FormControl>
+                  <FloatingInput {...field} className='aria-invalid:border-destructive aria-invalid:ring-destructive' />
+                </FormControl>
+                <FloatingFormLabel className='required text-base uppercase' {...field}>
+                  {t('Phone')}
+                </FloatingFormLabel>
+              </div>
               <FormMessage />
             </FormItem>
           )}
         />
-        <div>
+        <div className='mt-5'>
           <SubmitButton label={t('I want to help')} pendingLabel={t('Sending feedback')} />
         </div>
       </form>
