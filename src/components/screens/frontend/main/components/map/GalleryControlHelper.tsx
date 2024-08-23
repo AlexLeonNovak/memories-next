@@ -43,11 +43,11 @@ export const GalleryControlHelper = () => {
   );
 
   return (
-    <div className="gallery-helper-container" ref={container}>
-      <div className="gallery-helper">
-        <div className="galler-text-help">Click on item to read more</div>
-        <div className="gallery-icon-help">
-          <Image width={50} height={50} src="/tap-white.svg" alt="Zberezhemo logo" priority className="gallery-icon" />
+    <div className='gallery-helper-container absolute top-0 left-0 right-0 z-100' ref={container}>
+      <div className='gallery-helper'>
+        <div className='galler-text-help'>Click on item to read more</div>
+        <div className='gallery-icon-help'>
+          <Image width={50} height={50} src='/tap-white.svg' alt='Zberezhemo logo' priority className='gallery-icon' />
         </div>
       </div>
     </div>

@@ -10,7 +10,6 @@ import { createGallery, TGalleryItemsWithLevel } from '@/lib/utils';
 import { useGetMedias, useGetPosts } from '@/hooks';
 import { TLocale } from '@/config';
 import { Modal } from '@/components/shared/Modal';
-import { GalleryControlHelper } from './GalleryControlHelper';
 import { GalleryItem } from './GalleryItem';
 import { ModalContent } from './ModalContent';
 
@@ -70,7 +69,6 @@ export const RandomGallery = () => {
           <LoaderCircle className='animate-spin size-10' />
         )}
       </Modal>
-      <GalleryControlHelper />
     </div>
   );
 };

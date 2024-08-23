@@ -1,9 +1,9 @@
-.gallery-helper-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-}
+/*.gallery-helper-container {*/
+/*  position: absolute;*/
+/*  top: 0;*/
+/*  left: 0;*/
+/*  right: 0;*/
+/*}*/
 
 .gallery-helper {
   position: relative;
@@ -40,12 +40,12 @@
     display: block;
   }
 
-  .gallery-helper-container {
-    position: relative;
-    top: -11.5vh;
-    left: 0;
-    right: 0;
-  }
+  /*.gallery-helper-container {*/
+  /*  position: relative;*/
+  /*  top: -11.5vh;*/
+  /*  left: 0;*/
+  /*  right: 0;*/
+  /*}*/
 
   .gallery-helper {
     margin: 13vw;

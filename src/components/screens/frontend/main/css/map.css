@@ -37,12 +37,12 @@
 }
 .map__container {
 }
-.map__container_temp {
-  position: relative;
-  height: fit-content;
-  padding: 80px 0;
-  margin-bottom: 80px;
-}
+/*.map__container_temp {*/
+/*  position: relative;*/
+/*  height: fit-content;*/
+/*  padding: 80px 0;*/
+/*  margin-bottom: 80px;*/
+/*}*/
 
 @media screen and (max-width: 980px) {
   .map .wrapper {
@@ -55,10 +55,10 @@
   .map__navigation-separator {
     font-size: 4.103vw;
   }
-  .map__container_temp {
-    position: relative;
-    padding-bottom: 10vh;
-    margin-bottom: 3.3vh;
-    height: fit-content;
-  }
+  /*.map__container_temp {*/
+  /*  position: relative;*/
+  /*  padding-bottom: 10vh;*/
+  /*  margin-bottom: 3.3vh;*/
+  /*  height: fit-content;*/
+  /*}*/
 }
