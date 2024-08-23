@@ -45,7 +45,7 @@ export const GalleryControlHelper = () => {
   );
 
   return (
-    <div className='gallery-helper-container absolute top-0 left-0 right-0 z-100' ref={container}>
+    <div className='gallery-helper-container absolute top-0 left-0 right-0 z-10' ref={container}>
       <div className='gallery-helper'>
         <div className='galler-text-help'>{t('Click on item to read more')}</div>
         <div className='gallery-icon-help'>

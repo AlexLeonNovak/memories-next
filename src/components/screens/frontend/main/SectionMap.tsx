@@ -11,7 +11,7 @@ export const SectionMap = () => {
     <section className='map map-section w-full relative'>
       <MapNavigation />
       <GalleryControlHelper />
-      <div className='map__container map__container_temp py-20 overflow-x-scroll overflow-y-hidden lg:overflow-x-hidden relative'>
+      <div className='map__container map__container_temp py-20 overflow-x-scroll overflow-y-hidden relative'>
         <div className='w-full min-w-[1000px] h-[870px] relative'>
           <RandomGallery />
         </div>
