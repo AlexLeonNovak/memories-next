@@ -15,9 +15,9 @@
 }
 
 .galler-text-help {
-  background-image: url('/tap-black.png');
+  /*background-image: url('/tap-black.png');*/
   padding-bottom: 80px;
-  background-repeat: no-repeat;
+  /*background-repeat: no-repeat;*/
   padding-left: 30px;
   margin: 0 auto;
   width: 250px;
