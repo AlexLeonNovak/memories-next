@@ -9,13 +9,13 @@ export const Header: React.FC = () => {
   const t = useTranslations('MainHeader');
 
   return (
-    <header className="header">
-      <div className="wrapper">
-        <div className="header-left">
-          <Link href="/">
+    <header className='header mb-7 lg:mb-0'>
+      <div className='wrapper'>
+        <div className='header-left'>
+          <Link href='/'>
             <Image
-              src="/logo.svg"
-              className="header-logo"
+              src='/logo.svg'
+              className='header-logo'
               alt={t('logoAlt')} //'Zberezhemo logo'
               priority
               width={175}
@@ -23,9 +23,9 @@ export const Header: React.FC = () => {
             />
           </Link>
         </div>
-        <div className="header-right">
-          <LanguageSwitcher />
-          <a href="#feedback" className="header-help">
+        <div className='header-right'>
+          <LanguageSwitcher className='header-lang-switcher absolute top-full left-5 uppercase lg:static lg:mr-7' />
+          <a href='#feedback' className='header-help'>
             {t('I want to help')}
           </a>
         </div>

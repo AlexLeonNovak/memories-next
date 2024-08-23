@@ -1,6 +1,6 @@
 .header {
   border-bottom: 1px solid #ddd;
-  margin-bottom: 28px;
+  /*margin-bottom: 28px;*/
 }
 .header .wrapper {
   display: flex;
@@ -17,12 +17,12 @@
   align-items: center;
 }
 .header-lang-switcher {
-  margin-right: 30px;
-  font-weight: 400;
-  font-size: 15px;
-  line-height: 130%;
-  text-transform: uppercase;
-  color: rgba(0, 0, 0, 0.5);
+  /*margin-right: 30px;*/
+  /*font-weight: 400;*/
+  /*font-size: 15px;*/
+  /*line-height: 130%;*/
+  /*text-transform: uppercase;*/
+  /*color: rgba(0, 0, 0, 0.5);*/
 }
 .header-lang-switcher__item {
   color: rgba(0, 0, 0, 0.5);
@@ -53,9 +53,9 @@
 }
 
 @media screen and (max-width: 980px) {
-  .header {
-    margin-bottom: 35.897vw;
-  }
+  /*.header {*/
+  /*  margin-bottom: 35.897vw;*/
+  /*}*/
   .header .wrapper {
     position: relative;
     height: 12.821vw;
@@ -67,12 +67,12 @@
     width: 36.41vw;
     height: auto;
   }
-  .header-lang-switcher {
-    position: absolute;
-    top: 100%;
-    left: 20px;
-    margin-top: 2.564vw;
-  }
+  /*.header-lang-switcher {*/
+  /*  position: absolute;*/
+  /*  top: 100%;*/
+  /*  left: 20px;*/
+  /*  margin-top: 2.564vw;*/
+  /*}*/
   .header-help {
     width: 32.821vw;
     height: 8.462vw;

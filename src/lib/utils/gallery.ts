@@ -111,7 +111,7 @@ const getPlacement = <T>(el: HTMLDivElement, items: T[] = []) => {
   const placedDivs: HTMLDivElement[] = [];
   const placedItems: TPlaceItem<T>[] = [];
   let tries = 0;
-  const maxTries = 1000;
+  const maxTries = 100;
   while (items.length) {
     tries++;
     const [item] = items;

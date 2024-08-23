@@ -10,7 +10,6 @@ import { useEffect, useRef } from 'react';
 
 import { generateSymbolsFromText } from '@/lib/jsx-utils';
 import { HeroBackAnimation } from './components/HeroBackAnimation';
-import './css/hero.css';
 
 export const Hero = () => {
   const t = useTranslations('MainHero');
@@ -81,13 +80,19 @@ export const Hero = () => {
   const textItems = generateSymbolsFromText(text, className);
 
   return (
-    <section className='hero'>
-      <div className='wrapper' ref={container}>
+    <section className='hero relative h-[106vw] lg:h-[90vh]'>
+      <div className='flex h-full w-full items-center ' ref={container}>
         <HeroBackAnimation />
-        <div className='hero-texts'>
-          <div className='hero__title'>{titleItems}</div>
-          <div className='hero__sub-title'>{subtitleItems}</div>
-          <div className='hero__text'>{textItems}</div>
+        <div className='w-full px-6 z-100 pointer-events-none relative'>
+          <div className='hero__title text-[14.872vw] leading-[19.5vw] lg:text-[14.271vw] lg:leading-[18.552vw] font-medium lg:ml-[3.2vw] uppercase flex justify-start'>
+            {titleItems}
+          </div>
+          <div className='hero__sub-title text-[14.872vw] leading-[19.5vw] lg:text-[14.271vw] lg:leading-[18.552vw] font-medium uppercase -mt-[6vw] lg:mr-[4.24vw] flex justify-end'>
+            {subtitleItems}
+          </div>
+          <div className='hero__text text-[4.103vw] leading-[4.103vw] lg:text-[3.919vw] lg:leading-[3.919vw] font-normal uppercase -mt[1.8vw] mr-[12.1vw] flex justify-center'>
+            {textItems}
+          </div>
         </div>
       </div>
     </section>
