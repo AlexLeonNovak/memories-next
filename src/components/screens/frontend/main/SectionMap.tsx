@@ -3,7 +3,6 @@
 import { MapNavigation } from './components/map/MapNavigation';
 import { RandomGallery } from './components/map/RandomGallery';
 import { GalleryControlHelper } from './components/map/GalleryControlHelper';
-import './css/gallery.css';
 import './css/map.css';
 
 export const SectionMap = () => {

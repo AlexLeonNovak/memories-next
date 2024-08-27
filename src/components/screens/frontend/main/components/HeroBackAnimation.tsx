@@ -13,27 +13,25 @@ export const HeroBackAnimation = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    if (width > 1024) {
-      return;
-    }
     if (!imgContainerRef.current) {
       return;
     }
-
     const heroImages = imgContainerRef.current.querySelectorAll('.hero_image');
-
     const interval = setInterval(() => {
       setCurrentIndex((prevIdx) => (prevIdx + 1) % heroImages.length);
     }, ANIMATION_DURATION);
+
+    if (width > 1024) {
+      for (const heroImg of heroImages) {
+        (heroImg as HTMLDivElement).style.opacity = '';
+      }
+      clearInterval(interval);
+    }
 
     return () => clearInterval(interval);
   }, [imgContainerRef, width]);
 
   useEffect(() => {
-    if (width > 1024) {
-      return;
-    }
-
     if (!imgContainerRef.current) {
       return;
     }
@@ -45,7 +43,7 @@ export const HeroBackAnimation = () => {
     }
 
     (heroImages[currentIndex] as HTMLDivElement).style.opacity = '1';
-  }, [width, currentIndex]);
+  }, [currentIndex]);
 
   let animationDelay = 0;
   const rows = [];

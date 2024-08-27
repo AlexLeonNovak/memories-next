@@ -28,7 +28,7 @@ export const GalleryControlHelper = () => {
       gsap.to('.gallery-icon-help', {
         autoAlpha: 0.0,
         duration: 0.9,
-        delay: 2,
+        delay: 4,
         scrollTrigger: {
           trigger: '.gallery-icon-help',
           start: 'top bottom',
@@ -45,11 +45,14 @@ export const GalleryControlHelper = () => {
   );
 
   return (
-    <div className='gallery-helper-container absolute top-0 left-0 right-0 z-10' ref={container}>
+    <div
+      className='gallery-helper-container absolute top-16 left-1/2 -translate-x-1/2 z-30 pointer-events-none'
+      ref={container}
+    >
       <div className='gallery-helper'>
-        <div className='galler-text-help'>{t('Click on item to read more')}</div>
-        <div className='gallery-icon-help'>
-          <Image width={50} height={50} src='/tap-white.svg' alt='Zberezhemo logo' priority className='gallery-icon' />
+        <div className='lg:hidden'>{t('Click on item to read more')}</div>
+        <div className='gallery-icon-help mt-20 mx-auto w-12 h-12'>
+          <Image width={50} height={50} src='/tap-white.svg' alt='Click on item' priority className='drop-shadow-xl' />
         </div>
       </div>
     </div>
