@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import { GoogleTagManager } from '@next/third-parties/google';
 import { getMessages, unstable_setRequestLocale } from 'next-intl/server';
 import { Inter } from 'next/font/google';
 import { Toaster } from 'sonner';
@@ -37,6 +37,7 @@ export default async function RootLayout({ children, params }: TRootLayoutProps)
 
   return (
     <html lang={params.locale}>
+      <GoogleTagManager gtmId='G-C2H91SS7LC' />
       <body className={cn('flex flex-col min-h-screen h-auto', inter.className)}>
         <SWRProvider fallback={fallback}>
           <IntlProvider locale={params.locale} messages={messages}>
