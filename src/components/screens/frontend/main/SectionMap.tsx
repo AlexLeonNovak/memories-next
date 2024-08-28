@@ -73,7 +73,7 @@ export const SectionMap = () => {
         <ChevronsLeft className='animate-bounce-left w-16 h-16 stroke-primary' />
       </div>
       <div
-        className='map__container map__container_temp py-20 overflow-x-auto overflow-y-hidden relative'
+        className='map__container map__container_temp py-20 overflow-x-auto overflow-y-hidden lg:overflow-hidden relative'
         {...events}
         ref={galleryContainerRef}
         onScroll={onScroll}
