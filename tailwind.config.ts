@@ -79,11 +79,33 @@ const config = {
           // '37.5%': { opacity: '0', zIndex: '-14' },
           // '100%': { opacity: '0', zIndex: '-16' },
         },
+        'bounce-right': {
+          '0%, 100%': {
+            transform: 'translateX(-25%)',
+            animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)',
+          },
+          '50%': {
+            transform: 'translateX(0)',
+            animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)',
+          },
+        },
+        'bounce-left': {
+          '0%, 100%': {
+            transform: 'translateX(0)',
+            animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)',
+          },
+          '50%': {
+            transform: 'translateX(-25%)',
+            animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)',
+          },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         fade: 'fade 52s infinite',
+        'bounce-right': 'bounce-right 1s infinite',
+        'bounce-left': 'bounce-left 1s infinite',
       },
     },
   },
