@@ -37,7 +37,7 @@ export default async function RootLayout({ children, params }: TRootLayoutProps)
 
   return (
     <html lang={params.locale}>
-      <GoogleTagManager gtmId='G-C2H91SS7LC' />
+      <GoogleTagManager gtmId='GTM-T2NWG6R4' />
       <body className={cn('flex flex-col min-h-screen h-auto', inter.className)}>
         <SWRProvider fallback={fallback}>
           <IntlProvider locale={params.locale} messages={messages}>
