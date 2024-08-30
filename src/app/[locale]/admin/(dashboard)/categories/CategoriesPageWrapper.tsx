@@ -12,9 +12,9 @@ export const CategoriesPageWrapper = () => {
   return (
     <div>
       <PageTitle title={tAdm('Categories')} />
-      <div className="row">
+      <div className='row'>
         <Button asChild>
-          <Link href="categories/add">
+          <Link href='categories/add'>
             <Plus />
             <span>{tAdm('Add new category')}</span>
           </Link>

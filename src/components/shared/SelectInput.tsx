@@ -35,10 +35,10 @@ export const SelectInput = ({ items, value: initValue, placeholder, onValueChang
       </SelectTrigger>
       <SelectContent>
         <Button
-          className="w-full px-2"
-          variant="secondary"
-          size="sm"
-          onClick={e => {
+          className='w-full px-2'
+          variant='secondary'
+          size='sm'
+          onClick={(e) => {
             e.stopPropagation();
             setValue(undefined);
             setKey(+new Date());

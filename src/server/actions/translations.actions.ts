@@ -6,7 +6,6 @@ import { parseSchemaFormData } from '@/server/utils';
 import { TDeleteFormState, TFormState, TTranslation, TTranslationEntity } from '@/types';
 import { updateTranslationSchemaServer } from './validations';
 
-
 export const createTranslation = async (translationData: TTranslation): Promise<TFormState<TTranslationEntity>> => {
   try {
     const data = await createDocument('translations', translationData);

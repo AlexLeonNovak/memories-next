@@ -12,13 +12,13 @@ export default async function AdminLayout({ children }: { children: ReactNode })
   }
 
   return (
-    <div className="grid min-h-screen w-full grid-cols-[250px_1fr]">
+    <div className='grid min-h-screen w-full grid-cols-[250px_1fr]'>
       <Sidebar />
-      <div className="flex flex-col bg-gray-50">
+      <div className='flex flex-col bg-gray-50'>
         <AdminHeader />
-        <main className="p-4">
-          <div className="p-4 border bg-white h-full">
-            <Suspense fallback={<LoaderCircle className="animate-spin size-10" />}>
+        <main className='p-4'>
+          <div className='p-4 border bg-white h-full'>
+            <Suspense fallback={<LoaderCircle className='animate-spin size-10' />}>
               <PageContent>{children}</PageContent>
             </Suspense>
           </div>

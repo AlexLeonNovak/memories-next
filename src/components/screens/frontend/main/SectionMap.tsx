@@ -1,13 +1,13 @@
 'use client';
 
+import { useDraggable } from 'react-use-draggable-scroll';
+import { MutableRefObject, UIEvent, useEffect, useRef, useState } from 'react';
+import { ChevronsLeft, ChevronsRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { MapNavigation } from './components/map/MapNavigation';
 import { RandomGallery } from './components/map/RandomGallery';
 import { GalleryControlHelper } from './components/map/GalleryControlHelper';
 import './css/map.css';
-import { useDraggable } from 'react-use-draggable-scroll';
-import { MutableRefObject, UIEvent, useEffect, useRef, useState } from 'react';
-import { cn } from '@/lib/utils';
-import { ChevronsLeft, ChevronsRight } from 'lucide-react';
 
 export const SectionMap = () => {
   const galleryContainerRef = useRef<HTMLDivElement>(null);

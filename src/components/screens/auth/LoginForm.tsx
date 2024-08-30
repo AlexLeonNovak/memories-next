@@ -43,27 +43,27 @@ export const LoginForm = () => {
       toast.error(tAdm('One or more fields have an error. Please check them and try again.'));
       reset(defaultValues);
     },
-    onSuccess: state => {
+    onSuccess: (state) => {
       setUser(state.data);
       toast.success(t('You successfully logged in!'));
       router.replace('/admin');
     },
-    onFail: state => toast.error(tAdm(state.message)),
+    onFail: (state) => toast.error(tAdm(state.message)),
   });
 
   return (
-    <div className="p-6 bg-white border rounded">
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <Image className="mx-auto h-10 w-auto" src="/logo.svg" alt="Zberezhemo logo" width={175} priority height={37} />
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+    <div className='p-6 bg-white border rounded'>
+      <div className='sm:mx-auto sm:w-full sm:max-w-sm'>
+        <Image className='mx-auto h-10 w-auto' src='/logo.svg' alt='Zberezhemo logo' width={175} priority height={37} />
+        <h2 className='mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900'>
           {t('Sign in to your account')}
         </h2>
       </div>
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+      <div className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
         <Form {...form}>
-          <form className="space-y-5" action={action}>
+          <form className='space-y-5' action={action}>
             <FormField
-              name="email"
+              name='email'
               control={control}
               render={({ field }) => (
                 <FormItem>
@@ -77,20 +77,20 @@ export const LoginForm = () => {
             />
 
             <FormField
-              name="password"
+              name='password'
               control={control}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t('Password')}</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder={t('Your password')} {...field} />
+                    <Input type='password' placeholder={t('Your password')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <div className="flex justify-center">
+            <div className='flex justify-center'>
               <SubmitButton label={t('Sign in')} icon={<LogIn />} pendingLabel={tAdm('wait')} />
             </div>
           </form>

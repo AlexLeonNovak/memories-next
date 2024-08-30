@@ -32,7 +32,7 @@ export const useFormCheck = <T extends FieldValues, F extends FieldValues = T>({
           break;
         case 'error':
           setError &&
-            state.errors?.forEach(error => {
+            state.errors?.forEach((error) => {
               setError(error.path as FieldPath<F>, {
                 message: error.message,
               });

@@ -12,9 +12,9 @@ export const PostsPageWrapper = () => {
   return (
     <div>
       <PageTitle title={tAdm('Posts')} />
-      <div className="row">
+      <div className='row'>
         <Button asChild>
-          <Link href="posts/add">
+          <Link href='posts/add'>
             <Plus />
             <span>{tAdm('Add new post')}</span>
           </Link>

@@ -1,7 +1,7 @@
 export const removeEmpty = <T extends object>(obj: T): Partial<T> => {
   const newObj: Partial<T> = {};
 
-  Object.keys(obj).forEach(key => {
+  Object.keys(obj).forEach((key) => {
     const value = (obj as any)[key];
 
     if (value && typeof value === 'object' && !Array.isArray(value)) {

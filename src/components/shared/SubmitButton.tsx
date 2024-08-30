@@ -17,10 +17,10 @@ export const SubmitButton = ({ label, pendingLabel, icon, isPending, ...props }:
   const formPending = pending || isPending;
 
   return (
-    <Button type="submit" disabled={formPending} {...props}>
+    <Button type='submit' disabled={formPending} {...props}>
       {formPending ? (
         <>
-          <LoaderCircle className="animate-spin" />
+          <LoaderCircle className='animate-spin' />
           {pendingLabel && <span>{pendingLabel}</span>}
         </>
       ) : (

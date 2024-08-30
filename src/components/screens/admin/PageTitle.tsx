@@ -11,6 +11,6 @@ type TPageTitleProps = {
 
 export const PageTitle = ({ title }: TPageTitleProps) => (
   <>
-    <h1 className="text-3xl">{title}</h1>
+    <h1 className='text-3xl'>{title}</h1>
   </>
 );

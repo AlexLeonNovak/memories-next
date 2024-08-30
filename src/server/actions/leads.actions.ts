@@ -6,7 +6,6 @@ import { parseSchemaFormData } from '@/server/utils';
 import { TDeleteFormState, TFormState, TLead, TLeadEntity, TQueryOptions } from '@/types';
 import { createLeadSchemaServer } from './validations';
 
-
 // export const fetchLeads = (queryOptions?: TQueryOptions<TLeadEntity>) => LeadRepository.getAll(queryOptions);
 
 export const deleteLead = async (prevState: any, formData: FormData): Promise<TDeleteFormState> => {

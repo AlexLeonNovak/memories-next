@@ -21,11 +21,11 @@ export const TranslationEditDialog = ({ translation, onUpdate }: TranslationEdit
   const t = useTranslations('AdminTranslations');
   return (
     <>
-      <Button variant="ghost" onClick={() => setShow(true)}>
+      <Button variant='ghost' onClick={() => setShow(true)}>
         <Pencil />
       </Button>
       <Modal
-        className="sm:w-2/3"
+        className='sm:w-2/3'
         open={show}
         setOpen={setShow}
         title={t('Update translation')}
@@ -42,7 +42,7 @@ export const TranslationEditDialog = ({ translation, onUpdate }: TranslationEdit
         <TranslationForm
           translation={translation}
           submitRequested={submitRequested}
-          onFormSubmit={data => {
+          onFormSubmit={(data) => {
             setShow(false);
             router.refresh();
             onUpdate && onUpdate(data);

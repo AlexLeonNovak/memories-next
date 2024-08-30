@@ -1,18 +1,18 @@
 import { useTranslations } from 'next-intl';
-import { locales } from '@/config';
 import { Fragment, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import { TTranslation, TTranslationEntity } from '@/types';
 import { useFormState } from 'react-dom';
+import { toast } from 'sonner';
+import { Ban, Save } from 'lucide-react';
+import { locales } from '@/config';
+import { TTranslation, TTranslationEntity } from '@/types';
 import { updateTranslation } from '@/server/actions/translations.actions';
 import { useFormCheck } from '@/hooks';
-import { toast } from 'sonner';
 import {
   Button,
   Form,
   FormControl,
   FormField,
-  FormItem,
   FormLabel,
   FormMessage,
   Input,
@@ -22,7 +22,6 @@ import {
   TableRow,
 } from '@/components/ui';
 import { SubmitButton, Wysiwyg } from '@/components/shared';
-import { Save, Ban } from 'lucide-react';
 
 type TTranslationFormCellsProps = {
   translation: TTranslationEntity;

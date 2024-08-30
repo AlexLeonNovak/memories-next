@@ -45,8 +45,8 @@ export const DeleteForm = ({ id, title, description, onDeleted, deleteAction }: 
 
   return (
     <form action={action} ref={formRef}>
-      <Input type="hidden" name="id" value={id} />
-      <SubmitButton variant="destructive-ghost" title={tAdm('Delete')} icon={<Trash />} onClick={onSubmit} />
+      <Input type='hidden' name='id' value={id} />
+      <SubmitButton variant='destructive-ghost' title={tAdm('Delete')} icon={<Trash />} onClick={onSubmit} />
       <ConfirmDialog
         open={open}
         setOpen={setOpen}

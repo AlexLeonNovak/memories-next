@@ -7,7 +7,6 @@ import { parseSchemaFormData } from '@/server/utils';
 import { TDeleteFormState, TFormState, TPost, TPostEntity } from '@/types';
 import { createPostSchemaServer, updatePostSchemaServer } from './validations';
 
-
 export const createPost = async (prevState: any, formData: FormData): Promise<TFormState<TPostEntity>> => {
   try {
     const parsed = await parseSchemaFormData(createPostSchemaServer, formData);

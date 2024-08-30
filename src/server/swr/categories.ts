@@ -2,7 +2,6 @@ import { COLLECTION_PATH } from '@/lib/constants';
 import { TCategoryEntity, TGetAllDocuments } from '@/types';
 import { getCollectionCached, getDocCached } from '.';
 
-
 export const getCategories = (params?: Omit<TGetAllDocuments<TCategoryEntity>, 'path'>) =>
   getCollectionCached<TCategoryEntity>({ path: 'categories', ...params });
 

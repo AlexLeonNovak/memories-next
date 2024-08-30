@@ -15,7 +15,7 @@ export const CategoryDialog = () => {
 
   return (
     <>
-      <Button className="ml-auto" type="button" variant="link" onClick={() => setShowCategoryDialog(true)}>
+      <Button className='ml-auto' type='button' variant='link' onClick={() => setShowCategoryDialog(true)}>
         <Plus />
         <span>{t('Add new category')}</span>
       </Button>
