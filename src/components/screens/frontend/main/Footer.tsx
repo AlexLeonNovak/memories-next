@@ -13,6 +13,7 @@ export const Footer = () => {
       <div className='footer-right'>
         <Link href='/legal-terms'>{t('Legal terms and privacy')}</Link>
         <Link href='/cookies'>{t('Cookies')}</Link>
+        <Link href='/about-us'>{t('About us')}</Link>
       </div>
     </footer>
   );
