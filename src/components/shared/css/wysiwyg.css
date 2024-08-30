@@ -1,7 +1,4 @@
-.ck-editor__editable,
-.ck-source-editing-area {
-  height: 200px;
-}
-.ck-source-editing-area textarea {
-  overflow: auto;
+.editor-full-size-opened [role="dialog"] {
+    width: 100%;
+    height: 100%;
 }

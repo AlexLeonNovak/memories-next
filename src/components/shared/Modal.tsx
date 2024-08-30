@@ -31,7 +31,7 @@ export const Modal = ({
 }: TModalProps) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className={className} {...props}>
+      <DialogContent className={className} {...props} aria-describedby={undefined}>
         {title && <DialogTitle>{title}</DialogTitle>}
         {children}
         <DialogFooter>

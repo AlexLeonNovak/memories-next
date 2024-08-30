@@ -11,7 +11,6 @@
     "format": "biome format --write ./src"
   },
   "dependencies": {
-    "@ckeditor/ckeditor5-react": "^9.0.0",
     "@gsap/react": "^2.1.1",
     "@hookform/resolvers": "^3.6.0",
     "@next/third-parties": "^14.2.7",
@@ -24,7 +23,6 @@
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "animate.css": "^4.1.1",
-    "ckeditor5": "^43.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
@@ -32,6 +30,7 @@
     "firebase": "^10.12.5",
     "firebase-admin": "^12.3.0",
     "gsap": "^3.12.5",
+    "jodit-react": "^4.1.2",
     "lucide-react": "^0.396.0",
     "luxon": "^3.4.4",
     "mongodb": "^6.8.0",

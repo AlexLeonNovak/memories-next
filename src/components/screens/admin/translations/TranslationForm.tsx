@@ -84,9 +84,9 @@ export const TranslationForm = ({ translation, onFormSubmit, onFinally, submitRe
                 <FormLabel className='uppercase'>{locale}</FormLabel>
                 <FormControl>
                   {isHTML ? (
-                    <div className='ml-6'>
+                    <div>
                       <Input type='hidden' name={field.name} value={field.value} />
-                      <Wysiwyg onChange={field.onChange} value={field.value} />
+                      <Wysiwyg onBlur={field.onChange} value={field.value} />
                     </div>
                   ) : (
                     <Input {...field} />
