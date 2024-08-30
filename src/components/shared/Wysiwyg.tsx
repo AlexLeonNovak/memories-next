@@ -20,7 +20,7 @@ export const Wysiwyg = ({ value, onChange, onBlur }: TWysiwygProps) => {
   const config = {
     readonly: false, // all options from https://xdsoft.net/jodit/docs/,
     placeholder: 'Type or paste your content here!',
-    globalFullSize: false,
+    toolbarSticky: false,
     addNewLine: false,
     events: {
       toggleFullSize: onFullSizeChange,

@@ -2,17 +2,19 @@
 
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
-import { DeleteForm, TranslationEditDialog } from '@/components/screens';
+import { Pencil } from 'lucide-react';
+import { DeleteForm } from '@/components/screens';
 import { SelectInput, TableSkeleton, TSelectInputItem } from '@/components/shared';
-import { Input, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui';
-import { i18n, TLocale } from '@/config';
+import { Button, Input, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui';
+import { locales, TLocale } from '@/config';
 import { useGetTranslations } from '@/hooks/swr/translations';
 import { getArrayObjectValues } from '@/lib/utils';
 import { usePathname, useRouter } from '@/navigation';
 import { deleteTranslation } from '@/server/actions/translations.actions';
-import { TQueryFilter, TTranslationEntity } from '@/types';
+import { TTranslationEntity } from '@/types';
+import { TranslationFormTable } from './TranslationFormTable';
 
 export const TranslationsTable = () => {
   const tAdm = useTranslations('Admin');
@@ -26,6 +28,7 @@ export const TranslationsTable = () => {
   const [keys, setKeys] = useState<TSelectInputItem[]>();
   const [localeSearch, setLocaleSearch] = useState<{ [key in TLocale]?: string }>();
   const [debouncedLocale] = useDebounce(localeSearch, 1500);
+  const [editId, setEditId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!translations) {
@@ -53,7 +56,7 @@ export const TranslationsTable = () => {
 
   useEffect(() => {
     const _localeSearch: { [key in TLocale]?: string } = {};
-    for (const locale of i18n.locales) {
+    for (const locale of locales) {
       const value = searchParams.get(locale) as string;
       if (value) {
         _localeSearch[locale] = value;
@@ -68,7 +71,7 @@ export const TranslationsTable = () => {
       return;
     }
     let filtered = translations;
-    const searchKeys = ['namespace', 'key', ...i18n.locales];
+    const searchKeys = ['namespace', 'key', ...locales];
     for (const searchKey of searchKeys) {
       const value = (searchParams.get(searchKey) as string)?.toLowerCase();
       if (value) {
@@ -92,7 +95,7 @@ export const TranslationsTable = () => {
           <TableHead>{tAdm('#')}</TableHead>
           <TableHead>{tAdm('Namespace')}</TableHead>
           <TableHead>{tAdm('Key')}</TableHead>
-          {i18n.locales.map((locale) => (
+          {locales.map((locale) => (
             <TableHead key={locale} className='uppercase'>
               {tAdm(locale)}
             </TableHead>
@@ -122,8 +125,8 @@ export const TranslationsTable = () => {
                 />
               )}
             </TableHead>
-            {i18n.locales.map((locale) => (
-              <TableHead key={locale} className='uppercase'>
+            {locales.map((locale) => (
+              <TableHead key={locale} className='uppercase w-1/3'>
                 <Input
                   name={locale}
                   value={localeSearch && localeSearch[locale as TLocale]}
@@ -131,12 +134,12 @@ export const TranslationsTable = () => {
                 />
               </TableHead>
             ))}
-            <TableHead></TableHead>
+            <TableHead className='w-32'></TableHead>
           </TableRow>
         )}
       </TableHeader>
       <TableBody>
-        {isLoading && <TableSkeleton columns={4 + i18n.locales.length} />}
+        {isLoading && <TableSkeleton columns={4 + locales.length} />}
         {!isLoading &&
           filteredTranslations?.map((translation, index) => {
             const { id, namespace, key } = translation;
@@ -145,39 +148,60 @@ export const TranslationsTable = () => {
                 <TableCell>{++index}</TableCell>
                 <TableCell>{namespace}</TableCell>
                 <TableCell>{key}</TableCell>
-                {i18n.locales.map((locale) => {
-                  let content;
-                  if (typeof translation[locale] === 'undefined') {
-                    content = <span className='text-destructive'>{tAdm('No translation')}</span>;
-                  } else if (key.startsWith('[html]')) {
-                    content = <span dangerouslySetInnerHTML={{ __html: translation[locale]! }} />;
-                  } else {
-                    content = translation[locale]!;
-                  }
+                {editId === id ? (
+                  <Fragment>
+                    <TableCell colSpan={locales.length + 1}>
+                      <TranslationFormTable
+                        translation={translation}
+                        onFormSubmit={() => {
+                          setEditId(null);
+                          revalidate();
+                          mutate();
+                        }}
+                        onCancel={() => setEditId(null)}
+                      />
+                    </TableCell>
+                  </Fragment>
+                ) : (
+                  <Fragment>
+                    {locales.map((locale) => {
+                      let content;
+                      if (typeof translation[locale] === 'undefined') {
+                        content = <span className='text-destructive'>{tAdm('No translation')}</span>;
+                      } else if (key.startsWith('[html]')) {
+                        content = <span dangerouslySetInnerHTML={{ __html: translation[locale]! }} />;
+                      } else {
+                        content = translation[locale]!;
+                      }
 
-                  return <TableCell key={locale}>{content}</TableCell>;
-                })}
-                <TableCell>
-                  <div className='flex gap-2'>
-                    <TranslationEditDialog
-                      translation={translation}
-                      onUpdate={() => {
-                        revalidate();
-                        mutate();
-                      }}
-                    />
-                    <DeleteForm
-                      id={id}
-                      deleteAction={deleteTranslation}
-                      title={t('Delete translation?')}
-                      description={t('Are you sure you want to delete this translation?')}
-                      onDeleted={() => {
-                        revalidate();
-                        mutate();
-                      }}
-                    />
-                  </div>
-                </TableCell>
+                      return <TableCell key={locale}>{content}</TableCell>;
+                    })}
+                    <TableCell>
+                      <div className='flex gap-2'>
+                        <Button variant='ghost' onClick={() => setEditId(id)}>
+                          <Pencil />
+                        </Button>
+                        {/*<TranslationEditDialog*/}
+                        {/*  translation={translation}*/}
+                        {/*  onUpdate={() => {*/}
+                        {/*    revalidate();*/}
+                        {/*    mutate();*/}
+                        {/*  }}*/}
+                        {/*/>*/}
+                        <DeleteForm
+                          id={id}
+                          deleteAction={deleteTranslation}
+                          title={t('Delete translation?')}
+                          description={t('Are you sure you want to delete this translation?')}
+                          onDeleted={() => {
+                            revalidate();
+                            mutate();
+                          }}
+                        />
+                      </div>
+                    </TableCell>
+                  </Fragment>
+                )}
               </TableRow>
             );
           })}
