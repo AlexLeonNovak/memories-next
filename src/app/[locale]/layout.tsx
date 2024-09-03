@@ -36,7 +36,7 @@ export default async function RootLayout({ children, params }: TRootLayoutProps)
   const messages = await getMessages();
 
   return (
-    <html lang={params.locale}>
+    <html lang={params.locale} className='scroll-smooth'>
       <GoogleTagManager gtmId='GTM-T2NWG6R4' />
       <body className={cn('flex flex-col min-h-screen h-auto', inter.className)}>
         <SWRProvider fallback={fallback}>

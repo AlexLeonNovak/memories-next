@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
-import { Footer, Header } from '@/components/screens';
+import { Footer, Header, SectionFeedback } from '@/components/screens';
 import { TAppLayoutProps, TChildrenProps } from '@/types';
 
 export const generateMetadata = async ({ params: { locale } }: TAppLayoutProps): Promise<Metadata> => {
@@ -16,6 +16,7 @@ export default async function RootLayout({ children }: TChildrenProps) {
     <>
       <Header />
       <main>{children}</main>
+      <SectionFeedback />
       <Footer />
     </>
   );
